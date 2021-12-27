@@ -20,4 +20,13 @@ abstract class Helper
         $this->view = $view;
     }
 
+    /**
+     * Get the View.
+     * @return View The View.
+     */
+    public function getView(): View
+    {
+        return $this->view;
+    }
+
 }

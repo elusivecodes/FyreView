@@ -26,6 +26,14 @@ final class HelperTest extends TestCase
         $this->view->render('test/helper_invalid');
     }
 
+    public function testGetView(): void
+    {
+        $this->assertInstanceOf(
+            View::class,
+            $this->view->Test->getView()
+        );
+    }
+
     public function testNamespaceLeadingSlash(): void
     {
         View::clear();
