@@ -17,7 +17,7 @@
 **Using Composer**
 
 ```
-composer install fyre/view
+composer require fyre/view
 ```
 
 In PHP:
