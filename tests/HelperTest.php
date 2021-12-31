@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\View;
+namespace Tests;
 
 use
     Fyre\View\Exceptions\ViewException,
