@@ -12,17 +12,17 @@ use
 class ViewException extends RuntimeException
 {
 
-    public static function forInvalidElement(string $name): self
+    public static function forInvalidElement(string $name): static
     {
         return new static('Element not found: '.$name);
     }
 
-    public static function forInvalidHelper(string $name): self
+    public static function forInvalidHelper(string $name): static
     {
         return new static('Helper not found: '.$name);
     }
 
-    public static function forInvalidTemplate(string $name): self
+    public static function forInvalidTemplate(string $name): static
     {
         return new static('Template not found: '.$name);
     }

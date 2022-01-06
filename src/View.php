@@ -136,7 +136,7 @@ class View
      * @param array $data The view data.
      * @return View The View.
      */
-    public function setData(array $data): self
+    public function setData(array $data): static
     {
         $this->data = array_merge($this->data, $data);
 
