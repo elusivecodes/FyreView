@@ -15,7 +15,7 @@ trait RenderTest
             'a' => 1
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             'Template: 1',
             $this->view->render('test/template')
         );
@@ -23,7 +23,7 @@ trait RenderTest
 
     public function testRenderDeep(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             'Test',
             $this->view->render('test/deep/test')
         );

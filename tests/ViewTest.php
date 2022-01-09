@@ -22,7 +22,7 @@ final class ViewTest extends TestCase
         View::clear();
         View::addPath('tests/templates/');
 
-        $this->assertEquals(
+        $this->assertSame(
             'Test',
             $this->view->render('test/deep/test')
         );

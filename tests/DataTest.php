@@ -8,11 +8,14 @@ trait DataTest
 
     public function testData(): void
     {
-        $this->view->setData([
-            'a' => 1
-        ]);
+        $this->assertSame(
+            $this->view,
+            $this->view->setData([
+                'a' => 1
+            ])
+        );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'a' => 1
             ],
@@ -30,7 +33,7 @@ trait DataTest
             'b' => 2
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'a' => 1,
                 'b' => 2

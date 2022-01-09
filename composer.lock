@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fyre/path",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyrePath.git",
-                "reference": "dd0bc41c63b6cc18ac2c9d7a81beb20f4f125a1a"
+                "reference": "9a78d77623357a607687d9c5535309541a5feed4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyrePath/zipball/dd0bc41c63b6cc18ac2c9d7a81beb20f4f125a1a",
-                "reference": "dd0bc41c63b6cc18ac2c9d7a81beb20f4f125a1a",
+                "url": "https://api.github.com/repos/elusivecodes/FyrePath/zipball/9a78d77623357a607687d9c5535309541a5feed4",
+                "reference": "9a78d77623357a607687d9c5535309541a5feed4",
                 "shasum": ""
             },
             "require-dev": {
@@ -42,9 +42,9 @@
             "description": "A path utility library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyrePath/issues",
-                "source": "https://github.com/elusivecodes/FyrePath/tree/v1.0.2"
+                "source": "https://github.com/elusivecodes/FyrePath/tree/v1.0.3"
             },
-            "time": "2021-12-27T05:36:56+00:00"
+            "time": "2022-01-09T07:48:06+00:00"
         }
     ],
     "packages-dev": [

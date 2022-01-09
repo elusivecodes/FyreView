@@ -11,7 +11,7 @@ trait ElementTest
 
     public function testElementData(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             'Element: 2',
             $this->view->render('test/element')
         );
@@ -19,7 +19,7 @@ trait ElementTest
 
     public function testElementDeep(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             'Test',
             $this->view->render('test/element_deep')
         );

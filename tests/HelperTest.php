@@ -13,7 +13,7 @@ final class HelperTest extends TestCase
 
     public function testHelper(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             'test',
             $this->view->render('test/helper')
         );
@@ -40,7 +40,7 @@ final class HelperTest extends TestCase
         View::addNamespace('\Tests\Helpers');
         View::addPath('tests/templates');
 
-        $this->assertEquals(
+        $this->assertSame(
             'test',
             $this->view->render('test/helper')
         );
@@ -52,7 +52,7 @@ final class HelperTest extends TestCase
         View::addNamespace('Tests\Helpers\\');
         View::addPath('tests/templates');
 
-        $this->assertEquals(
+        $this->assertSame(
             'test',
             $this->view->render('test/helper')
         );
