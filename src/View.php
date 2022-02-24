@@ -14,6 +14,7 @@ use function
     func_get_arg,
     in_array,
     is_file,
+    is_subclass_of,
     ob_end_clean,
     ob_get_contents,
     ob_start,
@@ -42,8 +43,10 @@ class View
      */
     public static function addNamespace(string $namespace): void
     {
+        $namespace = static::normalizeNamespace($namespace);
+
         if (!in_array($namespace, static::$namespaces)) {
-            static::$namespaces[] = static::normalizeNamespace($namespace);
+            static::$namespaces[] = $namespace;
         }
     }
 
@@ -175,7 +178,7 @@ class View
         foreach (static::$namespaces AS $namespace) {
             $className = $namespace.$name;
 
-            if (class_exists($className)) {
+            if (class_exists($className) && is_subclass_of($className, Helper::class)) {
                 return new $className($this);
             }
         }
