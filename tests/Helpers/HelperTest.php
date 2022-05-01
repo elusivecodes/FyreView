@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Helpers;
 
 use
     Fyre\View\Exceptions\ViewException,
@@ -10,6 +10,8 @@ use
 
 final class HelperTest extends TestCase
 {
+
+    protected View $view;
 
     public function testHelper(): void
     {
@@ -37,8 +39,8 @@ final class HelperTest extends TestCase
     public function testNamespaceLeadingSlash(): void
     {
         View::clear();
-        View::addNamespace('\Tests\Helpers');
-        View::addPath('tests/templates');
+        View::addNamespace('\Tests\Mock\Helpers');
+        View::addPath('tests/Mock/templates');
 
         $this->assertSame(
             'test',
@@ -49,8 +51,8 @@ final class HelperTest extends TestCase
     public function testNamespaceTrailingSlash(): void
     {
         View::clear();
-        View::addNamespace('Tests\Helpers\\');
-        View::addPath('tests/templates');
+        View::addNamespace('Tests\Mock\Helpers\\');
+        View::addPath('tests/Mock/templates');
 
         $this->assertSame(
             'test',
@@ -61,8 +63,8 @@ final class HelperTest extends TestCase
     protected function setUp(): void
     {
         View::clear();
-        View::addNamespace('Tests\Helpers');
-        View::addPath('tests/templates');
+        View::addNamespace('Tests\Mock\Helpers');
+        View::addPath('tests/Mock/templates');
 
         $this->view = new View();
     }

@@ -20,7 +20,7 @@ final class ViewTest extends TestCase
     public function testPathTrailingSlash(): void
     {
         View::clear();
-        View::addPath('tests/templates/');
+        View::addPath('tests/Mock/templates/');
 
         $this->assertSame(
             'Test',
@@ -31,7 +31,7 @@ final class ViewTest extends TestCase
     protected function setUp(): void
     {
         View::clear();
-        View::addPath('tests/templates');
+        View::addPath('tests/Mock/templates');
 
         $this->view = new View();
     }

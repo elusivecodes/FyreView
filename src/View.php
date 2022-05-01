@@ -31,6 +31,7 @@ class View
     protected const FILE_EXTENSION = '.php';
 
     protected static array $namespaces = [];
+
     protected static array $paths = [];
 
     protected array $data = [];
@@ -175,7 +176,9 @@ class View
      */
     protected function loadHelper(string $name): Helper
     {
-        foreach (static::$namespaces AS $namespace) {
+        $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Helpers\\']);
+
+        foreach ($namespaces AS $namespace) {
             $className = $namespace.$name;
 
             if (class_exists($className) && is_subclass_of($className, Helper::class)) {

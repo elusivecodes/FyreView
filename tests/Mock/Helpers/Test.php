@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Helpers;
+namespace Tests\Mock\Helpers;
 
 use
     Fyre\View\Helper;
