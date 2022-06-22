@@ -235,7 +235,7 @@ $nonce = $this->CSP->styleNonce();
 
 ### Form
 
-The form helper provides a convenient wrapper for [*FormBuilder*](https://github.com/elusivecodes/FyreFormBuilder) methods, and includes the following additional methods.
+The form helper provides a convenient wrapper for [*FormBuilder*](https://github.com/elusivecodes/FyreFormBuilder) methods, and includes the following additional methods:
 
 **Csrf**
 
@@ -248,7 +248,7 @@ $input = $this->Form->csrf();
 
 ### Format
 
-The form helper provides a convenient wrapper for [*Formatter*](https://github.com/elusivecodes/FyreFormatter) methods.
+The format helper provides a convenient wrapper for [*Formatter*](https://github.com/elusivecodes/FyreFormatter) methods.
 
 
 ### Url
