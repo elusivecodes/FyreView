@@ -12,6 +12,7 @@
 - [Helpers](#helpers)
     - [CSP](#csp)
     - [Form](#form)
+    - [Format](#format)
     - [Url](#url)
 
 
