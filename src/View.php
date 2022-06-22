@@ -5,21 +5,20 @@ namespace Fyre\View;
 
 use
     Fyre\Utility\Path,
-    Fyre\View\Exceptions\ViewException;
+    Fyre\View\Exceptions\ViewException,
+    RuntimeException;
 
 use function
+    array_key_exists,
     array_merge,
-    class_exists,
     extract,
     func_get_arg,
     in_array,
     is_file,
-    is_subclass_of,
     ob_end_clean,
     ob_get_contents,
     ob_start,
-    str_ends_with,
-    trim;
+    str_ends_with;
 
 /**
  * View
@@ -28,28 +27,16 @@ class View
 {
 
     protected const ELEMENTS_FOLDER = 'elements';
+    protected const LAYOUTS_FOLDER = 'layouts';
     protected const FILE_EXTENSION = '.php';
-
-    protected static array $namespaces = [];
 
     protected static array $paths = [];
 
     protected array $data = [];
 
-    protected array $helpers = [];
+    protected string|null $file = null; 
 
-    /**
-     * Add a namespace for loading helpers.
-     * @param string $namespace The namespace.
-     */
-    public static function addNamespace(string $namespace): void
-    {
-        $namespace = static::normalizeNamespace($namespace);
-
-        if (!in_array($namespace, static::$namespaces)) {
-            static::$namespaces[] = $namespace;
-        }
-    }
+    protected string|null $layout = 'default';
 
     /**
      * Add a path for loading templates.
@@ -69,7 +56,6 @@ class View
      */
     public static function clear(): void
     {
-        static::$namespaces = [];
         static::$paths = [];
     }
 
@@ -79,17 +65,36 @@ class View
      */
     public function __get(string $name)
     {
-        return $this->helpers[$name] ??= $this->loadHelper($name);
+        if (!HelperRegistry::find($name)) {
+            throw new RuntimeException('Undefined property: '.$name);
+        }
+
+        $this->loadHelper($name);
+
+        return $this->$name;
     }
 
     /**
-     * Determine if a helper exists.
-     * @param string $name The helper name.
-     * @return bool TRUE if the helper exists, otherwise FALSE.
+     * Get the layout content.
+     * @return string The layout content.
      */
-    public function __isset(string $name): bool
+    public function content(): string
     {
-        return !!$this->$name;
+        $file = $this->file ?? '';
+
+        $this->file = null;
+
+        if (!$file) {
+            throw ViewException::forInvalidTemplate($file);
+        }
+
+        $filePath = static::findFile($file);
+
+        if (!$filePath) {
+            throw ViewException::forInvalidTemplate($file);
+        }
+
+        return $this->evaluate($filePath, $this->data);
     }
 
     /**
@@ -119,6 +124,28 @@ class View
     }
 
     /**
+     * Get the layout.
+     * @return string|null The layout.
+     */
+    public function getLayout(): string|null
+    {
+        return $this->layout;
+    }
+
+    /**
+     * Load a Helper.
+     * @param string $name The helper name.
+     * @param array $options The helper options.
+     * @return View The View.
+     */
+    public function loadHelper(string $name, array $options = []): static
+    {
+        $this->$name = HelperRegistry::load($name, $this, $options);
+
+        return $this;
+    }
+
+    /**
      * Render a template.
      * @param string $file The template file.
      * @return string The rendered template.
@@ -126,13 +153,23 @@ class View
      */
     public function render(string $file): string
     {
-        $filePath = static::findFile($file);
+        $this->file = $file;
 
-        if (!$filePath) {
-            throw ViewException::forInvalidTemplate($file);
+        if (!$this->layout) {
+            return $this->content();
         }
 
-        return $this->evaluate($filePath, $this->data);
+        $layoutPath = static::findFile($this->layout, static::LAYOUTS_FOLDER);
+
+        if (!$layoutPath) {
+            return $this->content();
+        }
+
+        $result = $this->evaluate($layoutPath, $this->data);
+
+        $this->file = null;
+
+        return $result;
     }
 
     /**
@@ -143,6 +180,18 @@ class View
     public function setData(array $data): static
     {
         $this->data = array_merge($this->data, $data);
+
+        return $this;
+    }
+
+    /**
+     * Set the layout.
+     * @param string|null $layout The layout.
+     * @return View The View.
+     */
+    public function setLayout(string|null $layout): static
+    {
+        $this->layout = $layout;
 
         return $this;
     }
@@ -169,27 +218,6 @@ class View
     }
 
     /**
-     * Load a helper.
-     * @param string $name The helper name.
-     * @return Helper The Helper.
-     * @throws ViewException if the helper does not exist.
-     */
-    protected function loadHelper(string $name): Helper
-    {
-        $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Helpers\\']);
-
-        foreach ($namespaces AS $namespace) {
-            $className = $namespace.$name;
-
-            if (class_exists($className) && is_subclass_of($className, Helper::class)) {
-                return new $className($this);
-            }
-        }
-
-        throw ViewException::forInvalidHelper($name);
-    }
-
-    /**
      * Find a file in paths.
      * @param string $name The file name.
      * @param string $folder The file folder.
@@ -210,20 +238,6 @@ class View
         }
 
         return null;
-    }
-
-    /**
-     * Normalize a namespace
-     * @param string $namespace The namespace.
-     * @return string The normalized namespace.
-     */
-    protected static function normalizeNamespace(string $namespace): string
-    {
-        $namespace = trim($namespace, '\\');
-
-        return $namespace ?
-            '\\'.$namespace.'\\' :
-            '\\';
     }
 
 }

@@ -5,6 +5,8 @@ namespace Tests\Helpers;
 
 use
     Fyre\View\Exceptions\ViewException,
+    Fyre\View\Helper,
+    Fyre\View\HelperRegistry,
     Fyre\View\View,
     PHPUnit\Framework\TestCase;
 
@@ -21,11 +23,25 @@ final class HelperTest extends TestCase
         );
     }
 
-    public function testHelperInvalid(): void
+    public function testLoadHelperInvalid(): void
     {
         $this->expectException(ViewException::class);
 
-        $this->view->render('test/helper_invalid');
+        $this->view->loadHelper('Invalid');
+    }
+
+    public function testGetConfig(): void
+    {
+        $this->view->loadHelper('Test', [
+            'value' => 1
+        ]);
+
+        $this->assertSame(
+            [
+                'value' => 1
+            ],
+            $this->view->Test->getConfig()
+        );
     }
 
     public function testGetView(): void
@@ -36,34 +52,12 @@ final class HelperTest extends TestCase
         );
     }
 
-    public function testNamespaceLeadingSlash(): void
-    {
-        View::clear();
-        View::addNamespace('\Tests\Mock\Helpers');
-        View::addPath('tests/Mock/templates');
-
-        $this->assertSame(
-            'test',
-            $this->view->render('test/helper')
-        );
-    }
-
-    public function testNamespaceTrailingSlash(): void
-    {
-        View::clear();
-        View::addNamespace('Tests\Mock\Helpers\\');
-        View::addPath('tests/Mock/templates');
-
-        $this->assertSame(
-            'test',
-            $this->view->render('test/helper')
-        );
-    }
-
     protected function setUp(): void
     {
+        HelperRegistry::clear();
+        HelperRegistry::addNamespace('\Tests\Mock\Helpers');
+
         View::clear();
-        View::addNamespace('Tests\Mock\Helpers');
         View::addPath('tests/Mock/templates');
 
         $this->view = new View();

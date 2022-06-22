@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a094e96c87bc735bcd7e5876401c9be0",
+    "content-hash": "bde854dbc4ef0784828ac098d68f3a54",
     "packages": [
         {
             "name": "fyre/cookie",
@@ -48,16 +48,16 @@
         },
         {
             "name": "fyre/csp",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreCSP.git",
-                "reference": "972a26715114fbf481c4f983ff595af77f7677ea"
+                "reference": "682b281b450bc279cdb48c49a57c14cfa1e6cc98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreCSP/zipball/972a26715114fbf481c4f983ff595af77f7677ea",
-                "reference": "972a26715114fbf481c4f983ff595af77f7677ea",
+                "url": "https://api.github.com/repos/elusivecodes/FyreCSP/zipball/682b281b450bc279cdb48c49a57c14cfa1e6cc98",
+                "reference": "682b281b450bc279cdb48c49a57c14cfa1e6cc98",
                 "shasum": ""
             },
             "require": {
@@ -86,9 +86,9 @@
             "description": "A content security policy library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreCSP/issues",
-                "source": "https://github.com/elusivecodes/FyreCSP/tree/v1.0.5"
+                "source": "https://github.com/elusivecodes/FyreCSP/tree/v1.0.6"
             },
-            "time": "2022-04-04T08:17:49+00:00"
+            "time": "2022-05-06T10:34:05+00:00"
         },
         {
             "name": "fyre/csrf",
@@ -136,17 +136,57 @@
             "time": "2022-04-04T08:19:11+00:00"
         },
         {
-            "name": "fyre/filesystem",
+            "name": "fyre/datetime",
             "version": "v1.0.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/elusivecodes/FyreFileSystem.git",
-                "reference": "9da5a22cbd366b465cfa1d4c32a7913cc83db3ac"
+                "url": "https://github.com/elusivecodes/FyreDateTime.git",
+                "reference": "8343158ce13f0f37eab714c65e02dd62e71e8424"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreFileSystem/zipball/9da5a22cbd366b465cfa1d4c32a7913cc83db3ac",
-                "reference": "9da5a22cbd366b465cfa1d4c32a7913cc83db3ac",
+                "url": "https://api.github.com/repos/elusivecodes/FyreDateTime/zipball/8343158ce13f0f37eab714c65e02dd62e71e8424",
+                "reference": "8343158ce13f0f37eab714c65e02dd62e71e8424",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\DateTime\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "A DateTime library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyreDateTime/issues",
+                "source": "https://github.com/elusivecodes/FyreDateTime/tree/v1.0.8"
+            },
+            "time": "2022-05-15T13:13:21+00:00"
+        },
+        {
+            "name": "fyre/filesystem",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyreFileSystem.git",
+                "reference": "5946e3f3eb285a84d4ed7d4c1dac379953bb0730"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyreFileSystem/zipball/5946e3f3eb285a84d4ed7d4c1dac379953bb0730",
+                "reference": "5946e3f3eb285a84d4ed7d4c1dac379953bb0730",
                 "shasum": ""
             },
             "require": {
@@ -174,9 +214,53 @@
             "description": "A file/folder library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreFileSystem/issues",
-                "source": "https://github.com/elusivecodes/FyreFileSystem/tree/v1.0.8"
+                "source": "https://github.com/elusivecodes/FyreFileSystem/tree/v1.0.9"
             },
-            "time": "2022-04-04T08:24:08+00:00"
+            "time": "2022-05-08T07:31:48+00:00"
+        },
+        {
+            "name": "fyre/formatter",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyreFormatter.git",
+                "reference": "e79bb629843acdcf41686dc2a742315e7b002089"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyreFormatter/zipball/e79bb629843acdcf41686dc2a742315e7b002089",
+                "reference": "e79bb629843acdcf41686dc2a742315e7b002089",
+                "shasum": ""
+            },
+            "require": {
+                "fyre/datetime": "^1.0",
+                "fyre/typeparser": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\Formatter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "A formatting library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyreFormatter/issues",
+                "source": "https://github.com/elusivecodes/FyreFormatter/tree/v1.0"
+            },
+            "time": "2022-06-19T08:01:47+00:00"
         },
         {
             "name": "fyre/formbuilder",
@@ -303,16 +387,16 @@
         },
         {
             "name": "fyre/message",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreMessage.git",
-                "reference": "4a462c8f037d8ee0b91babe7ee227b6d6e9b8b5d"
+                "reference": "84815a9a47a920c55250004306d1760fd260e6de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreMessage/zipball/4a462c8f037d8ee0b91babe7ee227b6d6e9b8b5d",
-                "reference": "4a462c8f037d8ee0b91babe7ee227b6d6e9b8b5d",
+                "url": "https://api.github.com/repos/elusivecodes/FyreMessage/zipball/84815a9a47a920c55250004306d1760fd260e6de",
+                "reference": "84815a9a47a920c55250004306d1760fd260e6de",
                 "shasum": ""
             },
             "require": {
@@ -340,22 +424,22 @@
             "description": "A HTTP message library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreMessage/issues",
-                "source": "https://github.com/elusivecodes/FyreMessage/tree/v1.0.8"
+                "source": "https://github.com/elusivecodes/FyreMessage/tree/v1.0.9"
             },
-            "time": "2022-01-09T07:45:50+00:00"
+            "time": "2022-06-13T08:47:46+00:00"
         },
         {
             "name": "fyre/middleware",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreMiddleware.git",
-                "reference": "af69f674dcbe2aa07e85d3daaf4a7d1df6c30ea6"
+                "reference": "1effce4b1b53bee31ffbffeaac0fc993577a180f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreMiddleware/zipball/af69f674dcbe2aa07e85d3daaf4a7d1df6c30ea6",
-                "reference": "af69f674dcbe2aa07e85d3daaf4a7d1df6c30ea6",
+                "url": "https://api.github.com/repos/elusivecodes/FyreMiddleware/zipball/1effce4b1b53bee31ffbffeaac0fc993577a180f",
+                "reference": "1effce4b1b53bee31ffbffeaac0fc993577a180f",
                 "shasum": ""
             },
             "require": {
@@ -383,9 +467,9 @@
             "description": "A middleware library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreMiddleware/issues",
-                "source": "https://github.com/elusivecodes/FyreMiddleware/tree/v1.0.4"
+                "source": "https://github.com/elusivecodes/FyreMiddleware/tree/v1.0.5"
             },
-            "time": "2022-03-31T08:54:38+00:00"
+            "time": "2022-06-13T08:50:29+00:00"
         },
         {
             "name": "fyre/negotiate",
@@ -558,16 +642,16 @@
         },
         {
             "name": "fyre/router",
-            "version": "v2.1.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreRouter.git",
-                "reference": "be34d6c7ef60e04683df52cb14d41823fcb88865"
+                "reference": "939f4f87c723c3a00513412c1575180ac612ff91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/be34d6c7ef60e04683df52cb14d41823fcb88865",
-                "reference": "be34d6c7ef60e04683df52cb14d41823fcb88865",
+                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/939f4f87c723c3a00513412c1575180ac612ff91",
+                "reference": "939f4f87c723c3a00513412c1575180ac612ff91",
                 "shasum": ""
             },
             "require": {
@@ -598,9 +682,9 @@
             "description": "A URL routing library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreRouter/issues",
-                "source": "https://github.com/elusivecodes/FyreRouter/tree/v2.1.1"
+                "source": "https://github.com/elusivecodes/FyreRouter/tree/v2.1.2"
             },
-            "time": "2022-05-01T08:15:04+00:00"
+            "time": "2022-05-08T07:29:01+00:00"
         },
         {
             "name": "fyre/server",
@@ -650,6 +734,49 @@
                 "source": "https://github.com/elusivecodes/FyreServer/tree/v1.1.0"
             },
             "time": "2022-04-04T08:39:11+00:00"
+        },
+        {
+            "name": "fyre/typeparser",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyreTypeParser.git",
+                "reference": "e7b282ed4fa60611df731b79df3d380df914b3f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyreTypeParser/zipball/e7b282ed4fa60611df731b79df3d380df914b3f9",
+                "reference": "e7b282ed4fa60611df731b79df3d380df914b3f9",
+                "shasum": ""
+            },
+            "require": {
+                "fyre/datetime": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\DB\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "A database type parser library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyreTypeParser/issues",
+                "source": "https://github.com/elusivecodes/FyreTypeParser/tree/v1.0.3"
+            },
+            "time": "2022-04-03T05:51:07+00:00"
         },
         {
             "name": "fyre/uri",
@@ -864,16 +991,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.13.2",
+            "version": "v4.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "210577fe3cf7badcc5814d99455df46564f3c077"
+                "reference": "34bea19b6e03d8153165d8f30bba4c3be86184c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/210577fe3cf7badcc5814d99455df46564f3c077",
-                "reference": "210577fe3cf7badcc5814d99455df46564f3c077",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/34bea19b6e03d8153165d8f30bba4c3be86184c1",
+                "reference": "34bea19b6e03d8153165d8f30bba4c3be86184c1",
                 "shasum": ""
             },
             "require": {
@@ -914,9 +1041,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.2"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.14.0"
             },
-            "time": "2021-11-30T19:35:32+00:00"
+            "time": "2022-05-31T20:59:12+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1576,16 +1703,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.20",
+            "version": "9.5.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "12bc8879fb65aef2138b26fc633cb1e3620cffba"
+                "reference": "0e32b76be457de00e83213528f6bb37e2a38fcb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/12bc8879fb65aef2138b26fc633cb1e3620cffba",
-                "reference": "12bc8879fb65aef2138b26fc633cb1e3620cffba",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0e32b76be457de00e83213528f6bb37e2a38fcb1",
+                "reference": "0e32b76be457de00e83213528f6bb37e2a38fcb1",
                 "shasum": ""
             },
             "require": {
@@ -1619,7 +1746,6 @@
                 "sebastian/version": "^3.0.2"
             },
             "require-dev": {
-                "ext-pdo": "*",
                 "phpspec/prophecy-phpunit": "^2.0.1"
             },
             "suggest": {
@@ -1663,7 +1789,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.20"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.21"
             },
             "funding": [
                 {
@@ -1675,7 +1801,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-01T12:37:26+00:00"
+            "time": "2022-06-19T12:14:25+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2642,88 +2768,6 @@
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
-            "name": "symfony/polyfill-ctype",
-            "version": "v1.25.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "30885182c981ab175d4d034db0f6f469898070ab"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/30885182c981ab175d4d034db0f6f469898070ab",
-                "reference": "30885182c981ab175d4d034db0f6f469898070ab",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "provide": {
-                "ext-ctype": "*"
-            },
-            "suggest": {
-                "ext-ctype": "For best performance"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.23-dev"
-                },
-                "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill for ctype functions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "ctype",
-                "polyfill",
-                "portable"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.25.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-10-20T20:35:02+00:00"
-        },
-        {
             "name": "theseer/tokenizer",
             "version": "1.2.1",
             "source": {
@@ -2775,21 +2819,21 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25"
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/6964c76c7804814a842473e0c8fd15bab0f18e25",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0",
-                "symfony/polyfill-ctype": "^1.8"
+                "ext-ctype": "*",
+                "php": "^7.2 || ^8.0"
             },
             "conflict": {
                 "phpstan/phpstan": "<0.12.20",
@@ -2827,9 +2871,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.10.0"
+                "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
-            "time": "2021-03-09T10:59:23+00:00"
+            "time": "2022-06-03T18:03:27+00:00"
         }
     ],
     "aliases": [],

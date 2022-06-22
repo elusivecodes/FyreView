@@ -25,6 +25,7 @@
     "require": {
         "fyre/csp": "^1.0",
         "fyre/csrf": "^1.0",
+        "fyre/formatter": "^1.0",
         "fyre/formbuilder": "^1.0",
         "fyre/htmlhelper": "^1.0",
         "fyre/path": "^1.0",

@@ -15,6 +15,7 @@ final class ViewTest extends TestCase
     use
         DataTest,
         ElementTest,
+        LayoutTest,
         RenderTest;
 
     public function testPathTrailingSlash(): void
