@@ -6,7 +6,7 @@ namespace Tests\Mock\Helpers;
 use
     Fyre\View\Helper;
 
-class Test extends Helper
+class TestHelper extends Helper
 {
 
     public function test(): string

@@ -16,7 +16,7 @@ final class HelperRegistryTest extends TestCase
     public function testFind(): void
     {
         $this->assertSame(
-            '\Tests\Mock\Helpers\Test',
+            '\Tests\Mock\Helpers\TestHelper',
             HelperRegistry::find('Test')
         );
     }

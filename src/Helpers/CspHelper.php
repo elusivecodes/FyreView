@@ -12,9 +12,9 @@ use function
     random_bytes;
 
 /**
- * Csp
+ * CspHelper
  */
-class Csp extends Helper
+class CspHelper extends Helper
 {
 
     /**

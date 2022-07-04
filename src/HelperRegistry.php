@@ -80,7 +80,7 @@ abstract class HelperRegistry
         $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Helpers\\']);
 
         foreach ($namespaces AS $namespace) {
-            $className = $namespace.$name;
+            $className = $namespace.$name.'Helper';
 
             if (class_exists($className) && is_subclass_of($className, Helper::class)) {
                 return $className;

@@ -12,9 +12,9 @@ use function
     call_user_func_array;
 
 /**
- * Form
+ * FormHelper
  */
-class Form extends Helper
+class FormHelper extends Helper
 {
 
     /**

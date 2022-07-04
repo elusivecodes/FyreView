@@ -196,7 +196,7 @@ $helper = $this->MyHelper;
 
 Alternatively, you can load a helper with configuration options using the `loadHelper` method of the *View*.
 
-Custom helpers can be created by extending `\Fyre\View\Helper`, ensuring the `__construct` method accepts *View* as the argument.
+Custom helpers can be created by extending `\Fyre\View\Helper`, suffixing the class name with "*Helper*", and ensuring the `__construct` method accepts *View* as the argument.
 
 **Get Config**
 

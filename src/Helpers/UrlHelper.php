@@ -9,9 +9,9 @@ use
     Fyre\View\Helper;
 
 /**
- * Url
+ * UrlHelper
  */
-class Url extends Helper
+class UrlHelper extends Helper
 {
 
     /**

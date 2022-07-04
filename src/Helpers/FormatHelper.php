@@ -11,9 +11,9 @@ use function
     call_user_func_array;
 
 /**
- * Format
+ * FormatHelper
  */
-class Format extends Helper
+class FormatHelper extends Helper
 {
 
     /**
