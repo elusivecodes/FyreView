@@ -29,6 +29,6 @@
         "fyre/formbuilder": "^1.0",
         "fyre/htmlhelper": "^1.0",
         "fyre/path": "^1.0",
-        "fyre/router": "^2.1"
+        "fyre/router": "^3.0"
     }
 }
