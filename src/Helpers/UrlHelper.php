@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Fyre\View\Helpers;
 
 use
-    Fyre\HtmlHelper\HtmlHelper,
+    Fyre\HTMLHelper\HtmlHelper,
     Fyre\Router\Router,
     Fyre\View\Helper;
 
@@ -18,7 +18,7 @@ class UrlHelper extends Helper
      * Generate an anchor link for a destination.
      * @param string $content The link content.
      * @param string|array $destination The destination.
-     * @param array $options THe link options.
+     * @param array $options The link options.
      * @return string The anchor link.
      */
     public function link(string $content, string|array $destination, array $options = []): string
