@@ -57,6 +57,10 @@ class EntityContext extends Context
      */
     public function getDefaultValue(string $key): mixed
     {
+        if (!$this->item->isNew()) {
+            return null;
+        }
+
         [$model, $field] = $this->getModelField($key);
 
         if (!$model) {

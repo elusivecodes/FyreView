@@ -36,8 +36,10 @@ use Fyre\View\View;
 
 ## Views
 
+- `$controller` is a [*Controller*](https://github.com/elusivecodes/FyreController).
+
 ```php
-$view = new View();
+$view = new View($controller);
 ```
 
 **Get Controller**
@@ -385,9 +387,11 @@ $input = $this->Form->input($key, $options);
 All `options` will be created as attributes on the input element.
 
 - The default `id` and `name` attributes will be converted from the field key.
-- The input `type` and other default attributes will be determined from the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) and [*Model*](https://github.com/elusivecodes/FyreORM#models) [*Validator*](https://github.com/elusivecodes/FyreValidation).
-- The default value will be retrieved from the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests) `$_POST` data, the [*Entity*](https://github.com/elusivecodes/FyreEntity) (when using the *EntityContext*) or the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas).
+- The input `type` and other default attributes will be determined from the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) and [*Model Validation*](https://github.com/elusivecodes/FyreORM#validation).
+- The default value will be retrieved from the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests) `$_POST` data.
+    - If the form was opened in an [*Entity*](https://github.com/elusivecodes/FyreEntity) context, the [*Entity*](https://github.com/elusivecodes/FyreEntity) and the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) will also be used.
 - Select options can be specified using the `options` key.
+- Checkboxes and radio inputs can be marked as checked by setting the `checked` option to *true*.
 - Checkboxes will (by default) render a hidden field with the value "*0*". This can be disabled by setting the `hiddenField` option to *false*.
 
 You can also use the following helper methods to generate specific input type fields.
@@ -414,7 +418,7 @@ $input = $this->Form->submit($key, $options);
 $input = $this->Form->tel($key, $options);
 $input = $this->Form->text($key, $options);
 $input = $this->Form->time($key, $options);
-$input = $this->Form->url($name, $options);
+$input = $this->Form->url($key, $options);
 $input = $this->Form->week($key, $options);
 ```
 
@@ -452,7 +456,7 @@ All other `options` will be created as attributes on the legend element.
 
 Render a form open tag.
 
-- `$item` is an array or object representing the form context, and will default to *null*
+- `$item` is an [*Entity*](https://github.com/elusivecodes/FyreEntity) or other (supported) object representing the form context, and will default to *null*
 - `$options` is an array of options for rendering the form.
 
 ```php
