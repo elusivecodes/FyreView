@@ -388,7 +388,7 @@ All `options` will be created as attributes on the input element.
 
 - The default `id` and `name` attributes will be converted from the field key.
 - The input `type` and other default attributes will be determined from the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) and [*Model Validation*](https://github.com/elusivecodes/FyreORM#validation).
-- The default value will be retrieved from the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests) `$_POST` data.
+- The default value will be retrieved from the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests) `$_POST` data or form context.
     - If the form was opened in an [*Entity*](https://github.com/elusivecodes/FyreEntity) context, the [*Entity*](https://github.com/elusivecodes/FyreEntity) and the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) will also be used.
 - Select options can be specified using the `options` key.
 - Checkboxes and radio inputs can be marked as checked by setting the `checked` option to *true*.
