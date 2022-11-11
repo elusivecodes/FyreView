@@ -27,4 +27,14 @@ class ViewException extends RuntimeException
         return new static('Template not found: '.$name);
     }
 
+    public static function forUnclosedBlock(): static
+    {
+        return new static('Unclosed view block.');
+    }
+
+    public static function forUnopenedBlock(): static
+    {
+        return new static('Unopened view block.');
+    }
+
 }

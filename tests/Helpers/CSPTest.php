@@ -5,8 +5,11 @@ namespace Tests\Helpers;
 
 use
     Fyre\CSP\CspBuilder,
+    Fyre\Server\ServerRequest,
+    Fyre\Server\ClientResponse,
     Fyre\View\View,
-    PHPUnit\Framework\TestCase;
+    PHPUnit\Framework\TestCase,
+    Tests\Mock\TestController;
 
 final class CSPTest extends TestCase
 {
@@ -53,7 +56,11 @@ final class CSPTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->view = new View();
+        $request = new ServerRequest();
+        $response = new ClientResponse();
+        $controller = new TestController($request, $response);
+
+        $this->view = new View($controller);
     }
 
 }

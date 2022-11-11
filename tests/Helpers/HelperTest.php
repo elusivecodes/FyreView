@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Tests\Helpers;
 
 use
+    Fyre\Server\ServerRequest,
+    Fyre\Server\ClientResponse,
     Fyre\View\Exceptions\ViewException,
     Fyre\View\Helper,
     Fyre\View\HelperRegistry,
     Fyre\View\View,
-    PHPUnit\Framework\TestCase;
+    PHPUnit\Framework\TestCase,
+    Tests\Mock\TestController;
 
 final class HelperTest extends TestCase
 {
@@ -60,7 +63,11 @@ final class HelperTest extends TestCase
         View::clear();
         View::addPath('tests/Mock/templates');
 
-        $this->view = new View();
+        $request = new ServerRequest();
+        $response = new ClientResponse();
+        $controller = new TestController($request, $response);
+
+        $this->view = new View($controller);
     }
 
 }

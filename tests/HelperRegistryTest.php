@@ -4,14 +4,19 @@ declare(strict_types=1);
 namespace Tests;
 
 use
+    Fyre\Server\ServerRequest,
+    Fyre\Server\ClientResponse,
     Fyre\View\Exceptions\ViewException,
     Fyre\View\Helper,
     Fyre\View\HelperRegistry,
     Fyre\View\View,
-    PHPUnit\Framework\TestCase;
+    PHPUnit\Framework\TestCase,
+    Tests\Mock\TestController;
 
 final class HelperRegistryTest extends TestCase
 {
+
+    protected View $view;
 
     public function testFind(): void
     {
@@ -30,11 +35,9 @@ final class HelperRegistryTest extends TestCase
 
     public function testLoad(): void
     {
-        $view = new View();
-
         $this->assertInstanceOf(
             Helper::class,
-            HelperRegistry::load('Test', $view)
+            HelperRegistry::load('Test', $this->view)
         );
     }
 
@@ -42,9 +45,7 @@ final class HelperRegistryTest extends TestCase
     {
         $this->expectException(ViewException::class);
 
-        $view =  new View();
-
-        HelperRegistry::load('Invalid', $view);
+        HelperRegistry::load('Invalid', $this->view);
     }
 
     public function testNamespaceNoLeadingSlash(): void
@@ -52,11 +53,9 @@ final class HelperRegistryTest extends TestCase
         HelperRegistry::clear();
         HelperRegistry::addNamespace('Tests\Mock\Helpers');
 
-        $view = new View();
-
         $this->assertInstanceOf(
             Helper::class,
-            HelperRegistry::load('Test', $view)
+            HelperRegistry::load('Test', $this->view)
         );
     }
 
@@ -65,11 +64,9 @@ final class HelperRegistryTest extends TestCase
         HelperRegistry::clear();
         HelperRegistry::addNamespace('\Tests\Mock\Helpers\\');
 
-        $view = new View();
-
         $this->assertInstanceOf(
             Helper::class,
-            HelperRegistry::load('Test', $view)
+            HelperRegistry::load('Test', $this->view)
         );
     }
 
@@ -77,6 +74,12 @@ final class HelperRegistryTest extends TestCase
     {
         HelperRegistry::clear();
         HelperRegistry::addNamespace('\Tests\Mock\Helpers');
+
+        $request = new ServerRequest();
+        $response = new ClientResponse();
+        $controller = new TestController($request, $response);
+
+        $this->view = new View($controller);
     }
 
 }

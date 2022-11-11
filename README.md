@@ -5,9 +5,11 @@
 
 ## Table Of Contents
 - [Installation](#installation)
-- [Methods](#methods)
-- [Layouts](#layouts)
-- [Paths](#paths)
+- [Views](#views)
+    - [Layouts](#layouts)
+    - [Elements](#elements)
+    - [Blocks](#blocks)
+    - [Paths](#paths)
 - [Helper Registry](#helper-registry)
 - [Helpers](#helpers)
     - [CSP](#csp)
@@ -32,24 +34,19 @@ use Fyre\View\View;
 ```
 
 
-## Methods
+## Views
 
 ```php
 $view = new View();
 ```
 
-**Element**
+**Get Controller**
 
-Render an element.
-
-- `$file` is a string representing the element file.
-- `$data` is an array containing data to pass to the element, and will default to *[]*.
+Get the Controller.
 
 ```php
-echo $view->element($file, $data);
+$controller = $view->getController();
 ```
-
-Element files must end in the extension `.php`, and must exist in an "*elements*" folder in one of the defined paths.
 
 **Get Data**
 
@@ -113,7 +110,7 @@ $view->setLayout($layout);
 Layout files must end in the extension `.php`, and must exist in a "*layouts*" folder in one of the defined paths.
 
 
-## Layouts
+### Layouts
 
 You can use layouts when rendering views by placing a `default.php` file in a *layouts* folder of one of the defined paths. You can create multiple layouts, and specify the layout to use with the `setLayout` method above.
 
@@ -124,7 +121,100 @@ $this->content();
 ```
 
 
-## Paths
+### Elements
+
+**Element**
+
+Render an element.
+
+- `$file` is a string representing the element file.
+- `$data` is an array containing data to pass to the element, and will default to *[]*.
+
+```php
+echo $this->element($file, $data);
+```
+
+Element files must end in the extension `.php`, and must exist in an "*elements*" folder in one of the defined paths.
+
+
+### Blocks
+
+**Append**
+
+Append content to a block.
+
+- `$name` is a string representing the block name.
+
+```php
+$this->append($name);
+```
+
+Any output until the block is ended will be appended to the block.
+
+**Assign**
+
+Assign content to a block.
+
+- `$name` is a string representing the block name.
+- `$content` is a string representing the content.
+
+```php
+$this->assign($name, $content);
+```
+
+**End**
+
+End a block.
+
+```php
+$this->end();
+```
+
+**Fetch**
+
+Fetch a block.
+
+- `$name` is a string representing the block name.
+- `$default` is a string representing the default value, and will default to "".
+
+```php
+$block = $this->fetch($name, $default);
+```
+
+**Prepend**
+
+Prepend content to a block.
+
+- `$name` is a string representing the block name.
+
+```php
+$this->prepend($name);
+```
+
+Any output until the block is ended will be prepended to the block.
+
+**Reset**
+
+Reset content of a block.
+
+- `$name` is a string representing the block name.
+
+```php
+$this->reset($name);
+```
+
+**Start**
+
+- `$name` is a string representing the block name.
+
+Start content for a block.
+
+```php
+$this->start($name);
+```
+
+
+### Paths
 
 Layouts, templates and elements are loaded by searching available paths.
 
@@ -214,6 +304,7 @@ Get the *View*.
 $view = $helper->getView();
 ```
 
+
 ### CSP
 
 The CSP helper allows an easy way to generate nonces, and automatically add them to your [*CSP*](https://github.com/elusivecodes/FyreCSP) policies.
@@ -234,17 +325,154 @@ Generate a style nonce.
 $nonce = $this->CSP->styleNonce();
 ```
 
+
 ### Form
 
-The form helper provides a convenient wrapper for [*FormBuilder*](https://github.com/elusivecodes/FyreFormBuilder) methods, and includes the following additional methods:
+**Button**
 
-**Csrf**
+Render a button element.
 
-Render a CSRF token input element.
+- `$content` is a string representing the button content.
+- `$options` is an array of options for rendering the button.
 
 ```php
-$input = $this->Form->csrf();
+$button = $this->Form->button($content, $options);
 ```
+
+By default, the button content will be HTML escaped. To disable this, set the `escape` value to *false* in the `options` array.
+
+All other `options` will be created as attributes on the button element.
+
+**Close**
+
+Render a form close tag.
+
+```php
+$close = $this->Form->close();
+```
+
+**Fieldset Close**
+
+Render a fieldset close tag.
+
+```php
+$fieldsetClose = $this->Form->fieldsetClose();
+```
+
+**Fieldset Open**
+
+Render a fieldset open tag.
+
+- `$options` is an array of options for rendering the fieldset.
+
+```php
+$fieldset = $this->Form->fieldsetOpen($options);
+```
+
+All `options` will be created as attributes on the fieldset element.
+
+**Input**
+
+Render an input element.
+
+- `$key` is a string representing the field key, using dot notation.
+- `$options` is an array of options for rendering the label.
+
+```php
+$input = $this->Form->input($key, $options);
+```
+
+All `options` will be created as attributes on the input element.
+
+- The default `id` and `name` attributes will be converted from the field key.
+- The input `type` and other default attributes will be determined from the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) and [*Model*](https://github.com/elusivecodes/FyreORM#models) [*Validator*](https://github.com/elusivecodes/FyreValidation).
+- The default value will be retrieved from the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests) `$_POST` data, the [*Entity*](https://github.com/elusivecodes/FyreEntity) (when using the *EntityContext*) or the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas).
+- Select options can be specified using the `options` key.
+- Checkboxes will (by default) render a hidden field with the value "*0*". This can be disabled by setting the `hiddenField` option to *false*.
+
+You can also use the following helper methods to generate specific input type fields.
+
+```php
+$input = $this->Form->checkbox($key, $options);
+$input = $this->Form->color($key, $options);
+$input = $this->Form->date($key, $options);
+$input = $this->Form->datetime($key, $options);
+$input = $this->Form->email($key, $options);
+$input = $this->Form->file($key, $options);
+$input = $this->Form->hidden($key, $options);
+$input = $this->Form->image($key, $options);
+$input = $this->Form->month($key, $options);
+$input = $this->Form->number($key, $options);
+$input = $this->Form->password($key, $options);
+$input = $this->Form->radio($key, $options);
+$input = $this->Form->range($key, $options);
+$input = $this->Form->reset($key, $options);
+$input = $this->Form->search($key, $options);
+$input = $this->Form->select($key, $options);
+$input = $this->Form->selectMulti($key, $options);
+$input = $this->Form->submit($key, $options);
+$input = $this->Form->tel($key, $options);
+$input = $this->Form->text($key, $options);
+$input = $this->Form->time($key, $options);
+$input = $this->Form->url($name, $options);
+$input = $this->Form->week($key, $options);
+```
+
+**Label**
+
+Render a label element.
+
+- `$key` is a string representing the field key.
+- `$options` is an array of options for rendering the label.
+
+```php
+$label = $this->Form->label($key, $options);
+```
+
+The label text will be converted from the field key, unless a `text` option is specified. By default, the label content will be HTML escaped. To disable this, set the `escape` value to *false* in the `options` array.
+
+All other `options` will be created as attributes on the label element. The default `for` attribute will be converted from the field key.
+
+**Legend**
+
+Render a legend element.
+
+- `$content` is a string representing the legend content.
+- `$options` is an array of options for rendering the legend.
+
+```php
+$legend = $this->Form->legend($content, $options);
+```
+
+By default, the legend content will be HTML escaped. To disable this, set the `escape` value to *false* in the `options` array.
+
+All other `options` will be created as attributes on the legend element.
+
+**Open**
+
+Render a form open tag.
+
+- `$item` is an array or object representing the form context, and will default to *null*
+- `$options` is an array of options for rendering the form.
+
+```php
+$open = $this->Form->open($item, $options);
+```
+
+All `options` will be created as attributes on the form element.
+
+**Open Multipart**
+
+Render a multipart form open tag.
+
+- `$item` is an array or object representing the form context, and will default to *null*
+- `$options` is an array of options for rendering the form.
+
+```php
+$open = $this->Form->openMultipart($item, $options);
+```
+
+All `options` will be created as attributes on the form element.
 
 
 ### Format

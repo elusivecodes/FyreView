@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace Tests;
 
 use
+    Fyre\Controller\Controller,
+    Fyre\Server\ServerRequest,
+    Fyre\Server\ClientResponse,
     Fyre\View\View,
-    PHPUnit\Framework\TestCase;
+    PHPUnit\Framework\TestCase,
+    Tests\Mock\TestController;
 
 final class ViewTest extends TestCase
 {
@@ -13,10 +17,19 @@ final class ViewTest extends TestCase
     protected View $view;
 
     use
+        BlockTest,
         DataTest,
         ElementTest,
         LayoutTest,
         RenderTest;
+
+    public function testGetController(): void
+    {
+        $this->assertInstanceOf(
+            Controller::class,
+            $this->view->getController()
+        );
+    }
 
     public function testPathTrailingSlash(): void
     {
@@ -34,7 +47,11 @@ final class ViewTest extends TestCase
         View::clear();
         View::addPath('tests/Mock/templates');
 
-        $this->view = new View();
+        $request = new ServerRequest();
+        $response = new ClientResponse();
+        $controller = new TestController($request, $response);
+
+        $this->view = new View($controller);
     }
 
 }

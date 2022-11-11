@@ -5,8 +5,11 @@ namespace Tests\Helpers;
 
 use
     Fyre\Router\Router,
+    Fyre\Server\ServerRequest,
+    Fyre\Server\ClientResponse,
     Fyre\View\View,
-    PHPUnit\Framework\TestCase;
+    PHPUnit\Framework\TestCase,
+    Tests\Mock\TestController;
 
 final class UrlTest extends TestCase
 {
@@ -113,7 +116,11 @@ final class UrlTest extends TestCase
         Router::setAutoRoute(false);
         Router::setDefaultNamespace('Tests\Controller');
 
-        $this->view = new View();
+        $request = new ServerRequest();
+        $response = new ClientResponse();
+        $controller = new TestController($request, $response);
+
+        $this->view = new View($controller);
     }
 
 }

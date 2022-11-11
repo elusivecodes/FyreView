@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\View;
 
 use
+    Fyre\Controller\Controller,
     Fyre\Utility\Path,
     Fyre\View\Exceptions\ViewException,
     RuntimeException;
@@ -11,6 +12,7 @@ use
 use function
     array_key_exists,
     array_merge,
+    array_pop,
     extract,
     func_get_arg,
     in_array,
@@ -32,11 +34,19 @@ class View
 
     protected static array $paths = [];
 
+    protected Controller $controller;
+
     protected array $data = [];
+
+    protected string $content = ''; 
 
     protected string|null $file = null; 
 
     protected string|null $layout = 'default';
+
+    protected array $blocks = [];
+
+    protected array $blockStack = [];
 
     /**
      * Add a path for loading templates.
@@ -52,11 +62,20 @@ class View
     }
 
     /**
-     * Clear all namespaces and paths.
+     * Clear all namespaces, paths and blocks.
      */
     public static function clear(): void
     {
         static::$paths = [];
+    }
+
+    /**
+     * New View constructor.
+     * @param Controller $controller The Controller.
+     */
+    public function __construct(Controller $controller)
+    {
+        $this->controller = $controller;
     }
 
     /**
@@ -75,26 +94,35 @@ class View
     }
 
     /**
+     * Append content to a block.
+     * @param string $name The block name.
+     * @return View The View.
+     */
+    public function append(string $name): static
+    {
+        return $this->start($name, 'append');
+    }
+
+    /**
+     * Assign content to a block.
+     * @param string $name The block name.
+     * @param string $content The block content.
+     * @return View The View.
+     */
+    public function assign(string $name, string $content): static
+    {
+        $this->blocks[$name] = $content;
+
+        return $this;
+    }
+
+    /**
      * Get the layout content.
      * @return string The layout content.
      */
     public function content(): string
     {
-        $file = $this->file ?? '';
-
-        $this->file = null;
-
-        if (!$file) {
-            throw ViewException::forInvalidTemplate($file);
-        }
-
-        $filePath = static::findFile($file);
-
-        if (!$filePath) {
-            throw ViewException::forInvalidTemplate($file);
-        }
-
-        return $this->evaluate($filePath, $this->data);
+        return $this->content;
     }
 
     /**
@@ -112,6 +140,61 @@ class View
         }
 
         return $this->evaluate($filePath, $data);
+    }
+
+    /**
+     * End a block.
+     * @return View The View.
+     */
+    public function end(): static
+    {
+        $block = array_pop($this->blockStack);
+
+        if (!$block) {
+            throw ViewException::forUnopenedBlock();
+        }
+
+        $contents =  ob_get_contents();
+
+        ob_end_clean();
+
+        $name = $block['name'];
+
+        $this->blocks[$name] ??= '';
+
+        switch ($block['type']) {
+            case 'append':
+                $this->blocks[$name] .= $contents;
+                break;
+            case 'prepend':
+                $this->blocks[$name] = $contents.$this->blocks[$name];
+                break;
+            default:
+                $this->blocks[$name] = $contents;
+                break;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Fetch a block.
+     * @param string $name The block name.
+     * @param string $default The default value.
+     * @return string The block contents.
+     */
+    public function fetch(string $name, string $default = ''): string
+    {
+        return $this->blocks[$name] ?? $default;
+    }
+
+    /**
+     * Get the Controller.
+     * @return Controller The Controller.
+     */
+    public function getController(): Controller
+    {
+        return $this->controller;
     }
 
     /**
@@ -146,6 +229,16 @@ class View
     }
 
     /**
+     * Prepend content to a block.
+     * @param string $name The block name.
+     * @return View The View.
+     */
+    public function prepend(string $name): static
+    {
+        return $this->start($name, 'prepend');
+    }
+
+    /**
      * Render a template.
      * @param string $file The template file.
      * @return string The rendered template.
@@ -153,23 +246,42 @@ class View
      */
     public function render(string $file): string
     {
-        $this->file = $file;
-
-        if (!$this->layout) {
-            return $this->content();
-        }
-
+        $filePath = static::findFile($file);
         $layoutPath = static::findFile($this->layout, static::LAYOUTS_FOLDER);
 
-        if (!$layoutPath) {
-            return $this->content();
+        if (!$filePath) {
+            throw ViewException::forInvalidTemplate($file);
         }
 
-        $result = $this->evaluate($layoutPath, $this->data);
+        $this->content = $this->evaluate($filePath, $this->data);
 
-        $this->file = null;
+        if (!$layoutPath) {
+            $result = $this->content;
+        } else {
+            $result = $this->evaluate($layoutPath, $this->data);
+        }
+
+        if ($this->blockStack !== []) {
+            while ($this->blockStack !== []) {
+                $this->end();
+            }
+
+            throw ViewException::forUnclosedBlock();
+        }
+
+        $this->blocks = [];
 
         return $result;
+    }
+
+    /**
+     * Reset content of a block.
+     * @param string $name The block name.
+     * @return View The View.
+     */
+    public function reset(string $name): static
+    {
+        return $this->assign($name, '');
     }
 
     /**
@@ -192,6 +304,24 @@ class View
     public function setLayout(string|null $layout): static
     {
         $this->layout = $layout;
+
+        return $this;
+    }
+
+    /**
+     * Start content for a block.
+     * @param string $name The block name.
+     * @param string|null $type The block type.
+     * @return View The View.
+     */
+    public function start(string $name, string|null $type = null): static
+    {
+        ob_start();
+
+        $this->blockStack[] = [
+            'name' => $name,
+            'type' => $type
+        ];
 
         return $this;
     }

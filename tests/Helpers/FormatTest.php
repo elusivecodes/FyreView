@@ -5,8 +5,11 @@ namespace Tests\Helpers;
 
 use
     Fyre\Formatter\Formatter,
+    Fyre\Server\ServerRequest,
+    Fyre\Server\ClientResponse,
     Fyre\View\View,
-    PHPUnit\Framework\TestCase;
+    PHPUnit\Framework\TestCase,
+    Tests\Mock\TestController;
 
 final class FormatTest extends TestCase
 {
@@ -33,7 +36,11 @@ final class FormatTest extends TestCase
     {
         Formatter::setDefaultLocale('en-US');
 
-        $this->view = new View();
+        $request = new ServerRequest();
+        $response = new ClientResponse();
+        $controller = new TestController($request, $response);
+
+        $this->view = new View($controller);
     }
 
 }
