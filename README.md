@@ -433,7 +433,9 @@ Render a label element.
 $label = $this->Form->label($key, $options);
 ```
 
-The label text will be converted from the field key, unless a `text` option is specified. By default, the label content will be HTML escaped. To disable this, set the `escape` value to *false* in the `options` array.
+The label text will be retrieved from the [*Lang*](https://github.com/elusivecodes/FyreLang) using the `Field.{field_name}` key or converted from the field name. You can also set custom label text by setting the `text` option.
+
+By default, the label content will be HTML escaped. To disable this, set the `escape` value to *false* in the `options` array.
 
 All other `options` will be created as attributes on the label element. The default `for` attribute will be converted from the field key.
 
