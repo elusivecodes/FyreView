@@ -607,16 +607,16 @@
         },
         {
             "name": "fyre/inflector",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreInflector.git",
-                "reference": "3b3d83480e2a2e0f62bf73a053cb7c97ddc09150"
+                "reference": "359cb66ac8e8c3088c6b05fb65b1266b9be41518"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreInflector/zipball/3b3d83480e2a2e0f62bf73a053cb7c97ddc09150",
-                "reference": "3b3d83480e2a2e0f62bf73a053cb7c97ddc09150",
+                "url": "https://api.github.com/repos/elusivecodes/FyreInflector/zipball/359cb66ac8e8c3088c6b05fb65b1266b9be41518",
+                "reference": "359cb66ac8e8c3088c6b05fb65b1266b9be41518",
                 "shasum": ""
             },
             "require-dev": {
@@ -641,9 +641,9 @@
             "description": "An inflection library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreInflector/issues",
-                "source": "https://github.com/elusivecodes/FyreInflector/tree/v1.0.4"
+                "source": "https://github.com/elusivecodes/FyreInflector/tree/v1.0.5"
             },
-            "time": "2022-04-03T05:50:10+00:00"
+            "time": "2022-11-12T00:06:45+00:00"
         },
         {
             "name": "fyre/lang",
