@@ -1,7 +1,7 @@
 {
     "name": "fyre/view",
     "description": "A template rendering library.",
-    "version": "3.0.2",
+    "version": "4.0.1",
     "type": "library",
     "license": "MIT",
     "authors": [
