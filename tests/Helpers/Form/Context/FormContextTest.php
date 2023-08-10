@@ -3,49 +3,45 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Form\Context;
 
-use
-    Fyre\CSRF\CsrfProtection,
-    Fyre\DB\ConnectionManager,
-    Fyre\DB\Handlers\MySQL\MySQLConnection,
-    Fyre\HTMLHelper\HtmlHelper,
-    Fyre\ORM\ModelRegistry,
-    Fyre\Server\ServerRequest,
-    Fyre\Server\ClientResponse,
-    Fyre\View\View,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\TestController;
+use Fyre\DB\ConnectionManager;
+use Fyre\DB\Handlers\MySQL\MySQLConnection;
+use Fyre\ORM\ModelRegistry;
+use Fyre\Security\CsrfProtection;
+use Fyre\Server\ServerRequest;
+use Fyre\Utility\HtmlHelper;
+use Fyre\View\View;
+use PHPUnit\Framework\TestCase;
 
 final class FormContextTest extends TestCase
 {
 
     protected View $view;
 
-    use
-        BigIntTest,
-        BlobTest,
-        BooleanTest,
-        CharTest,
-        DateTest,
-        DatetimeTest,
-        DecimalTest,
-        DoubleTest,
-        EnumTest,
-        FloatTest,
-        IntTest,
-        LongBlobTest,
-        LongTextTest,
-        MediumBlobTest,
-        MediumIntTest,
-        MediumTextTest,
-        RelationshipTest,
-        SetTest,
-        SmallIntTest,
-        TextTest,
-        TimeTest,
-        TinyBlobTest,
-        TinyIntTest,
-        TinyTextTest,
-        VarcharTest;
+    use BigIntTestTrait;
+    use BlobTestTrait;
+    use BooleanTestTrait;
+    use CharTestTrait;
+    use DateTestTrait;
+    use DatetimeTestTrait;
+    use DecimalTestTrait;
+    use DoubleTestTrait;
+    use EnumTestTrait;
+    use FloatTestTrait;
+    use IntTestTrait;
+    use LongBlobTestTrait;
+    use LongTextTestTrait;
+    use MediumBlobTestTrait;
+    use MediumIntTestTrait;
+    use MediumTextTestTrait;
+    use RelationshipTestTrait;
+    use SetTestTrait;
+    use SmallIntTestTrait;
+    use TextTestTrait;
+    use TimeTestTrait;
+    use TinyBlobTestTrait;
+    use TinyIntTestTrait;
+    use TinyTextTestTrait;
+    use VarcharTestTrait;
 
     protected function setUp(): void
     {
@@ -68,13 +64,15 @@ final class FormContextTest extends TestCase
         CsrfProtection::disable();
         HtmlHelper::setCharset('UTF-8');
 
-        $request = new ServerRequest();
-        $response = new ClientResponse();
-        $controller = new TestController($request, $response);
+        $request = new ServerRequest([
+            'globals' => [
+                'server' => [
+                    'REQUEST_URI' => '/test'
+                ]
+            ]
+        ]);
 
-        $request->getUri()->setPath('/test');
-
-        $this->view = new View($controller);
+        $this->view = new View($request);
     }
 
     protected function tearDown(): void

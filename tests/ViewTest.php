@@ -3,38 +3,34 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\Controller\Controller,
-    Fyre\Server\ServerRequest,
-    Fyre\Server\ClientResponse,
-    Fyre\View\View,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\TestController;
+use Fyre\Server\ServerRequest;
+use Fyre\View\Template;
+use Fyre\View\View;
+use PHPUnit\Framework\TestCase;
 
 final class ViewTest extends TestCase
 {
 
     protected View $view;
 
-    use
-        BlockTest,
-        DataTest,
-        ElementTest,
-        LayoutTest,
-        RenderTest;
+    use BlockTestTrait;
+    use DataTestTrait;
+    use ElementTestTrait;
+    use LayoutTestTrait;
+    use RenderTestTrait;
 
-    public function testGetController(): void
+    public function testGetRequest(): void
     {
         $this->assertInstanceOf(
-            Controller::class,
-            $this->view->getController()
+            ServerRequest::class,
+            $this->view->getRequest()
         );
     }
 
     public function testPathTrailingSlash(): void
     {
-        View::clear();
-        View::addPath('tests/Mock/templates/');
+        Template::clear();
+        Template::addPath('tests/Mock/templates/');
 
         $this->assertSame(
             'Test',
@@ -44,14 +40,12 @@ final class ViewTest extends TestCase
 
     protected function setUp(): void
     {
-        View::clear();
-        View::addPath('tests/Mock/templates');
+        Template::clear();
+        Template::addPath('tests/Mock/templates');
 
         $request = new ServerRequest();
-        $response = new ClientResponse();
-        $controller = new TestController($request, $response);
 
-        $this->view = new View($controller);
+        $this->view = new View($request);
     }
 
 }

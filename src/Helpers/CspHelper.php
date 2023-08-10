@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\View\Helpers;
 
-use
-    Fyre\CSP\CspBuilder,
-    Fyre\View\Helper;
+use Fyre\Security\CspBuilder;
+use Fyre\View\Helper;
 
-use function
-    hash,
-    random_bytes;
+use function hash;
+use function random_bytes;
 
 /**
  * CspHelper
@@ -47,8 +45,10 @@ class CspHelper extends Helper
 
         $policies = CspBuilder::getPolicies();
 
-        foreach ($policies AS $policy) {
-            $policy->addDirective($directive, $value);
+        foreach ($policies AS $key => $policy) {
+            $policy = $policy->addDirective($directive, $value);
+
+            CspBuilder::setPolicy($key, $policy);
         }
 
         return $nonce;

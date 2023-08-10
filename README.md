@@ -1,6 +1,6 @@
 # FyreView
 
-**FyreView** is a free, template rendering library for *PHP*.
+**FyreView** is a free, open-source template rendering library for *PHP*.
 
 
 ## Table Of Contents
@@ -9,7 +9,7 @@
     - [Layouts](#layouts)
     - [Elements](#elements)
     - [Blocks](#blocks)
-    - [Paths](#paths)
+- [Templates](#templates)
 - [Helper Registry](#helper-registry)
 - [Helpers](#helpers)
     - [CSP](#csp)
@@ -36,18 +36,18 @@ use Fyre\View\View;
 
 ## Views
 
-- `$controller` is a [*Controller*](https://github.com/elusivecodes/FyreController).
+- `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 
 ```php
-$view = new View($controller);
+$view = new View($request);
 ```
 
-**Get Controller**
+**Get Request**
 
-Get the Controller.
+Get the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 
 ```php
-$controller = $view->getController();
+$request = $view->getRequest();
 ```
 
 **Get Data**
@@ -216,7 +216,11 @@ $this->start($name);
 ```
 
 
-### Paths
+## Templates
+
+```php
+use Fyre\View\Template;
+```
 
 Layouts, templates and elements are loaded by searching available paths.
 
@@ -227,7 +231,34 @@ Add a path for loading templates.
 - `$path` is a string representing the path.
 
 ```php
-View::addPath($path);
+Template::addPath($path);
+```
+
+**Get Paths**
+
+Get the paths.
+
+```php
+$paths = Template::getPaths();
+```
+
+**Locate**
+
+Find a file in paths.
+
+- `$file` is a string representing the file name.
+- `$folder` is a string representing the folder name, and will default to "".
+
+```php
+$filePath = Template::findFile($file, $folder);
+```
+
+**Remove Path**
+
+- `$path` is a string representing the path.
+
+```php
+$removed = Template::removePath($path);
 ```
 
 
@@ -265,6 +296,24 @@ Find a helper class.
 $className = HelperRegistry::find($name);
 ```
 
+**Get Namespaces**
+
+Get the namespaces.
+
+```php
+$namespaces = HelperRegistry::getNamespaces();
+```
+
+**Has Namespace**
+
+Check if a namespace exists.
+
+- `$namespace` is a string representing the namespace.
+
+```php
+$hasNamespace = HelperRegistry::hasNamespace ($namespace);
+```
+
 **Load**
 
 Load a helper.
@@ -275,6 +324,16 @@ Load a helper.
 
 ```php
 $helper = HelperRegistry::load($name, $view, $options);
+```
+
+**Remove Namespace**
+
+Remove a namespace.
+
+- `$namespace` is a string representing the namespace.
+
+```php
+$removed = HelperRegistry::removeNamespace($namespace);
 ```
 
 

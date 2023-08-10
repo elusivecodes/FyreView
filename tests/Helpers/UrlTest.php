@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
-use
-    Fyre\Router\Router,
-    Fyre\Server\ServerRequest,
-    Fyre\Server\ClientResponse,
-    Fyre\View\View,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\TestController;
+use Fyre\Router\Router;
+use Fyre\Server\ServerRequest;
+use Fyre\View\View;
+use PHPUnit\Framework\TestCase;
 
 final class UrlTest extends TestCase
 {
@@ -117,10 +114,8 @@ final class UrlTest extends TestCase
         Router::setDefaultNamespace('Tests\Controller');
 
         $request = new ServerRequest();
-        $response = new ClientResponse();
-        $controller = new TestController($request, $response);
 
-        $this->view = new View($controller);
+        $this->view = new View($request);
     }
 
 }

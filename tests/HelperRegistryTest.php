@@ -3,15 +3,12 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\Server\ServerRequest,
-    Fyre\Server\ClientResponse,
-    Fyre\View\Exceptions\ViewException,
-    Fyre\View\Helper,
-    Fyre\View\HelperRegistry,
-    Fyre\View\View,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\TestController;
+use Fyre\Server\ServerRequest;
+use Fyre\View\Exceptions\ViewException;
+use Fyre\View\Helper;
+use Fyre\View\HelperRegistry;
+use Fyre\View\View;
+use PHPUnit\Framework\TestCase;
 
 final class HelperRegistryTest extends TestCase
 {
@@ -30,6 +27,48 @@ final class HelperRegistryTest extends TestCase
     {
         $this->assertNull(
             HelperRegistry::find('Invalid')
+        );
+    }
+
+    public function testGetNamespaces(): void
+    {
+        $this->assertSame(
+            [
+                '\Tests\Mock\Helpers\\'
+            ],
+            HelperRegistry::getNamespaces()
+        );
+    }
+
+    public function testHasNamespace(): void
+    {
+        $this->assertTrue(
+            HelperRegistry::hasNamespace('\Tests\Mock\Helpers')
+        );
+    }
+
+    public function testHasNamespaceInvalid(): void
+    {
+        $this->assertFalse(
+            HelperRegistry::hasNamespace('\Tests\Mock\Invalid')
+        );
+    }
+
+    public function testRemoveNamespace(): void
+    {
+        $this->assertTrue(
+            HelperRegistry::removeNamespace('\Tests\Mock\Helpers')
+        );
+
+        $this->assertFalse(
+            HelperRegistry::hasNamespace('\Tests\Mock\Helpers')
+        );
+    }
+
+    public function testRemoveNamespaceInvalid(): void
+    {
+        $this->assertFalse(
+            HelperRegistry::removeNamespace('\Tests\Mock\Invalid')
         );
     }
 
@@ -76,10 +115,8 @@ final class HelperRegistryTest extends TestCase
         HelperRegistry::addNamespace('\Tests\Mock\Helpers');
 
         $request = new ServerRequest();
-        $response = new ClientResponse();
-        $controller = new TestController($request, $response);
 
-        $this->view = new View($controller);
+        $this->view = new View($request);
     }
 
 }

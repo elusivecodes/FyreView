@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
-use
-    Fyre\Formatter\Formatter,
-    Fyre\Server\ServerRequest,
-    Fyre\Server\ClientResponse,
-    Fyre\View\View,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\TestController;
+use Fyre\Server\ServerRequest;
+use Fyre\Utility\Formatter;
+use Fyre\View\View;
+use PHPUnit\Framework\TestCase;
 
 final class FormatTest extends TestCase
 {
@@ -37,10 +34,8 @@ final class FormatTest extends TestCase
         Formatter::setDefaultLocale('en-US');
 
         $request = new ServerRequest();
-        $response = new ClientResponse();
-        $controller = new TestController($request, $response);
 
-        $this->view = new View($controller);
+        $this->view = new View($request);
     }
 
 }

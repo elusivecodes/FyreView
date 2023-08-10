@@ -3,24 +3,22 @@ declare(strict_types=1);
 
 namespace Fyre\View\Form;
 
-use
-    Closure,
-    Fyre\Entity\Entity,
-    Fyre\View\Form\Traits\SchemaTrait,
-    Fyre\View\Form\Traits\ValidationTrait,
-    Fyre\ORM\Relationships\Relationship,
-    Fyre\ORM\Model,
-    Fyre\ORM\ModelRegistry;
+use Closure;
+use Fyre\Entity\Entity;
+use Fyre\View\Form\Traits\SchemaTrait;
+use Fyre\View\Form\Traits\ValidationTrait;
+use Fyre\ORM\Relationships\Relationship;
+use Fyre\ORM\Model;
+use Fyre\ORM\ModelRegistry;
 
-use function
-    array_filter,
-    array_key_exists,
-    array_pop,
-    array_shift,
-    explode,
-    is_array,
-    max,
-    min;
+use function array_filter;
+use function array_key_exists;
+use function array_pop;
+use function array_shift;
+use function explode;
+use function is_array;
+use function max;
+use function min;
 
 /**
  * EntityContext

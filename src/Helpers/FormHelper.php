@@ -3,33 +3,31 @@ declare(strict_types=1);
 
 namespace Fyre\View\Helpers;
 
-use
-    Fyre\CSRF\CsrfProtection,
-    Fyre\DB\TypeParser,
-    Fyre\Entity\Entity,
-    Fyre\FormBuilder\FormBuilder,
-    Fyre\Lang\Lang,
-    Fyre\Router\Router,
-    Fyre\Server\ServerRequest,
-    Fyre\View\Exceptions\FormException,
-    Fyre\View\Form\Context,
-    Fyre\View\Form\EntityContext,
-    Fyre\View\Form\NullContext,
-    Fyre\View\Helper,
-    Fyre\View\View;
+use Fyre\DB\TypeParser;
+use Fyre\Entity\Entity;
+use Fyre\Form\FormBuilder;
+use Fyre\Lang\Lang;
+use Fyre\Router\Router;
+use Fyre\Security\CsrfProtection;
+use Fyre\Server\ServerRequest;
+use Fyre\View\Exceptions\FormException;
+use Fyre\View\Form\Context;
+use Fyre\View\Form\EntityContext;
+use Fyre\View\Form\NullContext;
+use Fyre\View\Helper;
+use Fyre\View\View;
 
-use function
-    array_map,
-    array_pop,
-    explode,
-    get_class,
-    is_array,
-    method_exists,
-    preg_replace,
-    str_replace,
-    str_starts_with,
-    trim,
-    ucwords;
+use function array_map;
+use function array_pop;
+use function explode;
+use function get_class;
+use function is_array;
+use function method_exists;
+use function preg_replace;
+use function str_replace;
+use function str_starts_with;
+use function trim;
+use function ucwords;
 
 /**
  * FormHelper
@@ -58,7 +56,7 @@ class FormHelper extends Helper
     {
         parent::__construct($view, $options);
 
-        $this->request = $this->view->getController()->getRequest();
+        $this->request = $this->view->getRequest();
     }
 
     /**
@@ -81,7 +79,7 @@ class FormHelper extends Helper
     public function checkbox(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('boolean');
+        $parser = TypeParser::use('boolean');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -145,7 +143,7 @@ class FormHelper extends Helper
     public function date(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('date');
+        $parser = TypeParser::use('date');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -178,7 +176,7 @@ class FormHelper extends Helper
     public function datetime(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('datetime');
+        $parser = TypeParser::use('datetime');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -289,6 +287,7 @@ class FormHelper extends Helper
      * @param string $key The field key.
      * @param array $options Options for rendering the input.
      * @return string The input HTML.
+     * @throws FormException if the input type is not valid.
      */
     public function input(string $key, array $options = []): string
     {
@@ -364,7 +363,7 @@ class FormHelper extends Helper
     public function number(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('float');
+        $parser = TypeParser::use('float');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -390,6 +389,7 @@ class FormHelper extends Helper
      * @param object|null $item The context item.
      * @param array $options Options for rendering the form.
      * @return string The form open HTML.
+     * @throws FormException if there is an unclosed form or the context is not valid.
      */
     public function open(object|null $item = null, array $options = []): string
     {
@@ -473,7 +473,7 @@ class FormHelper extends Helper
     public function radio(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('boolean');
+        $parser = TypeParser::use('boolean');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -621,7 +621,7 @@ class FormHelper extends Helper
     public function text(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('string');
+        $parser = TypeParser::use('string');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -649,7 +649,7 @@ class FormHelper extends Helper
     public function textarea(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('string');
+        $parser = TypeParser::use('string');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -676,7 +676,7 @@ class FormHelper extends Helper
     public function time(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::getType('time');
+        $parser = TypeParser::use('time');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);

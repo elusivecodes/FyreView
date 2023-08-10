@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Fyre\View\Helpers;
 
-use
-    Fyre\HTMLHelper\HtmlHelper,
-    Fyre\Router\Router,
-    Fyre\View\Helper;
+use Fyre\Router\Router;
+use Fyre\Utility\HtmlHelper;
+use Fyre\View\Helper;
 
 /**
  * UrlHelper

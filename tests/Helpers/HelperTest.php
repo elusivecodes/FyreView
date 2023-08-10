@@ -3,15 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
-use
-    Fyre\Server\ServerRequest,
-    Fyre\Server\ClientResponse,
-    Fyre\View\Exceptions\ViewException,
-    Fyre\View\Helper,
-    Fyre\View\HelperRegistry,
-    Fyre\View\View,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\TestController;
+use Fyre\Server\ServerRequest;
+use Fyre\View\Exceptions\ViewException;
+use Fyre\View\HelperRegistry;
+use Fyre\View\Template;
+use Fyre\View\View;
+use PHPUnit\Framework\TestCase;
 
 final class HelperTest extends TestCase
 {
@@ -60,14 +57,12 @@ final class HelperTest extends TestCase
         HelperRegistry::clear();
         HelperRegistry::addNamespace('\Tests\Mock\Helpers');
 
-        View::clear();
-        View::addPath('tests/Mock/templates');
+        Template::clear();
+        Template::addPath('tests/Mock/templates');
 
         $request = new ServerRequest();
-        $response = new ClientResponse();
-        $controller = new TestController($request, $response);
 
-        $this->view = new View($controller);
+        $this->view = new View($request);
     }
 
 }

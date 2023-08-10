@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
-use function
-    array_replace_recursive;
+use function array_replace;
 
 /**
  * Helper
@@ -27,7 +26,7 @@ abstract class Helper
     {
         $this->view = $view;
 
-        $this->config = array_replace_recursive(static::$defaults, $options);
+        $this->config = array_replace(static::$defaults, $options);
     }
 
     /**

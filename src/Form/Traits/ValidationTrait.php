@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\View\Form\Traits;
 
-use
-    Fyre\Validation\Validator;
+use Fyre\Validation\Validator;
 
-use function
-    count,
-    max,
-    min;
+use function count;
+use function max;
+use function min;
 
 /**
  * ValidationTrait

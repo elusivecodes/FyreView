@@ -20,20 +20,18 @@
             "Tests\\": "tests/"
         }
     },
-    "require-dev": {
-        "phpunit/phpunit": "^9"
-    },
     "require": {
-        "fyre/controller": "^4.0",
-        "fyre/csp": "^1.0",
-        "fyre/csrf": "^1.0",
-        "fyre/forge": "^1.0",
-        "fyre/formatter": "^1.0",
-        "fyre/formbuilder": "^1.0",
-        "fyre/htmlhelper": "^1.0",
-        "fyre/lang": "^1.0",
-        "fyre/orm": "^3.1",
-        "fyre/path": "^1.0",
-        "fyre/router": "^3.0"
+        "fyre/csp": "^2.0",
+        "fyre/csrf": "^2.0",
+        "fyre/formatter": "^2.0",
+        "fyre/formbuilder": "^2.0",
+        "fyre/htmlhelper": "^2.0",
+        "fyre/lang": "^3.0",
+        "fyre/orm": "^4.0",
+        "fyre/path": "^2.0",
+        "fyre/router": "^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10"
     }
 }

@@ -3,18 +3,15 @@ declare(strict_types=1);
 
 namespace Fyre\View\Form\Traits;
 
-use
-    Fyre\Schema\TableSchemaInterface;
+use Fyre\Schema\TableSchema;
 
-use const
-    PHP_INT_MAX,
-    PHP_INT_MIN;
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
 
-use function
-    is_numeric,
-    min,
-    pow,
-    preg_match;
+use function is_numeric;
+use function min;
+use function pow;
+use function preg_match;
 
 /**
  * SchemaTrait
@@ -24,11 +21,11 @@ trait SchemaTrait
 
     /**
      * Get the default value.
-     * @param TableSchemaInterface $schema The TableSchema.
+     * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return mixed The default value.
      */
-    public static function getSchemaDefaultValue(TableSchemaInterface $schema, string $field): mixed
+    public static function getSchemaDefaultValue(TableSchema $schema, string $field): mixed
     {
         $column = $schema->column($field);
 
@@ -49,11 +46,11 @@ trait SchemaTrait
 
     /**
      * Get the maximum value.
-     * @param TableSchemaInterface $schema The TableSchema.
+     * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return float|null The maximum value.
      */
-    public static function getSchemaMax(TableSchemaInterface $schema, string $field): float|null
+    public static function getSchemaMax(TableSchema $schema, string $field): float|null
     {
         $column = $schema->column($field);
 
@@ -101,11 +98,11 @@ trait SchemaTrait
 
     /**
      * Get the maximum length.
-     * @param TableSchemaInterface $schema The TableSchema.
+     * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return int|null The maximum length.
      */
-    public static function getSchemaMaxLength(TableSchemaInterface $schema, string $field): int|null
+    public static function getSchemaMaxLength(TableSchema $schema, string $field): int|null
     {
         $column = $schema->column($field);
 
@@ -139,11 +136,11 @@ trait SchemaTrait
 
     /**
      * Get the minimum value.
-     * @param TableSchemaInterface $schema The TableSchema.
+     * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return float|null The minimum value.
      */
-    public static function getSchemaMin(TableSchemaInterface $schema, string $field): float|null
+    public static function getSchemaMin(TableSchema $schema, string $field): float|null
     {
         $column = $schema->column($field);
 
@@ -190,11 +187,11 @@ trait SchemaTrait
 
     /**
      * Get the step interval.
-     * @param TableSchemaInterface $schema The TableSchema.
+     * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return float|null The step interval.
      */
-    public static function getSchemaStep(TableSchemaInterface $schema, string $field): string|float|null
+    public static function getSchemaStep(TableSchema $schema, string $field): string|float|null
     {
         $column = $schema->column($field);
 
@@ -221,11 +218,11 @@ trait SchemaTrait
 
     /**
      * Get the field type.
-     * @param TableSchemaInterface $schema The TableSchema.
+     * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return string The field type.
      */
-    public static function getSchemaType(TableSchemaInterface $schema, string $field): string
+    public static function getSchemaType(TableSchema $schema, string $field): string
     {
         $column = $schema->column($field);
 

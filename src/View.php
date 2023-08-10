@@ -3,24 +3,16 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
-use
-    Fyre\Controller\Controller,
-    Fyre\Utility\Path,
-    Fyre\View\Exceptions\ViewException,
-    RuntimeException;
+use Fyre\Server\ServerRequest;
+use Fyre\View\Exceptions\ViewException;
 
-use function
-    array_key_exists,
-    array_merge,
-    array_pop,
-    extract,
-    func_get_arg,
-    in_array,
-    is_file,
-    ob_end_clean,
-    ob_get_contents,
-    ob_start,
-    str_ends_with;
+use function array_merge;
+use function array_pop;
+use function extract;
+use function func_get_arg;
+use function ob_end_clean;
+use function ob_get_contents;
+use function ob_start;
 
 /**
  * View
@@ -28,13 +20,7 @@ use function
 class View
 {
 
-    protected const ELEMENTS_FOLDER = 'elements';
-    protected const LAYOUTS_FOLDER = 'layouts';
-    protected const FILE_EXTENSION = '.php';
-
-    protected static array $paths = [];
-
-    protected Controller $controller;
+    protected ServerRequest $request;
 
     protected array $data = [];
 
@@ -49,33 +35,12 @@ class View
     protected array $blockStack = [];
 
     /**
-     * Add a path for loading templates.
-     * @param string $path The path.
-     */
-    public static function addPath(string $path): void
-    {
-        $path = Path::resolve($path);
-
-        if (!in_array($path, static::$paths)) {
-            static::$paths[] = $path;
-        }
-    }
-
-    /**
-     * Clear all namespaces, paths and blocks.
-     */
-    public static function clear(): void
-    {
-        static::$paths = [];
-    }
-
-    /**
      * New View constructor.
-     * @param Controller $controller The Controller.
+     * @param ServerRequest $request The ServerRequest.
      */
-    public function __construct(Controller $controller)
+    public function __construct(ServerRequest $request)
     {
-        $this->controller = $controller;
+        $this->request = $request;
     }
 
     /**
@@ -84,10 +49,6 @@ class View
      */
     public function __get(string $name)
     {
-        if (!HelperRegistry::find($name)) {
-            throw new RuntimeException('Undefined property: '.$name);
-        }
-
         $this->loadHelper($name);
 
         return $this->$name;
@@ -129,11 +90,11 @@ class View
      * Render an element.
      * @param string $file The element file.
      * @return string The rendered element.
-     * @throws ViewException if the element does not exist.
+     * @throws ViewException if the element is not valid.
      */
     public function element(string $file, array $data = []): string
     {
-        $filePath = static::findFile($file, static::ELEMENTS_FOLDER);
+        $filePath = Template::locate($file, Template::ELEMENTS_FOLDER);
 
         if (!$filePath) {
             throw ViewException::forInvalidElement($file);
@@ -145,6 +106,7 @@ class View
     /**
      * End a block.
      * @return View The View.
+     * @throws ViewException if a block is not opened.
      */
     public function end(): static
     {
@@ -189,15 +151,6 @@ class View
     }
 
     /**
-     * Get the Controller.
-     * @return Controller The Controller.
-     */
-    public function getController(): Controller
-    {
-        return $this->controller;
-    }
-
-    /**
      * Get the view data.
      * @return array The view data.
      */
@@ -213,6 +166,15 @@ class View
     public function getLayout(): string|null
     {
         return $this->layout;
+    }
+
+    /**
+     * Get the ServerRequest.
+     * @return ServerRequest The ServerRequest.
+     */
+    public function getRequest(): ServerRequest
+    {
+        return $this->request;
     }
 
     /**
@@ -242,12 +204,12 @@ class View
      * Render a template.
      * @param string $file The template file.
      * @return string The rendered template.
-     * @throws ViewException if the template does not exist.
+     * @throws ViewException if the template is not valid or there are unclosed blocks.
      */
     public function render(string $file): string
     {
-        $filePath = static::findFile($file);
-        $layoutPath = static::findFile($this->layout, static::LAYOUTS_FOLDER);
+        $filePath = Template::locate($file);
+        $layoutPath = Template::locate($this->layout, Template::LAYOUTS_FOLDER);
 
         if (!$filePath) {
             throw ViewException::forInvalidTemplate($file);
@@ -345,29 +307,6 @@ class View
         } finally {
             ob_end_clean();
         }
-    }
-
-    /**
-     * Find a file in paths.
-     * @param string $name The file name.
-     * @param string $folder The file folder.
-     * @return string|null The file path.
-     */
-    protected static function findFile(string $name, string $folder = ''): string|null
-    {
-        if (!str_ends_with($name, static::FILE_EXTENSION)) {
-            $name .= static::FILE_EXTENSION;
-        }
-
-        foreach (static::$paths AS $path) {
-            $filePath = Path::join($path, $folder, $name);
-
-            if (is_file($filePath)) {
-                return $filePath;
-            }
-        }
-
-        return null;
     }
 
 }

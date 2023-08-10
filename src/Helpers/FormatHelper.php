@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Fyre\View\Helpers;
 
-use
-    Fyre\Formatter\Formatter,
-    Fyre\View\Helper;
+use Fyre\Utility\Formatter;
+use Fyre\View\Helper;
 
 use function
     call_user_func_array;
