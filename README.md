@@ -42,14 +42,6 @@ use Fyre\View\View;
 $view = new View($request);
 ```
 
-**Get Request**
-
-Get the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
-
-```php
-$request = $view->getRequest();
-```
-
 **Get Data**
 
 Get the view data.
@@ -64,6 +56,14 @@ Get the layout.
 
 ```php
 $layout = $view->getLayout();
+```
+
+**Get Request**
+
+Get the [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
+
+```php
+$request = $view->getRequest();
 ```
 
 **Load Helper**
