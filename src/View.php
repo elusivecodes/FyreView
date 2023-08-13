@@ -34,6 +34,8 @@ class View
 
     protected array $blockStack = [];
 
+    protected array $helpers = [];
+
     /**
      * New View constructor.
      * @param ServerRequest $request The ServerRequest.
@@ -51,7 +53,7 @@ class View
     {
         $this->loadHelper($name);
 
-        return $this->$name;
+        return $this->helpers[$name];
     }
 
     /**
@@ -185,7 +187,7 @@ class View
      */
     public function loadHelper(string $name, array $options = []): static
     {
-        $this->$name = HelperRegistry::load($name, $this, $options);
+        $this->helpers[$name] ??= HelperRegistry::load($name, $this, $options);
 
         return $this;
     }
