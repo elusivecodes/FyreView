@@ -14,6 +14,8 @@ trait RenderTestTrait
             'a' => 1
         ]);
 
+        $this->view->setLayout(null);
+
         $this->assertSame(
             'Template: 1',
             $this->view->render('test/template')
@@ -22,6 +24,8 @@ trait RenderTestTrait
 
     public function testRenderDeep(): void
     {
+        $this->view->setLayout(null);
+
         $this->assertSame(
             'Test',
             $this->view->render('test/deep/test')

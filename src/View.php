@@ -48,8 +48,9 @@ class View
     /**
      * Load a helper.
      * @param string $name The helper name.
+     * @return Helper The Helper.
      */
-    public function __get(string $name)
+    public function __get(string $name): Helper
     {
         $this->loadHelper($name);
 
@@ -118,7 +119,7 @@ class View
             throw ViewException::forUnopenedBlock();
         }
 
-        $contents =  ob_get_contents();
+        $contents = ob_get_contents();
 
         ob_end_clean();
 
@@ -211,10 +212,17 @@ class View
     public function render(string $file): string
     {
         $filePath = Template::locate($file);
-        $layoutPath = Template::locate($this->layout, Template::LAYOUTS_FOLDER);
 
         if (!$filePath) {
             throw ViewException::forInvalidTemplate($file);
+        }
+
+        $layoutPath = $this->layout ?
+            Template::locate($this->layout, Template::LAYOUTS_FOLDER) :
+            null;
+
+        if ($this->layout && !$layoutPath) {
+            throw ViewException::forInvalidLayout($file);
         }
 
         $this->content = $this->evaluate($filePath, $this->data);

@@ -141,6 +141,7 @@ trait BlockTestTrait
             'a' => 1
         ]);
 
+        $this->view->setLayout(null);
         $this->view->start('test');
         $this->view->render('test/template');
     }

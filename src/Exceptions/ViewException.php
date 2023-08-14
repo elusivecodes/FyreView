@@ -21,6 +21,11 @@ class ViewException extends RuntimeException
         return new static('Helper not found: '.$name);
     }
 
+    public static function forInvalidLayout(string $name): static
+    {
+        return new static('Layout not found: '.$name);
+    }
+
     public static function forInvalidTemplate(string $name): static
     {
         return new static('Template not found: '.$name);

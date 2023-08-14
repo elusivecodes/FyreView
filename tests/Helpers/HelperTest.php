@@ -17,6 +17,8 @@ final class HelperTest extends TestCase
 
     public function testHelper(): void
     {
+        $this->view->setLayout(null);
+
         $this->assertSame(
             'test',
             $this->view->render('test/helper')

@@ -32,6 +32,8 @@ final class ViewTest extends TestCase
         Template::clear();
         Template::addPath('tests/Mock/templates/');
 
+        $this->view->setLayout(null);
+
         $this->assertSame(
             'Test',
             $this->view->render('test/deep/test')
