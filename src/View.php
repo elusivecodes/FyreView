@@ -222,7 +222,7 @@ class View
             null;
 
         if ($this->layout && !$layoutPath) {
-            throw ViewException::forInvalidLayout($file);
+            throw ViewException::forInvalidLayout($this->layout);
         }
 
         $this->content = $this->evaluate($filePath, $this->data);
