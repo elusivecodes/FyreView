@@ -19,6 +19,7 @@ use Fyre\View\View;
 
 use function array_map;
 use function array_pop;
+use function class_parents;
 use function explode;
 use function get_class;
 use function is_array;
@@ -400,6 +401,18 @@ class FormHelper extends Helper
         if ($item) {
             $class = get_class($item);
             $className = static::$contextMap[$class] ?? null;
+
+            if ($className === null) {
+                $parents = class_parents($class);
+
+                foreach ($parents AS $parent) {
+                    $className = static::$contextMap[$parent] ?? null;
+
+                    if ($className) {
+                        break;
+                    }
+                }
+            }
 
             if ($className === null) {
                 throw FormException::forInvalidContext();
