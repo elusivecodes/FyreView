@@ -138,7 +138,7 @@ Render a *Cell*.
 - `$args` is an array of arguments that will be passed to the cell method, and will default to *[]*.
 
 ```php
-echo $view->cell($cell, $args);
+echo $this->cell($cell, $args);
 ```
 
 
