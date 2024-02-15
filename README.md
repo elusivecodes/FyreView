@@ -12,7 +12,6 @@
     - [Blocks](#blocks)
 - [Templates](#templates)
 - [Cell Registry](#cell-registry)
-- [Custom Cells](#custom-cells)
 - [Helper Registry](#helper-registry)
 - [Helpers](#helpers)
     - [CSP](#csp)
