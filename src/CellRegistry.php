@@ -5,7 +5,6 @@ namespace Fyre\View;
 
 use Fyre\View\Exceptions\ViewException;
 
-use function array_merge;
 use function array_splice;
 use function class_exists;
 use function in_array;
@@ -13,17 +12,17 @@ use function is_subclass_of;
 use function trim;
 
 /**
- * HelperRegistry
+ * CellRegistry
  */
-abstract class HelperRegistry
+abstract class CellRegistry
 {
 
     protected static array $namespaces = [];
 
-    protected static array $helpers = [];
+    protected static array $cells = [];
 
     /**
-     * Add a namespace for loading helpers.
+     * Add a namespace for loading cells.
      * @param string $namespace The namespace.
      */
     public static function addNamespace(string $namespace): void
@@ -36,22 +35,22 @@ abstract class HelperRegistry
     }
 
     /**
-     * Clear all namespaces and helpers.
+     * Clear all namespaces and cells.
      */
     public static function clear(): void
     {
         static::$namespaces = [];
-        static::$helpers = [];
+        static::$cells = [];
     }
 
     /**
-     * Find a helper class.
-     * @param string $name The helper name.
-     * @return string|null The helper class.
+     * Find a cell class.
+     * @param string $name The cell name.
+     * @return string|null The cell class.
      */
     public static function find(string $name): string|null
     {
-        return static::$helpers[$name] ??= static::locate($name);
+        return static::$cells[$name] ??= static::locate($name);
     }
 
     /**
@@ -76,19 +75,19 @@ abstract class HelperRegistry
     }
 
     /**
-     * Load a helper.
-     * @param string $name The helper name.
+     * Load a cell.
+     * @param string $name The cell name.
      * @param View $view The View.
-     * @param array $options The helper options.
-     * @return Helper The Helper.
-     * @throws ViewException if the helper is not valid.
+     * @param array $options The cell options.
+     * @return Cell The Cell.
+     * @throws ViewException if the cell is not valid.
      */
-    public static function load(string $name, View $view, array $options = []): Helper
+    public static function load(string $name, View $view, array $options = []): Cell
     {
         $className = static::find($name);
 
         if (!$className) {
-            throw ViewException::forInvalidHelper($name);
+            throw ViewException::forInvalidCell($name);
         }
 
         return new $className($view, $options);
@@ -117,18 +116,18 @@ abstract class HelperRegistry
     }
 
     /**
-     * Locate a helper class.
-     * @param string $name The helper name.
-     * @return string|null The helper class.
+     * Locate a cell class.
+     * @param string $name The cell name.
+     * @return string|null The cell class.
      */
     protected static function locate(string $name): string|null
     {
-        $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Helpers\\']);
+        $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Cells\\']);
 
         foreach ($namespaces AS $namespace) {
-            $className = $namespace.$name.'Helper';
+            $className = $namespace.$name.'Cell';
 
-            if (class_exists($className) && is_subclass_of($className, Helper::class)) {
+            if (class_exists($className) && is_subclass_of($className, Cell::class)) {
                 return $className;
             }
         }

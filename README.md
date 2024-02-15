@@ -7,9 +7,12 @@
 - [Installation](#installation)
 - [Views](#views)
     - [Layouts](#layouts)
+    - [Cells](#cells)
     - [Elements](#elements)
     - [Blocks](#blocks)
 - [Templates](#templates)
+- [Cell Registry](#cell-registry)
+- [Custom Cells](#custom-cells)
 - [Helper Registry](#helper-registry)
 - [Helpers](#helpers)
     - [CSP](#csp)
@@ -41,6 +44,7 @@ use Fyre\View\View;
 ```php
 $view = new View($request);
 ```
+
 
 **Get Data**
 
@@ -120,6 +124,22 @@ The rendered content is passed to the layout file via the `content` method of `$
 
 ```php
 $this->content();
+```
+
+
+### Cells
+
+Custom cells can be created by extending `\Fyre\View\Cell`, and suffixing the class name with "*Cell*".
+
+**Cell**
+
+Render a *Cell*.
+
+- `$cell` is a string, and can either represent the cell name (implementing a `display` method) or in the format of `Cell::method`.
+- `$args` is an array of arguments that will be passed to the cell method, and will default to *[]*.
+
+```php
+echo $view->cell($cell, $args);
 ```
 
 
@@ -262,6 +282,81 @@ $removed = Template::removePath($path);
 ```
 
 
+## Cell Registry
+
+```php
+use Fyre\View\CellRegistry;
+```
+
+**Add Namespace**
+
+Add a namespace for automatically loading cells.
+
+- `$namespace` is a string representing the namespace.
+
+```php
+CellRegistry::addNamespace($namespace);
+```
+
+**Clear**
+
+Clear all namespaces and cells.
+
+```php
+CellRegistry::clear();
+```
+
+**Find**
+
+Find a cell class.
+
+- `$name` is a string representing the cell name.
+
+```php
+$className = CellRegistry::find($name);
+```
+
+**Get Namespaces**
+
+Get the namespaces.
+
+```php
+$namespaces = CellRegistry::getNamespaces();
+```
+
+**Has Namespace**
+
+Check if a namespace exists.
+
+- `$namespace` is a string representing the namespace.
+
+```php
+$hasNamespace = CellRegistry::hasNamespace($namespace);
+```
+
+**Load**
+
+Load a cell.
+
+- `$name` is a string representing the cell name.
+- `$view` is a *View*.
+- `$options` is an array containing cell options.
+
+```php
+$cell = CellRegistry::load($name, $view, $options);
+```
+
+**Remove Namespace**
+
+Remove a namespace.
+
+- `$namespace` is a string representing the namespace.
+
+```php
+$removed = CellRegistry::removeNamespace($namespace);
+```
+
+
 ## Helper Registry
 
 ```php
@@ -311,7 +406,7 @@ Check if a namespace exists.
 - `$namespace` is a string representing the namespace.
 
 ```php
-$hasNamespace = HelperRegistry::hasNamespace ($namespace);
+$hasNamespace = HelperRegistry::hasNamespace($namespace);
 ```
 
 **Load**

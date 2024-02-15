@@ -42,4 +42,19 @@ trait DataTestTrait
         );
     }
 
+    public function testSet(): void
+    {
+        $this->assertSame(
+            $this->view,
+            $this->view->set('a', 1)
+        );
+
+        $this->assertSame(
+            [
+                'a' => 1
+            ],
+            $this->view->getData()
+        );
+    }
+
 }

@@ -16,6 +16,7 @@ use function str_ends_with;
 class Template
 {
 
+    public const CELLS_FOLDER = 'cells';
     public const ELEMENTS_FOLDER = 'elements';
     public const LAYOUTS_FOLDER = 'layouts';
     protected const FILE_EXTENSION = '.php';

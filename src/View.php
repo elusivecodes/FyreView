@@ -5,11 +5,12 @@ namespace Fyre\View;
 
 use Fyre\Server\ServerRequest;
 use Fyre\View\Exceptions\ViewException;
+use Fyre\View\Traits\EvaluateTrait;
+use Fyre\View\Traits\ViewVarsTrait;
 
-use function array_merge;
 use function array_pop;
-use function extract;
-use function func_get_arg;
+use function count;
+use function explode;
 use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
@@ -22,19 +23,20 @@ class View
 
     protected ServerRequest $request;
 
-    protected array $data = [];
-
     protected string $content = ''; 
 
     protected string|null $file = null; 
 
     protected string|null $layout = 'default';
 
+    protected array $helpers = [];
+
     protected array $blocks = [];
 
     protected array $blockStack = [];
 
-    protected array $helpers = [];
+    use EvaluateTrait;
+    use ViewVarsTrait;
 
     /**
      * New View constructor.
@@ -78,6 +80,25 @@ class View
         $this->blocks[$name] = $content;
 
         return $this;
+    }
+
+    /**
+     * Render a cell.
+     * @param string $cell The cell name.
+     * @param array $args The cell method arguments.
+     * @return Cell The new Cell.
+     */
+    public function cell(string $cell, array $args = []): Cell
+    {
+        $parts = explode('::', $cell, 2);
+
+        if (count($parts) === 2) {
+            [$cell, $action] = $parts;
+        } else {
+            $action = null;
+        }
+
+        return CellRegistry::load($cell, $this, ['action' => $action, 'args' => $args]);
     }
 
     /**
@@ -151,15 +172,6 @@ class View
     public function fetch(string $name, string $default = ''): string
     {
         return $this->blocks[$name] ?? $default;
-    }
-
-    /**
-     * Get the view data.
-     * @return array The view data.
-     */
-    public function getData(): array
-    {
-        return $this->data;
     }
 
     /**
@@ -257,18 +269,6 @@ class View
     }
 
     /**
-     * Set view data.
-     * @param array $data The view data.
-     * @return View The View.
-     */
-    public function setData(array $data): static
-    {
-        $this->data = array_merge($this->data, $data);
-
-        return $this;
-    }
-
-    /**
      * Set the layout.
      * @param string|null $layout The layout.
      * @return View The View.
@@ -296,27 +296,6 @@ class View
         ];
 
         return $this;
-    }
-
-    /**
-     * Render and inject data into a file.
-     * @param string $filePath The file path.
-     * @param array $data The data to inject.
-     * @return string The rendered file.
-     */
-    protected function evaluate(string $filePath, array $data): string
-    {
-        extract($data);
-
-        try {
-            ob_start();
-
-            include func_get_arg(0);
-
-            return ob_get_contents();
-        } finally {
-            ob_end_clean();
-        }
     }
 
 }

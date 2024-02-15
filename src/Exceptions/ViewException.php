@@ -11,6 +11,16 @@ use RuntimeException;
 class ViewException extends RuntimeException
 {
 
+    public static function forInvalidCell(string $name): static
+    {
+        return new static('Cell not found: '.$name);
+    }
+
+    public static function forInvalidCellMethod(string $name, string $method): static
+    {
+        return new static('Cell method not valid: '.$name.'::'.$method);
+    }
+
     public static function forInvalidElement(string $name): static
     {
         return new static('Element not found: '.$name);
