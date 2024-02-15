@@ -134,7 +134,7 @@ Custom cells can be created by extending `\Fyre\View\Cell`, and suffixing the cl
 
 Render a *Cell*.
 
-- `$cell` is a string, and can either represent the cell name (implementing a `display` method) or in the format of `Cell::method`.
+- `$cell` is a string, and can either represent the cell name (implementing a `display` method) or in the format of "*Cell::method*".
 - `$args` is an array of arguments that will be passed to the cell method, and will default to *[]*.
 
 ```php
