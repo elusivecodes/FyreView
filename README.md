@@ -272,6 +272,16 @@ Find a file in paths.
 $filePath = Template::findFile($file, $folder);
 ```
 
+**Normalize**
+
+Normalize a template file name.
+
+- `$string` is a string representing the file name.
+
+```php
+$normalized = Template::normalize($string);
+```
+
 **Remove Path**
 
 - `$path` is a string representing the path.

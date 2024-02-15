@@ -127,7 +127,11 @@ abstract class Cell
         }
 
         $template = $this->template;
-        $template ??= Path::join($cell, $this->action);
+
+        if ($template === null) {
+            $file = Template::normalize($this->action);
+            $template = Path::join($cell, $file);
+        }
 
         $filePath = Template::locate($template, Template::CELLS_FOLDER);
 

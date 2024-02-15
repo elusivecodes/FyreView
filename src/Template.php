@@ -8,7 +8,9 @@ use Fyre\Utility\Path;
 use function array_splice;
 use function in_array;
 use function is_file;
+use function preg_replace;
 use function str_ends_with;
+use function strtolower;
 
 /**
  * Template
@@ -74,6 +76,18 @@ class Template
         }
 
         return null;
+    }
+
+    /**
+     * Normalize a file name.
+     * @param string $string The input string.
+     * @return string The normalized string.
+     */
+    public static function normalize(string $string): string
+    {
+        $string = preg_replace('/(?<=[^A-Z])[A-Z]/', '_\0', $string);
+
+        return strtolower($string);
     }
 
     /**

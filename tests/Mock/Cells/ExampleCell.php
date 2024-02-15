@@ -13,4 +13,9 @@ class ExampleCell extends Cell
         $this->set('a', $value);
     }
 
+    public function otherTest(): void
+    {
+        
+    }
+
 }

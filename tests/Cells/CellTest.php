@@ -108,6 +108,16 @@ final class CellTest extends TestCase
         );
     }
 
+    public function testCamelCase(): void
+    {
+        $this->view->setLayout(null);
+
+        $this->assertSame(
+            'Other',
+            $this->view->cell('Example::otherTest')->render()
+        );
+    }
+
     protected function setUp(): void
     {
         CellRegistry::clear();
