@@ -107,6 +107,16 @@ final class UrlTest extends TestCase
         );
     }
 
+    public function testToPartial(): void
+    {
+        Router::get('home', 'Home');
+
+        $this->assertSame(
+            '#',
+            $this->view->Url->to('#')
+        );
+    }
+
     protected function setUp(): void
     {
         Router::clear();

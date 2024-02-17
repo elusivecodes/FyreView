@@ -7,6 +7,9 @@ use Fyre\Router\Router;
 use Fyre\Utility\HtmlHelper;
 use Fyre\View\Helper;
 
+use function is_string;
+use function preg_match;
+
 /**
  * UrlHelper
  */
@@ -45,6 +48,10 @@ class UrlHelper extends Helper
      */
     public function to(string|array $destination, array $options = []): string
     {
+        if (is_string($destination) && preg_match('/^(?:(?:javascript|mailto|tel|sms):|#|\?|:?\/\/)/', $destination)) {
+            return $destination;
+        }
+
         return Router::build($destination, $options);
     }
 
