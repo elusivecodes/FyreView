@@ -156,9 +156,8 @@ trait ValidationTrait
         $rules = $validator->getFieldRules($field);
 
         foreach ($rules AS $rule) {
-            switch ($rule->getName()) {
-                case 'required':
-                    return true;
+            if (!$rule->skipEmpty()) {
+                return true;
             }
         }
 
