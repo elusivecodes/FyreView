@@ -6,6 +6,7 @@ namespace Tests\Helpers;
 use Fyre\Router\Router;
 use Fyre\Server\ServerRequest;
 use Fyre\View\View;
+use HomeController;
 use PHPUnit\Framework\TestCase;
 
 final class UrlTest extends TestCase
@@ -20,7 +21,7 @@ final class UrlTest extends TestCase
         $this->assertSame(
             '<a href="/home">Title</a>',
             $this->view->Url->link('Title', [
-                'controller' => 'Home'
+                'href' => '/home'
             ])
         );
     }
@@ -32,9 +33,8 @@ final class UrlTest extends TestCase
         $this->assertSame(
             '<a class="test" href="/home">Title</a>',
             $this->view->Url->link('Title', [
-                'controller' => 'Home'
-            ], [
-                'class' => 'test'
+                'class' => 'test',
+                'href' => '/home'
             ])
         );
     }
@@ -46,7 +46,7 @@ final class UrlTest extends TestCase
         $this->assertSame(
             '<a href="/home">&lt;i&gt;Title&lt;/i&gt;</a>',
             $this->view->Url->link('<i>Title</i>', [
-                'controller' => 'Home'
+                'href' => '/home'
             ])
         );
     }
@@ -58,70 +58,64 @@ final class UrlTest extends TestCase
         $this->assertSame(
             '<a href="/home"><i>Title</i></a>',
             $this->view->Url->link('<i>Title</i>', [
-                'controller' => 'Home'
-            ], [
+                'href' => '/home',
                 'escape' => false
-            ])
-        );
-    }
-
-    public function testLinkFullBase(): void
-    {
-        Router::setBaseUri('https://test.com/');
-        Router::get('home', 'Home');
-
-        $this->assertSame(
-            '<a href="https://test.com/home">Test</a>',
-            $this->view->Url->link('Test', [
-                'controller' => 'Home'
-            ], [
-                'fullBase' => true
             ])
         );
     }
 
     public function testTo(): void
     {
-        Router::get('home', 'Home');
+        Router::get('home', HomeController::class, ['as' => 'home']);
 
         $this->assertSame(
             '/home',
-            $this->view->Url->to([
-                'controller' => 'Home'
-            ])
+            $this->view->Url->to('home')
+        );
+    }
+
+    public function testToArguments(): void
+    {
+        Router::get('home/(:segment)', HomeController::class, ['as' => 'home']);
+
+        $this->assertSame(
+            '/home/1',
+            $this->view->Url->to('home', [1])
         );
     }
 
     public function testToFullbase(): void
     {
-        Router::setBaseUri('https://test.com/');
-        Router::get('home', 'Home');
+        Router::get('home', HomeController::class, ['as' => 'home']);
 
         $this->assertSame(
             'https://test.com/home',
-            $this->view->Url->to([
-                'controller' => 'Home'
-            ], [
+            $this->view->Url->to('home', options: [
                 'fullBase' => true
             ])
         );
     }
 
-    public function testToPartial(): void
+    public function testPath(): void
     {
-        Router::get('home', 'Home');
-
         $this->assertSame(
-            '#',
-            $this->view->Url->to('#')
+            '/assets/test.txt',
+            $this->view->Url->path('assets/test.txt')
+        );
+    }
+
+    public function testPathFullbase(): void
+    {
+        $this->assertSame(
+            'https://test.com/assets/test.txt',
+            $this->view->Url->path('assets/test.txt', ['fullBase' => true])
         );
     }
 
     protected function setUp(): void
     {
         Router::clear();
-        Router::setAutoRoute(false);
-        Router::setDefaultNamespace('Tests\Controller');
+        Router::setBaseUri('https://test.com/');
 
         $request = new ServerRequest();
 

@@ -30,7 +30,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="-999999999999" max="999999999999" step="any" />',
+            '<input id="value" name="value" type="number" placeholder="Value" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -54,7 +54,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="0" max="999999999999" step="any" />',
+            '<input id="value" name="value" type="number" placeholder="Value" min="0" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -83,7 +83,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="101" max="999999999999" step="any" />',
+            '<input id="value" name="value" type="number" placeholder="Value" min="101" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -112,7 +112,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="100" max="999999999999" step="any" />',
+            '<input id="value" name="value" type="number" placeholder="Value" min="100" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -141,7 +141,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="-999999999999" max="999" step="any" />',
+            '<input id="value" name="value" type="number" placeholder="Value" max="999" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -170,7 +170,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="-999999999999" max="1000" step="any" />',
+            '<input id="value" name="value" type="number" placeholder="Value" max="1000" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -228,7 +228,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" placeholder="Value" min="-999999999999" max="999999999999" step="any" required />',
+            '<input id="value" name="value" type="number" placeholder="Value" step="any" required />',
             $this->view->Form->input('value')
         );
     }
@@ -254,7 +254,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" value="100.123" placeholder="Value" min="-999999999999" max="999999999999" step="any" />',
+            '<input id="value" name="value" type="number" value="100.123" placeholder="Value" step="any" />',
             $this->view->Form->input('value')
         );
     }
@@ -278,7 +278,7 @@ trait FloatTestTrait
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="number" value="100.123" placeholder="Value" min="-999999999999" max="999999999999" step="any" />',
+            '<input id="value" name="value" type="number" value="100.123" placeholder="Value" step="any" />',
             $this->view->Form->input('value')
         );
     }

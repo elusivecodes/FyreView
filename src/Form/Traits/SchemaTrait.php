@@ -37,7 +37,7 @@ trait SchemaTrait
             return (float) $column['default'];
         }
 
-        if (preg_match('/^(["\'])(.*)\1$/', $column['default'], $match)) {
+        if (preg_match('/^([\'"])(.*)\1$/', $column['default'], $match)) {
             return $match[2];
         }
 
@@ -74,6 +74,10 @@ trait SchemaTrait
             // case 'bigint':
             //     $max = 9223372036854775807;
             //     break;
+            case 'float':
+            case 'double':
+            case 'real':
+                return null;
             default:
                 $max = null;
                 break;
@@ -168,6 +172,10 @@ trait SchemaTrait
             // case 'bigint':
             //     $min = -9223372036854775808;
             //     break;
+            case 'float':
+            case 'double':
+            case 'real':
+                return null;
             default:
                 $min = null;
                 break;
@@ -210,6 +218,7 @@ trait SchemaTrait
                 return 1 / pow(10, $column['precision']);
             case 'double':
             case 'float':
+            case 'real':
                 return 'any';
             default:
                 return null;
@@ -261,6 +270,7 @@ trait SchemaTrait
             case 'float':
             case 'int':
             case 'mediumint':
+            case 'real':
             case 'smallint':
             case 'tinyint':
                 return 'number';

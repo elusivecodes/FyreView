@@ -658,20 +658,34 @@ The URL helper provides methods for generating [*Router*](https://github.com/elu
 Generate an anchor link for a destination.
 
 - `$content` is a string representing the link content.
-- `$destination` is a string or array containing the destination.
 - `$options` is an array containing options.
     - `escape` is a boolean indicating whether to escape the link content, and will default to *true*.
     - `fullBase` is a boolean indicating whether to use the full base URI, and will default to *false*.
 
 ```php
-$link = $this->Url->link($content, $destination, $options);
+$link = $this->Url->link($content, $options);
+```
+
+**Path**
+
+Generate a url for a relative path.
+
+- `$path` is a string representing the file path.
+- `$options` is an array containing options.
+    - `fullBase` is a boolean indicating whether to use the full base URI, and will default to *false*.
+
+```php
+$url = $this->Url->path($path, $options);
 ```
 
 **To**
 
-Generate a url for a destination.
+Generate a url for a named route.
 
-- `$destination` is a string or array containing the destination.
+- `$name` is a string representing the route alias.
+- `$arguments` is an array containing the route arguments.
+    - `?` is an array containing route query parameters.
+    - `#` is a string representing the fragment component of the URI.
 - `$options` is an array containing options.
     - `fullBase` is a boolean indicating whether to use the full base URI, and will default to *false*.
 

@@ -22,13 +22,13 @@
     "require": {
         "fyre/csp": "^2.0",
         "fyre/csrf": "^3.0",
-        "fyre/formatter": "^2.0",
+        "fyre/formatter": "^3.0",
         "fyre/formbuilder": "^2.0",
         "fyre/htmlhelper": "^2.0",
         "fyre/lang": "^3.0",
-        "fyre/orm": "^5.0",
+        "fyre/orm": "^6.0",
         "fyre/path": "^2.0",
-        "fyre/router": "^4.0"
+        "fyre/router": "^5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^10"

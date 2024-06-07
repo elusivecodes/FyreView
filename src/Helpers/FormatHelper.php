@@ -6,8 +6,7 @@ namespace Fyre\View\Helpers;
 use Fyre\Utility\Formatter;
 use Fyre\View\Helper;
 
-use function
-    call_user_func_array;
+use function call_user_func_array;
 
 /**
  * FormatHelper

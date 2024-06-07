@@ -26,19 +26,6 @@ trait OpenMultipartTestTrait
         );
     }
 
-    public function testOpenMultipartActionArray(): void
-    {
-        $this->assertSame(
-            '<form action="/test/test-method" method="post" enctype="multipart/form-data" charset="UTF-8">',
-            $this->view->Form->openMultipart(null, [
-                'action' => [
-                    'controller' => 'Test',
-                    'action' => 'testMethod'
-                ]
-            ])
-        );
-    }
-
     public function testOpenMultipartCharset(): void
     {
         HtmlHelper::setCharset('ISO-8859-1');

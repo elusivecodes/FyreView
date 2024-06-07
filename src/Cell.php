@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
-use Fyre\ORM\Model;
-use Fyre\ORM\ModelRegistry;
-use Fyre\Server\ServerRequest;
 use Fyre\Utility\Path;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\Traits\EvaluateTrait;
@@ -67,16 +64,6 @@ abstract class Cell
     public function __toString(): string
     {
         return $this->render();
-    }
-
-    /**
-     * Fetch a Model from the ModelRegistry.
-     * @param string $alias  The model name.
-     * @return Model The Model.
-     */
-    public function fetchModel(string $alias): Model
-    {
-        return ModelRegistry::use($alias);
     }
 
     /**

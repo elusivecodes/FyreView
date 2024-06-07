@@ -7,7 +7,6 @@ use Fyre\DB\TypeParser;
 use Fyre\Entity\Entity;
 use Fyre\Form\FormBuilder;
 use Fyre\Lang\Lang;
-use Fyre\Router\Router;
 use Fyre\Security\CsrfProtection;
 use Fyre\Server\ServerRequest;
 use Fyre\View\Exceptions\FormException;
@@ -22,7 +21,6 @@ use function array_pop;
 use function class_parents;
 use function explode;
 use function get_class;
-use function is_array;
 use function method_exists;
 use function preg_replace;
 use function str_replace;
@@ -428,8 +426,6 @@ class FormHelper extends Helper
 
         if (!$options['action']) {
             $options['action'] = (string) $this->request->getUri();
-        } else if (is_array($options['action'])) {
-            $options['action'] = Router::build($options['action']);
         }
 
         if ($options['idPrefix']) {
@@ -799,7 +795,7 @@ class FormHelper extends Helper
 
     /**
      * Clean the input options.
-     * @param arary $options The input options.
+     * @param array $options The input options.
      * @return array The input options.
      */
     protected static function cleanOptions(array $options): array

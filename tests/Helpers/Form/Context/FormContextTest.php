@@ -59,6 +59,13 @@ final class FormContextTest extends TestCase
             'persist' => true
         ]);
 
+        $connection = ConnectionManager::use();
+
+        $connection->query('DROP TABLE IF EXISTS `contexts`');
+        $connection->query('DROP TABLE IF EXISTS `parents`');
+        $connection->query('DROP TABLE IF EXISTS `children`');
+        $connection->query('DROP TABLE IF EXISTS `contexts_children`');
+
         ModelRegistry::clear();
 
         CsrfProtection::disable();
