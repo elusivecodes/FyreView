@@ -10,7 +10,6 @@ use RuntimeException;
  */
 class ViewException extends RuntimeException
 {
-
     public static function forInvalidCell(string $name): static
     {
         return new static('Cell not found: '.$name);
@@ -50,5 +49,4 @@ class ViewException extends RuntimeException
     {
         return new static('Unopened view block.');
     }
-
 }

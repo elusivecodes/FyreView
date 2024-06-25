@@ -14,9 +14,9 @@ use function ob_start;
  */
 trait EvaluateTrait
 {
-
     /**
      * Render and inject data into a file.
+     *
      * @param string $filePath The file path.
      * @param array $data The data to inject.
      * @return string The rendered file.
@@ -35,5 +35,4 @@ trait EvaluateTrait
             ob_end_clean();
         }
     }
-
 }

@@ -14,9 +14,9 @@ use function random_bytes;
  */
 class CspHelper extends Helper
 {
-
     /**
      * Generate a script nonce.
+     *
      * @return string The script nonce.
      */
     public function scriptNonce(): string
@@ -26,6 +26,7 @@ class CspHelper extends Helper
 
     /**
      * Generate a style nonce.
+     *
      * @return string The style nonce.
      */
     public function styleNonce(): string
@@ -35,6 +36,7 @@ class CspHelper extends Helper
 
     /**
      * Add a nonce for a directive.
+     *
      * @param string $directive The directive.
      * @return string The nonce.
      */
@@ -45,7 +47,7 @@ class CspHelper extends Helper
 
         $policies = CspBuilder::getPolicies();
 
-        foreach ($policies AS $key => $policy) {
+        foreach ($policies as $key => $policy) {
             $policy = $policy->addDirective($directive, $value);
 
             CspBuilder::setPolicy($key, $policy);
@@ -56,11 +58,11 @@ class CspHelper extends Helper
 
     /**
      * Generate a nonce.
+     *
      * @return string The nonce.
      */
     protected static function generateNonce(): string
     {
         return hash('sha1', random_bytes(12));
     }
-
 }

@@ -5,22 +5,22 @@ namespace Fyre\View\Form\Traits;
 
 use Fyre\Schema\TableSchema;
 
-use const PHP_INT_MAX;
-use const PHP_INT_MIN;
-
 use function is_numeric;
 use function min;
 use function pow;
 use function preg_match;
+
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
 
 /**
  * SchemaTrait
  */
 trait SchemaTrait
 {
-
     /**
      * Get the default value.
+     *
      * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return mixed The default value.
@@ -46,6 +46,7 @@ trait SchemaTrait
 
     /**
      * Get the maximum value.
+     *
      * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return float|null The maximum value.
@@ -71,9 +72,9 @@ trait SchemaTrait
             case 'int':
                 $max = 2147483647;
                 break;
-            // case 'bigint':
-            //     $max = 9223372036854775807;
-            //     break;
+                // case 'bigint':
+                //     $max = 9223372036854775807;
+                //     break;
             case 'float':
             case 'double':
             case 'real':
@@ -102,6 +103,7 @@ trait SchemaTrait
 
     /**
      * Get the maximum length.
+     *
      * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return int|null The maximum length.
@@ -127,12 +129,12 @@ trait SchemaTrait
             case 'blob':
             case 'text':
                 return 65535;
-            // case 'mediumblob':
-            // case 'mediumtext':
-            //     return 16777215;
-            // case 'longblob':
-            // case 'longtext':
-            //     return 4294967295;
+                // case 'mediumblob':
+                // case 'mediumtext':
+                //     return 16777215;
+                // case 'longblob':
+                // case 'longtext':
+                //     return 4294967295;
             default:
                 return null;
         }
@@ -140,6 +142,7 @@ trait SchemaTrait
 
     /**
      * Get the minimum value.
+     *
      * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return float|null The minimum value.
@@ -169,9 +172,9 @@ trait SchemaTrait
             case 'int':
                 $min = -2147483648;
                 break;
-            // case 'bigint':
-            //     $min = -9223372036854775808;
-            //     break;
+                // case 'bigint':
+                //     $min = -9223372036854775808;
+                //     break;
             case 'float':
             case 'double':
             case 'real':
@@ -195,11 +198,12 @@ trait SchemaTrait
 
     /**
      * Get the step interval.
+     *
      * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return float|null The step interval.
      */
-    public static function getSchemaStep(TableSchema $schema, string $field): string|float|null
+    public static function getSchemaStep(TableSchema $schema, string $field): float|string|null
     {
         $column = $schema->column($field);
 
@@ -227,6 +231,7 @@ trait SchemaTrait
 
     /**
      * Get the field type.
+     *
      * @param TableSchema $schema The TableSchema.
      * @param string $field The field name.
      * @return string The field type.
@@ -278,5 +283,4 @@ trait SchemaTrait
                 return 'text';
         }
     }
-
 }

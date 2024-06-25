@@ -1,1 +1,1 @@
-<?=$this->Test->test()?>
+<?= $this->Test->test();

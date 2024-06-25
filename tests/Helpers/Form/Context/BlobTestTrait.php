@@ -10,12 +10,37 @@ use Fyre\Validation\Validator;
 
 trait BlobTestTrait
 {
+    public function testBlobEntityValue(): void
+    {
+        $connection = ConnectionManager::use();
+
+        $connection->query(<<<'EOT'
+            CREATE TABLE `contexts` (
+                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `value` BLOB NULL DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
+        EOT);
+
+        $model = ModelRegistry::use('Contexts');
+
+        $entity = $model->newEntity([
+            'value' => 'Test',
+        ]);
+
+        $this->view->Form->open($entity);
+
+        $this->assertSame(
+            '<textarea id="value" name="value" placeholder="Value" maxlength="65535">Test</textarea>',
+            $this->view->Form->input('value')
+        );
+    }
 
     public function testBlobMaxLengthSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BLOB NULL DEFAULT NULL,
@@ -39,7 +64,7 @@ trait BlobTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BLOB NULL DEFAULT NULL,
@@ -68,7 +93,7 @@ trait BlobTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BLOB NULL DEFAULT NULL,
@@ -93,37 +118,11 @@ trait BlobTestTrait
         );
     }
 
-    public function testBlobEntityValue(): void
-    {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<EOT
-            CREATE TABLE `contexts` (
-                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `value` BLOB NULL DEFAULT NULL,
-                PRIMARY KEY (`id`)
-            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
-        EOT);
-
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
-            'value' => 'Test'
-        ]);
-
-        $this->view->Form->open($entity);
-
-        $this->assertSame(
-            '<textarea id="value" name="value" placeholder="Value" maxlength="65535">Test</textarea>',
-            $this->view->Form->input('value')
-        );
-    }
-
     public function testBlobSchemaDefaultValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BLOB NOT NULL DEFAULT 'Test',
@@ -142,5 +141,4 @@ trait BlobTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

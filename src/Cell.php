@@ -18,22 +18,22 @@ use function preg_replace;
  */
 abstract class Cell
 {
-
-    protected View $view;
+    use EvaluateTrait;
+    use ViewVarsTrait;
 
     protected string $action;
-
-    protected string|null $template = null;
 
     protected array $args;
 
     protected array $helpers = [];
 
-    use EvaluateTrait;
-    use ViewVarsTrait;
+    protected string|null $template = null;
+
+    protected View $view;
 
     /**
      * New Cell constructor.
+     *
      * @param View $view The View.
      * @param array $options The cell options.
      */
@@ -47,6 +47,7 @@ abstract class Cell
 
     /**
      * Load a helper.
+     *
      * @param string $name The helper name.
      * @return Helper The Helper.
      */
@@ -59,6 +60,7 @@ abstract class Cell
 
     /**
      * Render the cell as a string.
+     *
      * @return string The rendered cell.
      */
     public function __toString(): string
@@ -68,6 +70,7 @@ abstract class Cell
 
     /**
      * Get the template.
+     *
      * @return string|null The template.
      */
     public function getTemplate(): string|null
@@ -77,6 +80,7 @@ abstract class Cell
 
     /**
      * Get the View.
+     *
      * @return View The View.
      */
     public function getView(): View
@@ -86,6 +90,7 @@ abstract class Cell
 
     /**
      * Load a Helper.
+     *
      * @param string $name The helper name.
      * @param array $options The helper options.
      * @return Cell The Cell.
@@ -99,7 +104,9 @@ abstract class Cell
 
     /**
      * Render the cell.
+     *
      * @return string The rendered cell.
+     *
      * @throws ViewException if the method or template is not valid.
      */
     public function render(): string
@@ -131,6 +138,7 @@ abstract class Cell
 
     /**
      * Set the template file.
+     *
      * @param string $file The template file.
      * @return Cell The Cell.
      */
@@ -140,5 +148,4 @@ abstract class Cell
 
         return $this;
     }
-
 }

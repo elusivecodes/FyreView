@@ -10,12 +10,11 @@ use Fyre\Validation\Validator;
 
 trait SetTestTrait
 {
-
-    public function testSetSchema(): void
+    public function testSetEntityValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` SET('A','B','C') NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -25,12 +24,14 @@ trait SetTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEmptyEntity();
+        $entity = $model->newEntity([
+            'value' => 'B',
+        ]);
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<select id="value" name="value"></select>',
+            '<select id="value" name="value"><option value="B" selected></option></select>',
             $this->view->Form->input('value')
         );
     }
@@ -39,7 +40,7 @@ trait SetTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` SET('A','B','C') NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -64,11 +65,11 @@ trait SetTestTrait
         );
     }
 
-    public function testSetEntityValue(): void
+    public function testSetSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` SET('A','B','C') NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -78,14 +79,12 @@ trait SetTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEntity([
-            'value' => 'B'
-        ]);
+        $entity = $model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<select id="value" name="value"><option value="B" selected></option></select>',
+            '<select id="value" name="value"></select>',
             $this->view->Form->input('value')
         );
     }
@@ -94,7 +93,7 @@ trait SetTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` SET('A','B','C') NOT NULL DEFAULT 'B' COLLATE 'utf8mb4_unicode_ci',
@@ -113,5 +112,4 @@ trait SetTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

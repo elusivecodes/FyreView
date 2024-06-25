@@ -5,7 +5,6 @@ namespace Tests\Helpers\Form;
 
 trait FieldsetCloseTestTrait
 {
-
     public function testFieldsetClose(): void
     {
         $this->assertSame(
@@ -13,5 +12,4 @@ trait FieldsetCloseTestTrait
             $this->view->Form->fieldsetClose()
         );
     }
-
 }

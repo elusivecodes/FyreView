@@ -16,13 +16,13 @@ use function trim;
  */
 abstract class CellRegistry
 {
+    protected static array $cells = [];
 
     protected static array $namespaces = [];
 
-    protected static array $cells = [];
-
     /**
      * Add a namespace for loading cells.
+     *
      * @param string $namespace The namespace.
      */
     public static function addNamespace(string $namespace): void
@@ -45,6 +45,7 @@ abstract class CellRegistry
 
     /**
      * Find a cell class.
+     *
      * @param string $name The cell name.
      * @return string|null The cell class.
      */
@@ -55,6 +56,7 @@ abstract class CellRegistry
 
     /**
      * Get the namespaces.
+     *
      * @return array The namespaces.
      */
     public static function getNamespaces(): array
@@ -64,6 +66,7 @@ abstract class CellRegistry
 
     /**
      * Determine if a namespace exists.
+     *
      * @param string $namespace The namespace.
      * @return bool TRUE if the namespace exists, otherwise FALSE.
      */
@@ -76,10 +79,12 @@ abstract class CellRegistry
 
     /**
      * Load a cell.
+     *
      * @param string $name The cell name.
      * @param View $view The View.
      * @param array $options The cell options.
      * @return Cell The Cell.
+     *
      * @throws ViewException if the cell is not valid.
      */
     public static function load(string $name, View $view, array $options = []): Cell
@@ -95,6 +100,7 @@ abstract class CellRegistry
 
     /**
      * Remove a namespace.
+     *
      * @param string $namespace The namespace.
      * @return bool TRUE If the namespace was removed, otherwise FALSE.
      */
@@ -102,7 +108,7 @@ abstract class CellRegistry
     {
         $namespace = static::normalizeNamespace($namespace);
 
-        foreach (static::$namespaces AS $i => $otherNamespace) {
+        foreach (static::$namespaces as $i => $otherNamespace) {
             if ($otherNamespace !== $namespace) {
                 continue;
             }
@@ -117,6 +123,7 @@ abstract class CellRegistry
 
     /**
      * Locate a cell class.
+     *
      * @param string $name The cell name.
      * @return string|null The cell class.
      */
@@ -124,7 +131,7 @@ abstract class CellRegistry
     {
         $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Cells\\']);
 
-        foreach ($namespaces AS $namespace) {
+        foreach ($namespaces as $namespace) {
             $className = $namespace.$name.'Cell';
 
             if (class_exists($className) && is_subclass_of($className, Cell::class)) {
@@ -137,6 +144,7 @@ abstract class CellRegistry
 
     /**
      * Normalize a namespace
+     *
      * @param string $namespace The namespace.
      * @return string The normalized namespace.
      */
@@ -148,5 +156,4 @@ abstract class CellRegistry
             '\\'.$namespace.'\\' :
             '\\';
     }
-
 }

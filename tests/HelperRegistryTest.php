@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 final class HelperRegistryTest extends TestCase
 {
-
     protected View $view;
 
     public function testFind(): void
@@ -34,7 +33,7 @@ final class HelperRegistryTest extends TestCase
     {
         $this->assertSame(
             [
-                '\Tests\Mock\Helpers\\'
+                '\Tests\Mock\Helpers\\',
             ],
             HelperRegistry::getNamespaces()
         );
@@ -51,24 +50,6 @@ final class HelperRegistryTest extends TestCase
     {
         $this->assertFalse(
             HelperRegistry::hasNamespace('\Tests\Mock\Invalid')
-        );
-    }
-
-    public function testRemoveNamespace(): void
-    {
-        $this->assertTrue(
-            HelperRegistry::removeNamespace('\Tests\Mock\Helpers')
-        );
-
-        $this->assertFalse(
-            HelperRegistry::hasNamespace('\Tests\Mock\Helpers')
-        );
-    }
-
-    public function testRemoveNamespaceInvalid(): void
-    {
-        $this->assertFalse(
-            HelperRegistry::removeNamespace('\Tests\Mock\Invalid')
         );
     }
 
@@ -109,6 +90,24 @@ final class HelperRegistryTest extends TestCase
         );
     }
 
+    public function testRemoveNamespace(): void
+    {
+        $this->assertTrue(
+            HelperRegistry::removeNamespace('\Tests\Mock\Helpers')
+        );
+
+        $this->assertFalse(
+            HelperRegistry::hasNamespace('\Tests\Mock\Helpers')
+        );
+    }
+
+    public function testRemoveNamespaceInvalid(): void
+    {
+        $this->assertFalse(
+            HelperRegistry::removeNamespace('\Tests\Mock\Invalid')
+        );
+    }
+
     protected function setUp(): void
     {
         HelperRegistry::clear();
@@ -118,5 +117,4 @@ final class HelperRegistryTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

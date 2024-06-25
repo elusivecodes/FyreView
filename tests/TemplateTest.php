@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 final class TemplateTest extends TestCase
 {
-
     public function testAddPath(): void
     {
         Template::addPath('tests/Mock/templates1/');
@@ -18,7 +17,7 @@ final class TemplateTest extends TestCase
         $this->assertSame(
             [
                 Path::resolve('tests/Mock/templates1/'),
-                Path::resolve('tests/Mock/templates2/')
+                Path::resolve('tests/Mock/templates2/'),
             ],
             Template::getPaths()
         );
@@ -68,5 +67,4 @@ final class TemplateTest extends TestCase
     {
         Template::clear();
     }
-
 }

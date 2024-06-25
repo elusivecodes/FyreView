@@ -7,11 +7,10 @@ use Fyre\View\Exceptions\ViewException;
 
 trait RenderTestTrait
 {
-
     public function testRenderData(): void
     {
         $this->view->setData([
-            'a' => 1
+            'a' => 1,
         ]);
 
         $this->view->setLayout(null);
@@ -38,5 +37,4 @@ trait RenderTestTrait
 
         $this->view->render('invalid');
     }
-
 }

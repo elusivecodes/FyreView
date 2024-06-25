@@ -10,12 +10,37 @@ use Fyre\Validation\Validator;
 
 trait TinyTextTestTrait
 {
+    public function testTinyTextEntityValue(): void
+    {
+        $connection = ConnectionManager::use();
+
+        $connection->query(<<<'EOT'
+            CREATE TABLE `contexts` (
+                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `value` TINYTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+                PRIMARY KEY (`id`)
+            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
+        EOT);
+
+        $model = ModelRegistry::use('Contexts');
+
+        $entity = $model->newEntity([
+            'value' => 'Test',
+        ]);
+
+        $this->view->Form->open($entity);
+
+        $this->assertSame(
+            '<textarea id="value" name="value" placeholder="Value" maxlength="255">Test</textarea>',
+            $this->view->Form->input('value')
+        );
+    }
 
     public function testTinyTextMaxLengthSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TINYTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -39,7 +64,7 @@ trait TinyTextTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TINYTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -68,7 +93,7 @@ trait TinyTextTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TINYTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -93,37 +118,11 @@ trait TinyTextTestTrait
         );
     }
 
-    public function testTinyTextEntityValue(): void
-    {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<EOT
-            CREATE TABLE `contexts` (
-                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `value` TINYTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-                PRIMARY KEY (`id`)
-            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
-        EOT);
-
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
-            'value' => 'Test'
-        ]);
-
-        $this->view->Form->open($entity);
-
-        $this->assertSame(
-            '<textarea id="value" name="value" placeholder="Value" maxlength="255">Test</textarea>',
-            $this->view->Form->input('value')
-        );
-    }
-
     public function testTinyTextSchemaDefaultValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TINYTEXT NOT NULL DEFAULT 'Test' COLLATE 'utf8mb4_unicode_ci',
@@ -142,5 +141,4 @@ trait TinyTextTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

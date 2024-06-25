@@ -14,9 +14,9 @@ use function min;
  */
 trait ValidationTrait
 {
-
     /**
      * Get the maximum value.
+     *
      * @param Validator $validator The Validator.
      * @param string $field The field name.
      * @return float|null The maximum value.
@@ -26,7 +26,7 @@ trait ValidationTrait
         $rules = $validator->getFieldRules($field);
 
         $max = null;
-        foreach ($rules AS $rule) {
+        foreach ($rules as $rule) {
             $ruleMax = null;
             switch ($rule->getName()) {
                 case 'between':
@@ -65,6 +65,7 @@ trait ValidationTrait
 
     /**
      * Get the maximum length.
+     *
      * @param Validator $validator The Validator.
      * @param string $field The field name.
      * @return int|null The maximum length.
@@ -74,7 +75,7 @@ trait ValidationTrait
         $rules = $validator->getFieldRules($field);
 
         $maxLength = null;
-        foreach ($rules AS $rule) {
+        foreach ($rules as $rule) {
             $ruleMaxLength = null;
             switch ($rule->getName()) {
                 case 'maxLength':
@@ -99,6 +100,7 @@ trait ValidationTrait
 
     /**
      * Get the minimum value.
+     *
      * @param Validator $validator The Validator.
      * @param string $field The field name.
      * @return float|null The minimum value.
@@ -108,7 +110,7 @@ trait ValidationTrait
         $rules = $validator->getFieldRules($field);
 
         $min = null;
-        foreach ($rules AS $rule) {
+        foreach ($rules as $rule) {
             $ruleMin = null;
             switch ($rule->getName()) {
                 case 'between':
@@ -147,6 +149,7 @@ trait ValidationTrait
 
     /**
      * Determine if the field is required.
+     *
      * @param Validator $validator The Validator.
      * @param string $field The field name.
      * @return bool TRUE if the field is required, otherwise FALSE.
@@ -155,7 +158,7 @@ trait ValidationTrait
     {
         $rules = $validator->getFieldRules($field);
 
-        foreach ($rules AS $rule) {
+        foreach ($rules as $rule) {
             if (!$rule->skipEmpty()) {
                 return true;
             }
@@ -163,5 +166,4 @@ trait ValidationTrait
 
         return false;
     }
-
 }

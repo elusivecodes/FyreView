@@ -17,16 +17,19 @@ use function strtolower;
  */
 class Template
 {
-
     public const CELLS_FOLDER = 'cells';
+
     public const ELEMENTS_FOLDER = 'elements';
+
     public const LAYOUTS_FOLDER = 'layouts';
+
     protected const FILE_EXTENSION = '.php';
 
     protected static array $paths = [];
 
     /**
      * Add a path for loading templates.
+     *
      * @param string $path The path.
      */
     public static function addPath(string $path): void
@@ -48,6 +51,7 @@ class Template
 
     /**
      * Get the paths.
+     *
      * @return array The paths.
      */
     public static function getPaths(): array
@@ -57,6 +61,7 @@ class Template
 
     /**
      * Find a file in paths.
+     *
      * @param string $name The file name.
      * @param string $folder The file folder.
      * @return string|null The file path.
@@ -67,7 +72,7 @@ class Template
             $name .= static::FILE_EXTENSION;
         }
 
-        foreach (static::$paths AS $path) {
+        foreach (static::$paths as $path) {
             $filePath = Path::join($path, $folder, $name);
 
             if (is_file($filePath)) {
@@ -80,6 +85,7 @@ class Template
 
     /**
      * Normalize a file name.
+     *
      * @param string $string The input string.
      * @return string The normalized string.
      */
@@ -92,6 +98,7 @@ class Template
 
     /**
      * Remove a path.
+     *
      * @param string $path The path to remove.
      * @return bool TRUE if the path was removed, otherwise FALSE.
      */
@@ -99,7 +106,7 @@ class Template
     {
         $path = Path::resolve($path);
 
-        foreach (static::$paths AS $i => $otherPath) {
+        foreach (static::$paths as $i => $otherPath) {
             if ($otherPath !== $path) {
                 continue;
             }
@@ -111,5 +118,4 @@ class Template
 
         return false;
     }
-
 }

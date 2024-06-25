@@ -1,1 +1,1 @@
-Template: <?=$a?>
+Template: <?= $a; ?>

@@ -5,11 +5,18 @@ namespace Tests;
 
 trait LayoutTestTrait
 {
+    public function testDefaultLayout(): void
+    {
+        $this->assertSame(
+            'default',
+            $this->view->getLayout()
+        );
+    }
 
     public function testRenderLayout(): void
     {
         $this->view->setData([
-            'a' => 1
+            'a' => 1,
         ]);
 
         $this->view->setLayout('test');
@@ -20,13 +27,4 @@ trait LayoutTestTrait
             $this->view->render('test/template')
         );
     }
-
-    public function testDefaultLayout(): void
-    {
-        $this->assertSame(
-            'default',
-            $this->view->getLayout()
-        );
-    }
-
 }

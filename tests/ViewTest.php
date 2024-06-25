@@ -10,14 +10,13 @@ use PHPUnit\Framework\TestCase;
 
 final class ViewTest extends TestCase
 {
-
-    protected View $view;
-
     use BlockTestTrait;
     use DataTestTrait;
     use ElementTestTrait;
     use LayoutTestTrait;
     use RenderTestTrait;
+
+    protected View $view;
 
     public function testGetRequest(): void
     {
@@ -49,5 +48,4 @@ final class ViewTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

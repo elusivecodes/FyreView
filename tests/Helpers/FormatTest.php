@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 final class FormatTest extends TestCase
 {
-
     protected View $view;
 
     public function testCurrency(): void
@@ -37,5 +36,4 @@ final class FormatTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

@@ -33,21 +33,21 @@ use function ucwords;
  */
 class FormHelper extends Helper
 {
-
     protected static array $contextMap = [
-        Entity::class => EntityContext::class
+        Entity::class => EntityContext::class,
     ];
 
     protected static Context $nullContext;
-
-    protected ServerRequest $request;
 
     protected Context|null $context = null;
 
     protected string|null $idPrefix = null;
 
+    protected ServerRequest $request;
+
     /**
      * New Helper constructor.
+     *
      * @param View $view The View.
      * @param array $options The helper options.
      */
@@ -60,6 +60,7 @@ class FormHelper extends Helper
 
     /**
      * Render a button element.
+     *
      * @param string $content The button content.
      * @param array $options Options for rendering the button.
      * @return string The button HTML.
@@ -71,6 +72,7 @@ class FormHelper extends Helper
 
     /**
      * Render a checkbox field.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the checkbox.
      * @return string The checkbox HTML.
@@ -95,7 +97,7 @@ class FormHelper extends Helper
         if ($options['hiddenField'] && $options['name'] !== false) {
             $result .= FormBuilder::hidden(null, [
                 'name' => $options['name'],
-                'value' => 0
+                'value' => 0,
             ]);
         }
 
@@ -110,6 +112,7 @@ class FormHelper extends Helper
 
     /**
      * Render a form close tag.
+     *
      * @return string The form close HTML.
      */
     public function close(): string
@@ -121,6 +124,7 @@ class FormHelper extends Helper
 
     /**
      * Render a color input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the color input.
      * @return string The color input HTML.
@@ -135,6 +139,7 @@ class FormHelper extends Helper
 
     /**
      * Render a date input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the date input.
      * @return string The date input HTML.
@@ -168,6 +173,7 @@ class FormHelper extends Helper
 
     /**
      * Render a datetime input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the datetime input.
      * @return string The datetime input HTML.
@@ -207,6 +213,7 @@ class FormHelper extends Helper
 
     /**
      * Render an email input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the email input.
      * @return string The email input HTML.
@@ -220,6 +227,7 @@ class FormHelper extends Helper
 
     /**
      * Render a fieldset close tag.
+     *
      * @return string The fieldset close HTML.
      */
     public function fieldsetClose(): string
@@ -229,6 +237,7 @@ class FormHelper extends Helper
 
     /**
      * Render a fieldset open tag.
+     *
      * @param array $options Options for rendering the fieldset.
      * @return string The fieldset open HTML.
      */
@@ -239,6 +248,7 @@ class FormHelper extends Helper
 
     /**
      * Render a file input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the file input.
      * @return string The file input HTML.
@@ -254,6 +264,7 @@ class FormHelper extends Helper
 
     /**
      * Render a hidden input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the hidden input.
      * @return string The hidden input HTML.
@@ -268,6 +279,7 @@ class FormHelper extends Helper
 
     /**
      * Render an image input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the image input.
      * @return string The image input HTML.
@@ -283,9 +295,11 @@ class FormHelper extends Helper
 
     /**
      * Render an input element.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the input.
      * @return string The input HTML.
+     *
      * @throws FormException if the input type is not valid.
      */
     public function input(string $key, array $options = []): string
@@ -305,6 +319,7 @@ class FormHelper extends Helper
 
     /**
      * Render a label element.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the label.
      * @return string The label HTML.
@@ -331,6 +346,7 @@ class FormHelper extends Helper
 
     /**
      * Render a legend element.
+     *
      * @param string $content The legend content.
      * @param array $options Options for rendering the legend.
      * @return string The legend HTML.
@@ -342,6 +358,7 @@ class FormHelper extends Helper
 
     /**
      * Render a month input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the month input.
      * @return string The month input HTML.
@@ -355,6 +372,7 @@ class FormHelper extends Helper
 
     /**
      * Render a number input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the number input.
      * @return string The number input HTML.
@@ -385,9 +403,11 @@ class FormHelper extends Helper
 
     /**
      * Render a form open tag.
+     *
      * @param object|null $item The context item.
      * @param array $options Options for rendering the form.
      * @return string The form open HTML.
+     *
      * @throws FormException if there is an unclosed form or the context is not valid.
      */
     public function open(object|null $item = null, array $options = []): string
@@ -403,7 +423,7 @@ class FormHelper extends Helper
             if ($className === null) {
                 $parents = class_parents($class);
 
-                foreach ($parents AS $parent) {
+                foreach ($parents as $parent) {
                     $className = static::$contextMap[$parent] ?? null;
 
                     if ($className) {
@@ -439,7 +459,7 @@ class FormHelper extends Helper
         if (CsrfProtection::isEnabled()) {
             $html .= FormBuilder::hidden(null, [
                 'name' => CsrfProtection::getField(),
-                'value' => CsrfProtection::getTokenHash()
+                'value' => CsrfProtection::getTokenHash(),
             ]);
         }
 
@@ -448,6 +468,7 @@ class FormHelper extends Helper
 
     /**
      * Render a multipart form open tag.
+     *
      * @param mixed $item The context item.
      * @param array $options Options for rendering the form.
      * @return string The form open HTML.
@@ -461,6 +482,7 @@ class FormHelper extends Helper
 
     /**
      * Render a password input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the password input.
      * @return string The password input HTML.
@@ -475,6 +497,7 @@ class FormHelper extends Helper
 
     /**
      * Render a radio input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the radio input.
      * @return string The radio input HTML.
@@ -506,6 +529,7 @@ class FormHelper extends Helper
 
     /**
      * Render a range input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the range input.
      * @return string The range input HTML.
@@ -520,6 +544,7 @@ class FormHelper extends Helper
 
     /**
      * Render a reset input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the reset input.
      * @return string The reset input HTML.
@@ -534,6 +559,7 @@ class FormHelper extends Helper
 
     /**
      * Render a search input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the search input.
      * @return string The search input HTML.
@@ -547,6 +573,7 @@ class FormHelper extends Helper
 
     /**
      * Render a select element.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the select.
      * @return string The select HTML.
@@ -568,7 +595,7 @@ class FormHelper extends Helper
             $options['options'] = array_map(
                 fn(mixed $value): array => [
                     'value' => $value,
-                    'label' => ''
+                    'label' => '',
                 ],
                 $options['value']
             );
@@ -583,6 +610,7 @@ class FormHelper extends Helper
 
     /**
      * Render a multiple select element.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the select.
      * @return string The select HTML.
@@ -596,6 +624,7 @@ class FormHelper extends Helper
 
     /**
      * Render a submit input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the submit input.
      * @return string The submit input HTML.
@@ -610,6 +639,7 @@ class FormHelper extends Helper
 
     /**
      * Render a telephone input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the telephone input.
      * @return string The telephone input HTML.
@@ -623,6 +653,7 @@ class FormHelper extends Helper
 
     /**
      * Render a text input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the text input.
      * @return string The text input HTML.
@@ -651,6 +682,7 @@ class FormHelper extends Helper
 
     /**
      * Render a textarea element.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the textarea.
      * @return string The textarea HTML.
@@ -678,6 +710,7 @@ class FormHelper extends Helper
 
     /**
      * Render a time input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the time input.
      * @return string The time input HTML.
@@ -711,6 +744,7 @@ class FormHelper extends Helper
 
     /**
      * Render a url input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the url input.
      * @return string The url input HTML.
@@ -724,6 +758,7 @@ class FormHelper extends Helper
 
     /**
      * Render a week input.
+     *
      * @param string $key The field key.
      * @param array $options Options for rendering the week input.
      * @return string The week input HTML.
@@ -737,6 +772,7 @@ class FormHelper extends Helper
 
     /**
      * Get the form Context.
+     *
      * @return Context The form Context.
      */
     protected function getContext(): Context
@@ -746,6 +782,7 @@ class FormHelper extends Helper
 
     /**
      * Get a field ID.
+     *
      * @param string $key The field key.
      * @return string The field ID.
      */
@@ -760,6 +797,7 @@ class FormHelper extends Helper
 
     /**
      * Get a value from post data.
+     *
      * @param string $name The field name.
      * @return mixed The value.
      */
@@ -772,6 +810,7 @@ class FormHelper extends Helper
 
     /**
      * Get a field value.
+     *
      * @param string $key The field key.
      * @return mixed The value.
      */
@@ -795,12 +834,13 @@ class FormHelper extends Helper
 
     /**
      * Clean the input options.
+     *
      * @param array $options The input options.
      * @return array The input options.
      */
     protected static function cleanOptions(array $options): array
     {
-        foreach ($options AS $key => $value) {
+        foreach ($options as $key => $value) {
             if ($value !== false || str_starts_with($key, 'data-')) {
                 continue;
             }
@@ -815,6 +855,7 @@ class FormHelper extends Helper
 
     /**
      * Get a field key.
+     *
      * @param string $name The field name.
      * @return string The field key.
      */
@@ -828,6 +869,7 @@ class FormHelper extends Helper
 
     /**
      * Get a field label text.
+     *
      * @param string $key The field key.
      * @return string The field label text.
      */
@@ -850,6 +892,7 @@ class FormHelper extends Helper
 
     /**
      * Get a field name.
+     *
      * @param string $key The field key.
      * @return string The field name.
      */
@@ -860,11 +903,11 @@ class FormHelper extends Helper
 
     /**
      * Get the NullContext.
+     *
      * @return Context The NullContext.
      */
     protected static function getNullContext(): Context
     {
-        return static::$nullContext ??= new NullContext;
+        return static::$nullContext ??= new NullContext();
     }
-
 }

@@ -10,12 +10,37 @@ use Fyre\Validation\Validator;
 
 trait VarcharTestTrait
 {
+    public function testVarcharEntityValue(): void
+    {
+        $connection = ConnectionManager::use();
+
+        $connection->query(<<<'EOT'
+            CREATE TABLE `contexts` (
+                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `value` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+                PRIMARY KEY (`id`)
+            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
+        EOT);
+
+        $model = ModelRegistry::use('Contexts');
+
+        $entity = $model->newEntity([
+            'value' => 'Test',
+        ]);
+
+        $this->view->Form->open($entity);
+
+        $this->assertSame(
+            '<input id="value" name="value" type="text" value="Test" placeholder="Value" maxlength="255" />',
+            $this->view->Form->input('value')
+        );
+    }
 
     public function testVarcharMaxLengthSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -39,7 +64,7 @@ trait VarcharTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -68,7 +93,7 @@ trait VarcharTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -93,37 +118,11 @@ trait VarcharTestTrait
         );
     }
 
-    public function testVarcharEntityValue(): void
-    {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<EOT
-            CREATE TABLE `contexts` (
-                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `value` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-                PRIMARY KEY (`id`)
-            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
-        EOT);
-
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
-            'value' => 'Test'
-        ]);
-
-        $this->view->Form->open($entity);
-
-        $this->assertSame(
-            '<input id="value" name="value" type="text" value="Test" placeholder="Value" maxlength="255" />',
-            $this->view->Form->input('value')
-        );
-    }
-
     public function testVarcharSchemaDefaultValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` VARCHAR(255) NOT NULL DEFAULT 'Test' COLLATE 'utf8mb4_unicode_ci',
@@ -142,5 +141,4 @@ trait VarcharTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

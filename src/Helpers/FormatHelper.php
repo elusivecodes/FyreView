@@ -13,9 +13,9 @@ use function call_user_func_array;
  */
 class FormatHelper extends Helper
 {
-
     /**
      * Call a Formatter method.
+     *
      * @param string $method The method.
      * @param array $arguments Arguments to pass to the method.
      * @return mixed The formatted value.
@@ -24,5 +24,4 @@ class FormatHelper extends Helper
     {
         return call_user_func_array([Formatter::class, $method], $arguments);
     }
-
 }

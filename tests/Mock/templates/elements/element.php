@@ -1,1 +1,1 @@
-Element: <?=$b?>
+Element: <?= $b; ?>

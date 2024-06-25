@@ -7,10 +7,5 @@ use Fyre\View\Cell;
 
 class TestCell extends Cell
 {
-
-    public function display(): void
-    {
-        
-    }
-
+    public function display(): void {}
 }

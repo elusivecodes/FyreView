@@ -11,12 +11,11 @@ use Fyre\Validation\Validator;
 
 trait TimeTestTrait
 {
-
-    public function testTimeSchema(): void
+    public function testTimeEntityValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TIME NULL DEFAULT NULL,
@@ -26,12 +25,14 @@ trait TimeTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEmptyEntity();
+        $entity = $model->newEntity([
+            'value' => DateTime::fromArray([2022, 1, 1, 12, 30]),
+        ]);
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="time" placeholder="Value" />',
+            '<input id="value" name="value" type="time" value="12:30" placeholder="Value" />',
             $this->view->Form->input('value')
         );
     }
@@ -40,7 +41,7 @@ trait TimeTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TIME NULL DEFAULT NULL,
@@ -65,11 +66,11 @@ trait TimeTestTrait
         );
     }
 
-    public function testTimeEntityValue(): void
+    public function testTimeSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TIME NULL DEFAULT NULL,
@@ -79,14 +80,12 @@ trait TimeTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEntity([
-            'value' => DateTime::fromArray([2022, 1, 1, 12, 30])
-        ]);
+        $entity = $model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="time" value="12:30" placeholder="Value" />',
+            '<input id="value" name="value" type="time" placeholder="Value" />',
             $this->view->Form->input('value')
         );
     }
@@ -95,7 +94,7 @@ trait TimeTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` TIME NOT NULL DEFAULT '12:30:00',
@@ -114,5 +113,4 @@ trait TimeTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

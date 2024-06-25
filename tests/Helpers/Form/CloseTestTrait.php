@@ -5,7 +5,6 @@ namespace Tests\Helpers\Form;
 
 trait CloseTestTrait
 {
-
     public function testClose(): void
     {
         $this->assertSame(
@@ -13,5 +12,4 @@ trait CloseTestTrait
             $this->view->Form->close()
         );
     }
-
 }

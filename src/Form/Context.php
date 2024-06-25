@@ -5,9 +5,9 @@ namespace Fyre\View\Form;
 
 abstract class Context
 {
-
     /**
      * Get the default value of a field.
+     *
      * @param string $key The field key.
      * @return mixed The default value.
      */
@@ -18,6 +18,7 @@ abstract class Context
 
     /**
      * Get the maximum value.
+     *
      * @param string $key The field key.
      * @return float|null The maximum value.
      */
@@ -28,6 +29,7 @@ abstract class Context
 
     /**
      * Get the maximum length.
+     *
      * @param string $key The field key.
      * @return int|null The maximum length.
      */
@@ -38,6 +40,7 @@ abstract class Context
 
     /**
      * Get the minimum value.
+     *
      * @param string $key The field key.
      * @return float|null The minimum value.
      */
@@ -48,16 +51,18 @@ abstract class Context
 
     /**
      * Get the step interval.
+     *
      * @param string $key The field key.
      * @return string|float|null The step interval.
      */
-    public function getStep(string $key): string|float|null
+    public function getStep(string $key): float|string|null
     {
         return null;
     }
 
     /**
      * Get the field type.
+     *
      * @param string $key The field key.
      * @return string The field type.
      */
@@ -68,6 +73,7 @@ abstract class Context
 
     /**
      * Get the value of a field.
+     *
      * @param string $key The field key.
      * @return mixed The value.
      */
@@ -75,6 +81,7 @@ abstract class Context
 
     /**
      * Determine if the field is required.
+     *
      * @param string $key The field key.
      * @return bool TRUE if the field is required, otherwise FALSE.
      */
@@ -82,5 +89,4 @@ abstract class Context
     {
         return false;
     }
-
 }

@@ -7,7 +7,6 @@ use Fyre\View\Exceptions\ViewException;
 
 trait ElementTestTrait
 {
-
     public function testElementData(): void
     {
         $this->view->setLayout(null);
@@ -34,5 +33,4 @@ trait ElementTestTrait
 
         $this->view->render('test/element_invalid');
     }
-
 }

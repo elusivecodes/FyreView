@@ -13,9 +13,6 @@ use stdClass;
 
 final class FormTest extends TestCase
 {
-
-    protected View $view;
-
     use ButtonTestTrait;
     use CheckboxTestTrait;
     use CloseTestTrait;
@@ -28,27 +25,21 @@ final class FormTest extends TestCase
     use LabelTestTrait;
     use LegendTestTrait;
     use NumberTestTrait;
-    use OpenTestTrait;
     use OpenMultipartTestTrait;
+    use OpenTestTrait;
     use RadioTestTrait;
-    use SelectTestTrait;
     use SelectMultiTestTrait;
+    use SelectTestTrait;
     use TextareaTestTrait;
     use TimeTestTrait;
 
-    public function testUnclosedForm(): void
-    {
-        $this->expectException(FormException::class);
-
-        $this->view->Form->open();
-        $this->view->Form->open();
-    }
+    protected View $view;
 
     public function testInvalidContext(): void
     {
         $this->expectException(FormException::class);
 
-        $this->view->Form->open(new stdClass);
+        $this->view->Form->open(new stdClass());
     }
 
     public function testInvalidInputType(): void
@@ -56,8 +47,16 @@ final class FormTest extends TestCase
         $this->expectException(FormException::class);
 
         $this->view->Form->input('input', [
-            'type' => 'invalid'
+            'type' => 'invalid',
         ]);
+    }
+
+    public function testUnclosedForm(): void
+    {
+        $this->expectException(FormException::class);
+
+        $this->view->Form->open();
+        $this->view->Form->open();
     }
 
     protected function setUp(): void
@@ -68,9 +67,9 @@ final class FormTest extends TestCase
         $request = new ServerRequest([
             'globals' => [
                 'server' => [
-                    'REQUEST_URI' => '/test'
-                ]
-            ]
+                    'REQUEST_URI' => '/test',
+                ],
+            ],
         ]);
 
         $this->view = new View($request);
@@ -80,5 +79,4 @@ final class FormTest extends TestCase
     {
         $_POST = [];
     }
-
 }

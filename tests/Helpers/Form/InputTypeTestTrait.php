@@ -5,22 +5,13 @@ namespace Tests\Helpers\Form;
 
 trait InputTypeTestTrait
 {
-
-    public function testInputTypeName(): void
-    {
-        $this->assertSame(
-            '<input id="number" name="number" type="number" placeholder="Number" />',
-            $this->view->Form->number('number')
-        );
-    }
-
     public function testInputTypeAttributes(): void
     {
         $this->assertSame(
             '<input class="test" id="number" name="number" type="number" placeholder="Number" />',
             $this->view->Form->number('number', [
                 'class' => 'test',
-                'id' => 'number'
+                'id' => 'number',
             ])
         );
     }
@@ -54,7 +45,7 @@ trait InputTypeTestTrait
         $this->assertSame(
             '<input id="file" name="file" type="file" />',
             $this->view->Form->file('file', [
-                'value' => 'test'
+                'value' => 'test',
             ])
         );
     }
@@ -80,7 +71,7 @@ trait InputTypeTestTrait
         $this->assertSame(
             '<input id="image" name="image" type="image" />',
             $this->view->Form->image('image', [
-                'value' => 'test'
+                'value' => 'test',
             ])
         );
     }
@@ -90,6 +81,14 @@ trait InputTypeTestTrait
         $this->assertSame(
             '<input id="month" name="month" type="month" placeholder="Month" />',
             $this->view->Form->month('month')
+        );
+    }
+
+    public function testInputTypeName(): void
+    {
+        $this->assertSame(
+            '<input id="number" name="number" type="number" placeholder="Number" />',
+            $this->view->Form->number('number')
         );
     }
 
@@ -106,7 +105,7 @@ trait InputTypeTestTrait
         $this->assertSame(
             '<input id="password" name="password" type="password" placeholder="Password" />',
             $this->view->Form->password('password', [
-                'value' => 'test'
+                'value' => 'test',
             ])
         );
     }
@@ -174,5 +173,4 @@ trait InputTypeTestTrait
             $this->view->Form->week('week')
         );
     }
-
 }

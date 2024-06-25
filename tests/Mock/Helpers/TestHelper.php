@@ -7,10 +7,8 @@ use Fyre\View\Helper;
 
 class TestHelper extends Helper
 {
-
     public function test(): string
     {
         return 'test';
     }
-
 }

@@ -10,12 +10,11 @@ use Fyre\Validation\Validator;
 
 trait BooleanTestTrait
 {
-
-    public function testBooleanSchema(): void
+    public function testBooleanEntityValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BOOLEAN NULL DEFAULT NULL,
@@ -25,12 +24,14 @@ trait BooleanTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEmptyEntity();
+        $entity = $model->newEntity([
+            'value' => true,
+        ]);
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input name="value" type="hidden" value="0" /><input id="value" name="value" type="checkbox" value="1" />',
+            '<input name="value" type="hidden" value="0" /><input id="value" name="value" type="checkbox" value="1" checked />',
             $this->view->Form->input('value')
         );
     }
@@ -39,7 +40,7 @@ trait BooleanTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BOOLEAN NULL DEFAULT NULL,
@@ -64,11 +65,11 @@ trait BooleanTestTrait
         );
     }
 
-    public function testBooleanEntityValue(): void
+    public function testBooleanSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BOOLEAN NULL DEFAULT NULL,
@@ -78,14 +79,12 @@ trait BooleanTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEntity([
-            'value' => true
-        ]);
+        $entity = $model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input name="value" type="hidden" value="0" /><input id="value" name="value" type="checkbox" value="1" checked />',
+            '<input name="value" type="hidden" value="0" /><input id="value" name="value" type="checkbox" value="1" />',
             $this->view->Form->input('value')
         );
     }
@@ -94,7 +93,7 @@ trait BooleanTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` BOOLEAN NOT NULL DEFAULT 1,
@@ -113,5 +112,4 @@ trait BooleanTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

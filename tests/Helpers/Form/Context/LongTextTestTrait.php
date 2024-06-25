@@ -10,12 +10,37 @@ use Fyre\Validation\Validator;
 
 trait LongTextTestTrait
 {
+    public function testLongTextEntityValue(): void
+    {
+        $connection = ConnectionManager::use();
+
+        $connection->query(<<<'EOT'
+            CREATE TABLE `contexts` (
+                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `value` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+                PRIMARY KEY (`id`)
+            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
+        EOT);
+
+        $model = ModelRegistry::use('Contexts');
+
+        $entity = $model->newEntity([
+            'value' => 'Test',
+        ]);
+
+        $this->view->Form->open($entity);
+
+        $this->assertSame(
+            '<textarea id="value" name="value" placeholder="Value">Test</textarea>',
+            $this->view->Form->input('value')
+        );
+    }
 
     public function testLongTextMaxLengthSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -39,7 +64,7 @@ trait LongTextTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -68,7 +93,7 @@ trait LongTextTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -93,37 +118,11 @@ trait LongTextTestTrait
         );
     }
 
-    public function testLongTextEntityValue(): void
-    {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<EOT
-            CREATE TABLE `contexts` (
-                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `value` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-                PRIMARY KEY (`id`)
-            ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
-        EOT);
-
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
-            'value' => 'Test'
-        ]);
-
-        $this->view->Form->open($entity);
-
-        $this->assertSame(
-            '<textarea id="value" name="value" placeholder="Value">Test</textarea>',
-            $this->view->Form->input('value')
-        );
-    }
-
     public function testLongTextSchemaDefaultValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` LONGTEXT NOT NULL DEFAULT 'Test' COLLATE 'utf8mb4_unicode_ci',
@@ -142,5 +141,4 @@ trait LongTextTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

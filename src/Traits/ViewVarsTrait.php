@@ -10,11 +10,11 @@ use function array_merge;
  */
 trait ViewVarsTrait
 {
-
     protected array $data = [];
 
     /**
      * Get the view data.
+     *
      * @return array The view data.
      */
     public function getData(): array
@@ -24,6 +24,7 @@ trait ViewVarsTrait
 
     /**
      * Set a view data value.
+     *
      * @param string $name The data name.
      * @param mixed $value The data value.
      * @return View The View.
@@ -37,6 +38,7 @@ trait ViewVarsTrait
 
     /**
      * Set view data.
+     *
      * @param array $data The view data.
      * @return View The View.
      */
@@ -46,5 +48,4 @@ trait ViewVarsTrait
 
         return $this;
     }
-
 }

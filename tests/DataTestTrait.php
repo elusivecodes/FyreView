@@ -5,19 +5,18 @@ namespace Tests;
 
 trait DataTestTrait
 {
-
     public function testData(): void
     {
         $this->assertSame(
             $this->view,
             $this->view->setData([
-                'a' => 1
+                'a' => 1,
             ])
         );
 
         $this->assertSame(
             [
-                'a' => 1
+                'a' => 1,
             ],
             $this->view->getData()
         );
@@ -26,17 +25,17 @@ trait DataTestTrait
     public function testDataMerges(): void
     {
         $this->view->setData([
-            'a' => 1
+            'a' => 1,
         ]);
 
         $this->view->setData([
-            'b' => 2
+            'b' => 2,
         ]);
 
         $this->assertSame(
             [
                 'a' => 1,
-                'b' => 2
+                'b' => 2,
             ],
             $this->view->getData()
         );
@@ -51,10 +50,9 @@ trait DataTestTrait
 
         $this->assertSame(
             [
-                'a' => 1
+                'a' => 1,
             ],
             $this->view->getData()
         );
     }
-
 }

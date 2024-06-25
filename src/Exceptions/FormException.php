@@ -10,7 +10,6 @@ use RuntimeException;
  */
 class FormException extends RuntimeException
 {
-
     public static function forInvalidContext(): static
     {
         return new static('Invalid form context.');
@@ -25,5 +24,4 @@ class FormException extends RuntimeException
     {
         return new static('Unclosed form.');
     }
-
 }

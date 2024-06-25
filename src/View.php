@@ -20,26 +20,26 @@ use function ob_start;
  */
 class View
 {
-
-    protected ServerRequest $request;
-
-    protected string $content = ''; 
-
-    protected string|null $file = null; 
-
-    protected string|null $layout = 'default';
-
-    protected array $helpers = [];
+    use EvaluateTrait;
+    use ViewVarsTrait;
 
     protected array $blocks = [];
 
     protected array $blockStack = [];
 
-    use EvaluateTrait;
-    use ViewVarsTrait;
+    protected string $content = '';
+
+    protected string|null $file = null;
+
+    protected array $helpers = [];
+
+    protected string|null $layout = 'default';
+
+    protected ServerRequest $request;
 
     /**
      * New View constructor.
+     *
      * @param ServerRequest $request The ServerRequest.
      */
     public function __construct(ServerRequest $request)
@@ -49,6 +49,7 @@ class View
 
     /**
      * Load a helper.
+     *
      * @param string $name The helper name.
      * @return Helper The Helper.
      */
@@ -61,6 +62,7 @@ class View
 
     /**
      * Append content to a block.
+     *
      * @param string $name The block name.
      * @return View The View.
      */
@@ -71,6 +73,7 @@ class View
 
     /**
      * Assign content to a block.
+     *
      * @param string $name The block name.
      * @param string $content The block content.
      * @return View The View.
@@ -84,6 +87,7 @@ class View
 
     /**
      * Render a cell.
+     *
      * @param string $cell The cell name.
      * @param array $args The cell method arguments.
      * @return Cell The new Cell.
@@ -103,6 +107,7 @@ class View
 
     /**
      * Get the layout content.
+     *
      * @return string The layout content.
      */
     public function content(): string
@@ -112,8 +117,10 @@ class View
 
     /**
      * Render an element.
+     *
      * @param string $file The element file.
      * @return string The rendered element.
+     *
      * @throws ViewException if the element is not valid.
      */
     public function element(string $file, array $data = []): string
@@ -129,7 +136,9 @@ class View
 
     /**
      * End a block.
+     *
      * @return View The View.
+     *
      * @throws ViewException if a block is not opened.
      */
     public function end(): static
@@ -165,6 +174,7 @@ class View
 
     /**
      * Fetch a block.
+     *
      * @param string $name The block name.
      * @param string $default The default value.
      * @return string The block contents.
@@ -176,6 +186,7 @@ class View
 
     /**
      * Get the layout.
+     *
      * @return string|null The layout.
      */
     public function getLayout(): string|null
@@ -185,6 +196,7 @@ class View
 
     /**
      * Get the ServerRequest.
+     *
      * @return ServerRequest The ServerRequest.
      */
     public function getRequest(): ServerRequest
@@ -194,6 +206,7 @@ class View
 
     /**
      * Load a Helper.
+     *
      * @param string $name The helper name.
      * @param array $options The helper options.
      * @return View The View.
@@ -207,6 +220,7 @@ class View
 
     /**
      * Prepend content to a block.
+     *
      * @param string $name The block name.
      * @return View The View.
      */
@@ -217,8 +231,10 @@ class View
 
     /**
      * Render a template.
+     *
      * @param string $file The template file.
      * @return string The rendered template.
+     *
      * @throws ViewException if the template is not valid or there are unclosed blocks.
      */
     public function render(string $file): string
@@ -260,6 +276,7 @@ class View
 
     /**
      * Reset content of a block.
+     *
      * @param string $name The block name.
      * @return View The View.
      */
@@ -270,6 +287,7 @@ class View
 
     /**
      * Set the layout.
+     *
      * @param string|null $layout The layout.
      * @return View The View.
      */
@@ -282,6 +300,7 @@ class View
 
     /**
      * Start content for a block.
+     *
      * @param string $name The block name.
      * @param string|null $type The block type.
      * @return View The View.
@@ -292,10 +311,9 @@ class View
 
         $this->blockStack[] = [
             'name' => $name,
-            'type' => $type
+            'type' => $type,
         ];
 
         return $this;
     }
-
 }

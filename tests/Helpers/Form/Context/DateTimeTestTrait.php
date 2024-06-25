@@ -11,12 +11,11 @@ use Fyre\Validation\Validator;
 
 trait DatetimeTestTrait
 {
-
-    public function testDatetimeSchema(): void
+    public function testDatetimeEntityValue(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` DATETIME NULL DEFAULT NULL,
@@ -26,12 +25,14 @@ trait DatetimeTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEmptyEntity();
+        $entity = $model->newEntity([
+            'value' => DateTime::fromArray([2022, 1, 1]),
+        ]);
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="datetime-local" placeholder="Value" />',
+            '<input id="value" name="value" type="datetime-local" value="2022-01-01T00:00" placeholder="Value" />',
             $this->view->Form->input('value')
         );
     }
@@ -40,7 +41,7 @@ trait DatetimeTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` DATETIME NULL DEFAULT NULL,
@@ -65,11 +66,11 @@ trait DatetimeTestTrait
         );
     }
 
-    public function testDatetimeEntityValue(): void
+    public function testDatetimeSchema(): void
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` DATETIME NULL DEFAULT NULL,
@@ -79,14 +80,12 @@ trait DatetimeTestTrait
 
         $model = ModelRegistry::use('Contexts');
 
-        $entity = $model->newEntity([
-            'value' => DateTime::fromArray([2022, 1, 1])
-        ]);
+        $entity = $model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
         $this->assertSame(
-            '<input id="value" name="value" type="datetime-local" value="2022-01-01T00:00" placeholder="Value" />',
+            '<input id="value" name="value" type="datetime-local" placeholder="Value" />',
             $this->view->Form->input('value')
         );
     }
@@ -95,7 +94,7 @@ trait DatetimeTestTrait
     {
         $connection = ConnectionManager::use();
 
-        $connection->query(<<<EOT
+        $connection->query(<<<'EOT'
             CREATE TABLE `contexts` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `value` DATETIME NOT NULL DEFAULT '2022-01-01 00:00:00',
@@ -114,5 +113,4 @@ trait DatetimeTestTrait
             $this->view->Form->input('value')
         );
     }
-
 }

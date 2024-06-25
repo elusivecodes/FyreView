@@ -5,9 +5,9 @@ namespace Fyre\View\Form;
 
 class NullContext extends Context
 {
-
     /**
      * Get the value of a field.
+     *
      * @param string $key The field key.
      * @return mixed The value.
      */
@@ -15,5 +15,4 @@ class NullContext extends Context
     {
         return null;
     }
-
 }

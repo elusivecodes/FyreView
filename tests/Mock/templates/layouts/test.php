@@ -1,3 +1,3 @@
-Layout: <?=$a?>
+Layout: <?= $a; ?>
 
-Content: <?=$this->content()?>
+Content: <?= $this->content(); ?>

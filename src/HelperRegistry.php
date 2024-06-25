@@ -17,13 +17,13 @@ use function trim;
  */
 abstract class HelperRegistry
 {
+    protected static array $helpers = [];
 
     protected static array $namespaces = [];
 
-    protected static array $helpers = [];
-
     /**
      * Add a namespace for loading helpers.
+     *
      * @param string $namespace The namespace.
      */
     public static function addNamespace(string $namespace): void
@@ -46,6 +46,7 @@ abstract class HelperRegistry
 
     /**
      * Find a helper class.
+     *
      * @param string $name The helper name.
      * @return string|null The helper class.
      */
@@ -56,6 +57,7 @@ abstract class HelperRegistry
 
     /**
      * Get the namespaces.
+     *
      * @return array The namespaces.
      */
     public static function getNamespaces(): array
@@ -65,6 +67,7 @@ abstract class HelperRegistry
 
     /**
      * Determine if a namespace exists.
+     *
      * @param string $namespace The namespace.
      * @return bool TRUE if the namespace exists, otherwise FALSE.
      */
@@ -77,10 +80,12 @@ abstract class HelperRegistry
 
     /**
      * Load a helper.
+     *
      * @param string $name The helper name.
      * @param View $view The View.
      * @param array $options The helper options.
      * @return Helper The Helper.
+     *
      * @throws ViewException if the helper is not valid.
      */
     public static function load(string $name, View $view, array $options = []): Helper
@@ -96,6 +101,7 @@ abstract class HelperRegistry
 
     /**
      * Remove a namespace.
+     *
      * @param string $namespace The namespace.
      * @return bool TRUE If the namespace was removed, otherwise FALSE.
      */
@@ -103,7 +109,7 @@ abstract class HelperRegistry
     {
         $namespace = static::normalizeNamespace($namespace);
 
-        foreach (static::$namespaces AS $i => $otherNamespace) {
+        foreach (static::$namespaces as $i => $otherNamespace) {
             if ($otherNamespace !== $namespace) {
                 continue;
             }
@@ -118,6 +124,7 @@ abstract class HelperRegistry
 
     /**
      * Locate a helper class.
+     *
      * @param string $name The helper name.
      * @return string|null The helper class.
      */
@@ -125,7 +132,7 @@ abstract class HelperRegistry
     {
         $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Helpers\\']);
 
-        foreach ($namespaces AS $namespace) {
+        foreach ($namespaces as $namespace) {
             $className = $namespace.$name.'Helper';
 
             if (class_exists($className) && is_subclass_of($className, Helper::class)) {
@@ -138,6 +145,7 @@ abstract class HelperRegistry
 
     /**
      * Normalize a namespace
+     *
      * @param string $namespace The namespace.
      * @return string The normalized namespace.
      */
@@ -149,5 +157,4 @@ abstract class HelperRegistry
             '\\'.$namespace.'\\' :
             '\\';
     }
-
 }

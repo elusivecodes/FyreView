@@ -14,9 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 final class FormContextTest extends TestCase
 {
-
-    protected View $view;
-
     use BigIntTestTrait;
     use BlobTestTrait;
     use BooleanTestTrait;
@@ -43,6 +40,8 @@ final class FormContextTest extends TestCase
     use TinyTextTestTrait;
     use VarcharTestTrait;
 
+    protected View $view;
+
     protected function setUp(): void
     {
         ConnectionManager::clear();
@@ -56,7 +55,7 @@ final class FormContextTest extends TestCase
             'collation' => 'utf8mb4_unicode_ci',
             'charset' => 'utf8mb4',
             'compress' => true,
-            'persist' => true
+            'persist' => true,
         ]);
 
         $connection = ConnectionManager::use();
@@ -74,9 +73,9 @@ final class FormContextTest extends TestCase
         $request = new ServerRequest([
             'globals' => [
                 'server' => [
-                    'REQUEST_URI' => '/test'
-                ]
-            ]
+                    'REQUEST_URI' => '/test',
+                ],
+            ],
         ]);
 
         $this->view = new View($request);
@@ -91,5 +90,4 @@ final class FormContextTest extends TestCase
         $connection->query('DROP TABLE IF EXISTS `children`');
         $connection->query('DROP TABLE IF EXISTS `contexts_children`');
     }
-
 }

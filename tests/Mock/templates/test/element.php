@@ -1,1 +1,1 @@
-<?=$this->element('element', ['b' => 2])?>
+<?= $this->element('element', ['b' => 2]);

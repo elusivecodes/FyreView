@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 final class CSPTest extends TestCase
 {
-
     protected View $view;
 
     public function testScriptNonce(): void
@@ -57,5 +56,4 @@ final class CSPTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

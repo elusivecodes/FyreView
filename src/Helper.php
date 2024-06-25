@@ -10,15 +10,15 @@ use function array_replace;
  */
 abstract class Helper
 {
-
     protected static array $defaults = [];
-
-    protected View $view;
 
     protected array $config;
 
+    protected View $view;
+
     /**
      * New Helper constructor.
+     *
      * @param View $view The View.
      * @param array $options The helper options.
      */
@@ -31,6 +31,7 @@ abstract class Helper
 
     /**
      * Get the helper config.
+     *
      * @return array The helper config.
      */
     public function getConfig(): array
@@ -40,11 +41,11 @@ abstract class Helper
 
     /**
      * Get the View.
+     *
      * @return View The View.
      */
     public function getView(): View
     {
         return $this->view;
     }
-
 }

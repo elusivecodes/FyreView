@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 final class UrlTest extends TestCase
 {
-
     protected View $view;
 
     public function testLink(): void
@@ -21,7 +20,7 @@ final class UrlTest extends TestCase
         $this->assertSame(
             '<a href="/home">Title</a>',
             $this->view->Url->link('Title', [
-                'href' => '/home'
+                'href' => '/home',
             ])
         );
     }
@@ -34,7 +33,7 @@ final class UrlTest extends TestCase
             '<a class="test" href="/home">Title</a>',
             $this->view->Url->link('Title', [
                 'class' => 'test',
-                'href' => '/home'
+                'href' => '/home',
             ])
         );
     }
@@ -46,7 +45,7 @@ final class UrlTest extends TestCase
         $this->assertSame(
             '<a href="/home">&lt;i&gt;Title&lt;/i&gt;</a>',
             $this->view->Url->link('<i>Title</i>', [
-                'href' => '/home'
+                'href' => '/home',
             ])
         );
     }
@@ -59,8 +58,24 @@ final class UrlTest extends TestCase
             '<a href="/home"><i>Title</i></a>',
             $this->view->Url->link('<i>Title</i>', [
                 'href' => '/home',
-                'escape' => false
+                'escape' => false,
             ])
+        );
+    }
+
+    public function testPath(): void
+    {
+        $this->assertSame(
+            '/assets/test.txt',
+            $this->view->Url->path('assets/test.txt')
+        );
+    }
+
+    public function testPathFullbase(): void
+    {
+        $this->assertSame(
+            'https://test.com/assets/test.txt',
+            $this->view->Url->path('assets/test.txt', ['fullBase' => true])
         );
     }
 
@@ -91,24 +106,8 @@ final class UrlTest extends TestCase
         $this->assertSame(
             'https://test.com/home',
             $this->view->Url->to('home', options: [
-                'fullBase' => true
+                'fullBase' => true,
             ])
-        );
-    }
-
-    public function testPath(): void
-    {
-        $this->assertSame(
-            '/assets/test.txt',
-            $this->view->Url->path('assets/test.txt')
-        );
-    }
-
-    public function testPathFullbase(): void
-    {
-        $this->assertSame(
-            'https://test.com/assets/test.txt',
-            $this->view->Url->path('assets/test.txt', ['fullBase' => true])
         );
     }
 
@@ -121,5 +120,4 @@ final class UrlTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

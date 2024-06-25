@@ -5,11 +5,11 @@ namespace Fyre\View\Form;
 
 use Closure;
 use Fyre\Entity\Entity;
-use Fyre\View\Form\Traits\SchemaTrait;
-use Fyre\View\Form\Traits\ValidationTrait;
-use Fyre\ORM\Relationships\Relationship;
 use Fyre\ORM\Model;
 use Fyre\ORM\ModelRegistry;
+use Fyre\ORM\Relationships\Relationship;
+use Fyre\View\Form\Traits\SchemaTrait;
+use Fyre\View\Form\Traits\ValidationTrait;
 
 use function array_filter;
 use function array_key_exists;
@@ -25,6 +25,8 @@ use function min;
  */
 class EntityContext extends Context
 {
+    use SchemaTrait;
+    use ValidationTrait;
 
     protected Entity $item;
 
@@ -32,12 +34,9 @@ class EntityContext extends Context
 
     protected array $models = [];
 
-    use
-        SchemaTrait,
-        ValidationTrait;
-
     /**
      * New EntityContext constructor.
+     *
      * @param Entity $item The entity.
      */
     public function __construct(Entity $item)
@@ -50,6 +49,7 @@ class EntityContext extends Context
 
     /**
      * Get the default value of a field.
+     *
      * @param string $key The field key.
      * @return mixed The default value.
      */
@@ -72,6 +72,7 @@ class EntityContext extends Context
 
     /**
      * Get the maximum value.
+     *
      * @param string $key The field key.
      * @return float|null The maximum value.
      */
@@ -103,6 +104,7 @@ class EntityContext extends Context
 
     /**
      * Get the maximum length.
+     *
      * @param string $key The field key.
      * @return int|null The maximum length.
      */
@@ -134,6 +136,7 @@ class EntityContext extends Context
 
     /**
      * Get the minimum value.
+     *
      * @param string $key The field key.
      * @return float|null The minimum value.
      */
@@ -165,10 +168,11 @@ class EntityContext extends Context
 
     /**
      * Get the step interval.
+     *
      * @param string $key The field key.
      * @return string|float|null The step interval.
      */
-    public function getStep(string $key): string|float|null
+    public function getStep(string $key): float|string|null
     {
         [$model, $field] = $this->getModelField($key);
 
@@ -183,6 +187,7 @@ class EntityContext extends Context
 
     /**
      * Get the field type.
+     *
      * @param string $key The field key.
      * @return string The field type.
      */
@@ -196,8 +201,7 @@ class EntityContext extends Context
 
         $relationship = static::findRelationship(
             $model,
-            fn(Relationship $relationship): bool =>
-                !$relationship->isOwningSide() && $relationship->getForeignKey() === $field
+            fn(Relationship $relationship): bool => !$relationship->isOwningSide() && $relationship->getForeignKey() === $field
         );
 
         if ($relationship) {
@@ -211,6 +215,7 @@ class EntityContext extends Context
 
     /**
      * Get the value of a field.
+     *
      * @param string $key The field key.
      * @return mixed The value.
      */
@@ -220,7 +225,7 @@ class EntityContext extends Context
 
         $value = $this->item;
 
-        foreach ($parts AS $part) {
+        foreach ($parts as $part) {
             if ($value instanceof Entity || is_array($value)) {
                 $value = $value[$part] ?? null;
             } else {
@@ -233,6 +238,7 @@ class EntityContext extends Context
 
     /**
      * Determine if the field is required.
+     *
      * @param string $key The field key.
      * @return bool TRUE if the field is required, otherwise FALSE.
      */
@@ -251,6 +257,7 @@ class EntityContext extends Context
 
     /**
      * Get the Model/field for a field.
+     *
      * @param string $key The field key.
      * @return array The Model/field.
      */
@@ -271,8 +278,7 @@ class EntityContext extends Context
 
             $relationship = static::findRelationship(
                 $model,
-                fn(Relationship $relationship): bool =>
-                    $relationship->getProperty() === $part
+                fn(Relationship $relationship): bool => $relationship->getProperty() === $part
             );
 
             $model = $relationship->getTarget();
@@ -287,6 +293,7 @@ class EntityContext extends Context
 
     /**
      * Find a relationship that passes a callback.
+     *
      * @param Model $model The Model.
      * @param Closure $callback The callback test.
      * @return Relationship|null The Relationship.
@@ -295,7 +302,7 @@ class EntityContext extends Context
     {
         $relationships = $model->getRelationships();
 
-        foreach ($relationships AS $relationship) {
+        foreach ($relationships as $relationship) {
             if (!$callback($relationship)) {
                 continue;
             }
@@ -305,5 +312,4 @@ class EntityContext extends Context
 
         return null;
     }
-
 }

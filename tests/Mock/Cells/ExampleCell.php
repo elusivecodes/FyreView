@@ -7,15 +7,10 @@ use Fyre\View\Cell;
 
 class ExampleCell extends Cell
 {
+    public function otherTest(): void {}
 
     public function test(int $value): void
     {
         $this->set('a', $value);
     }
-
-    public function otherTest(): void
-    {
-        
-    }
-
 }

@@ -7,12 +7,63 @@ use Fyre\DateTime\DateTime;
 
 trait DateTestTrait
 {
-
     public function testDate(): void
     {
         $this->assertSame(
             '<input id="date-value" name="date_value" type="date" placeholder="Date Value" />',
             $this->view->Form->date('date_value')
+        );
+    }
+
+    public function testDateAttributeArray(): void
+    {
+        $this->assertSame(
+            '<input id="date" name="date" data-test="[1,2]" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'data-test' => [1, 2],
+            ])
+        );
+    }
+
+    public function testDateAttributeEscape(): void
+    {
+        $this->assertSame(
+            '<input id="date" name="date" data-test="&lt;test&gt;" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'data-test' => '<test>',
+            ])
+        );
+    }
+
+    public function testDateAttributeInvalid(): void
+    {
+        $this->assertSame(
+            '<input class="test" id="date" name="date" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                '*class*' => 'test',
+            ])
+        );
+    }
+
+    public function testDateAttributes(): void
+    {
+        $this->assertSame(
+            '<input class="test" id="other" name="date" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'class' => 'test',
+                'id' => 'other',
+            ])
+        );
+    }
+
+    public function testDateAttributesOrder(): void
+    {
+        $this->assertSame(
+            '<input class="test" id="other" name="date" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'id' => 'other',
+                'class' => 'test',
+            ])
         );
     }
 
@@ -32,32 +83,12 @@ trait DateTestTrait
         );
     }
 
-    public function testDateName(): void
-    {
-        $this->assertSame(
-            '<input id="date" name="other" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'name' => 'other'
-            ])
-        );
-    }
-
-    public function testDateNameFalse(): void
-    {
-        $this->assertSame(
-            '<input id="date" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'name' => false
-            ])
-        );
-    }
-
     public function testDateId(): void
     {
         $this->assertSame(
             '<input id="other" name="date" type="date" placeholder="Date" />',
             $this->view->Form->date('date', [
-                'id' => 'other'
+                'id' => 'other',
             ])
         );
     }
@@ -67,7 +98,7 @@ trait DateTestTrait
         $this->assertSame(
             '<input name="date" type="date" placeholder="Date" />',
             $this->view->Form->date('date', [
-                'id' => false
+                'id' => false,
             ])
         );
     }
@@ -75,7 +106,7 @@ trait DateTestTrait
     public function testDateIdPrefix(): void
     {
         $this->view->Form->open(null, [
-            'idPrefix' => 'test'
+            'idPrefix' => 'test',
         ]);
 
         $this->assertSame(
@@ -84,12 +115,32 @@ trait DateTestTrait
         );
     }
 
+    public function testDateName(): void
+    {
+        $this->assertSame(
+            '<input id="date" name="other" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'name' => 'other',
+            ])
+        );
+    }
+
+    public function testDateNameFalse(): void
+    {
+        $this->assertSame(
+            '<input id="date" type="date" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'name' => false,
+            ])
+        );
+    }
+
     public function testDatePlaceholder(): void
     {
         $this->assertSame(
             '<input id="date" name="date" type="date" placeholder="Other" />',
             $this->view->Form->date('date', [
-                'placeholder' => 'Other'
+                'placeholder' => 'Other',
             ])
         );
     }
@@ -99,7 +150,19 @@ trait DateTestTrait
         $this->assertSame(
             '<input id="date" name="date" type="date" />',
             $this->view->Form->date('date', [
-                'placeholder' => false
+                'placeholder' => false,
+            ])
+        );
+    }
+
+    public function testDateValueDefault(): void
+    {
+        $now = DateTime::fromArray([2022, 1, 1]);
+
+        $this->assertSame(
+            '<input id="date" name="date" type="date" value="2022-01-01" placeholder="Date" />',
+            $this->view->Form->date('date', [
+                'default' => $now,
             ])
         );
     }
@@ -123,69 +186,4 @@ trait DateTestTrait
             $this->view->Form->date('key.date')
         );
     }
-
-    public function testDateValueDefault(): void
-    {
-        $now = DateTime::fromArray([2022, 1, 1]);
-
-        $this->assertSame(
-            '<input id="date" name="date" type="date" value="2022-01-01" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'default' => $now
-            ])
-        );
-    }
-
-    public function testDateAttributes(): void
-    {
-        $this->assertSame(
-            '<input class="test" id="other" name="date" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'class' => 'test',
-                'id' => 'other'
-            ])
-        );
-    }
-
-    public function testDateAttributesOrder(): void
-    {
-        $this->assertSame(
-            '<input class="test" id="other" name="date" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'id' => 'other',
-                'class' => 'test'
-            ])
-        );
-    }
-
-    public function testDateAttributeInvalid(): void
-    {
-        $this->assertSame(
-            '<input class="test" id="date" name="date" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                '*class*' => 'test'
-            ])
-        );
-    }
-
-    public function testDateAttributeEscape(): void
-    {
-        $this->assertSame(
-            '<input id="date" name="date" data-test="&lt;test&gt;" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'data-test' => '<test>'
-            ])
-        );
-    }
-
-    public function testDateAttributeArray(): void
-    {
-        $this->assertSame(
-            '<input id="date" name="date" data-test="[1,2]" type="date" placeholder="Date" />',
-            $this->view->Form->date('date', [
-                'data-test' => [1, 2]
-            ])
-        );
-    }
-
 }

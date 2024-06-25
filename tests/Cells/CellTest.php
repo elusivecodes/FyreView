@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Tests\Helpers;
 
 use Fyre\Server\ServerRequest;
-use Fyre\View\Exceptions\ViewException;
 use Fyre\View\CellRegistry;
+use Fyre\View\Exceptions\ViewException;
 use Fyre\View\HelperRegistry;
 use Fyre\View\Template;
 use Fyre\View\View;
@@ -13,8 +13,17 @@ use PHPUnit\Framework\TestCase;
 
 final class CellTest extends TestCase
 {
-
     protected View $view;
+
+    public function testCamelCase(): void
+    {
+        $this->view->setLayout(null);
+
+        $this->assertSame(
+            'Other',
+            $this->view->cell('Example::otherTest')->render()
+        );
+    }
 
     public function testCell(): void
     {
@@ -40,6 +49,25 @@ final class CellTest extends TestCase
         $this->view->cell('Test::invalid')->render();
     }
 
+    public function testData(): void
+    {
+        $cell = $this->view->cell('Test');
+
+        $this->assertSame(
+            $cell,
+            $cell->setData([
+                'a' => 1,
+            ])
+        );
+
+        $this->assertSame(
+            [
+                'a' => 1,
+            ],
+            $cell->getData()
+        );
+    }
+
     public function testGetView(): void
     {
         $this->assertInstanceOf(
@@ -48,39 +76,11 @@ final class CellTest extends TestCase
         );
     }
 
-    public function testData(): void
+    public function testHelper(): void
     {
-        $cell = $this->view->cell('Test');
-
         $this->assertSame(
-            $cell,
-            $cell->setData([
-                'a' => 1
-            ])
-        );
-
-        $this->assertSame(
-            [
-                'a' => 1
-            ],
-            $cell->getData()
-        );
-    }
-
-    public function testSet(): void
-    {
-        $cell = $this->view->cell('Test');
-
-        $this->assertSame(
-            $cell,
-            $cell->set('a', 1)
-        );
-
-        $this->assertSame(
-            [
-                'a' => 1
-            ],
-            $cell->getData()
+            'test',
+            $this->view->cell('Test')->Test->test()
         );
     }
 
@@ -100,21 +100,20 @@ final class CellTest extends TestCase
         );
     }
 
-    public function testHelper(): void
+    public function testSet(): void
     {
+        $cell = $this->view->cell('Test');
+
         $this->assertSame(
-            'test',
-            $this->view->cell('Test')->Test->test()
+            $cell,
+            $cell->set('a', 1)
         );
-    }
-
-    public function testCamelCase(): void
-    {
-        $this->view->setLayout(null);
 
         $this->assertSame(
-            'Other',
-            $this->view->cell('Example::otherTest')->render()
+            [
+                'a' => 1,
+            ],
+            $cell->getData()
         );
     }
 
@@ -133,5 +132,4 @@ final class CellTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

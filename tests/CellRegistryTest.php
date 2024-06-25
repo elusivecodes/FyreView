@@ -4,15 +4,14 @@ declare(strict_types=1);
 namespace Tests;
 
 use Fyre\Server\ServerRequest;
-use Fyre\View\Exceptions\ViewException;
 use Fyre\View\Cell;
 use Fyre\View\CellRegistry;
+use Fyre\View\Exceptions\ViewException;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 
 final class CellRegistryTest extends TestCase
 {
-
     protected View $view;
 
     public function testFind(): void
@@ -34,7 +33,7 @@ final class CellRegistryTest extends TestCase
     {
         $this->assertSame(
             [
-                '\Tests\Mock\Cells\\'
+                '\Tests\Mock\Cells\\',
             ],
             CellRegistry::getNamespaces()
         );
@@ -51,24 +50,6 @@ final class CellRegistryTest extends TestCase
     {
         $this->assertFalse(
             CellRegistry::hasNamespace('\Tests\Mock\Invalid')
-        );
-    }
-
-    public function testRemoveNamespace(): void
-    {
-        $this->assertTrue(
-            CellRegistry::removeNamespace('\Tests\Mock\Cells')
-        );
-
-        $this->assertFalse(
-            CellRegistry::hasNamespace('\Tests\Mock\Cells')
-        );
-    }
-
-    public function testRemoveNamespaceInvalid(): void
-    {
-        $this->assertFalse(
-            CellRegistry::removeNamespace('\Tests\Mock\Invalid')
         );
     }
 
@@ -109,6 +90,24 @@ final class CellRegistryTest extends TestCase
         );
     }
 
+    public function testRemoveNamespace(): void
+    {
+        $this->assertTrue(
+            CellRegistry::removeNamespace('\Tests\Mock\Cells')
+        );
+
+        $this->assertFalse(
+            CellRegistry::hasNamespace('\Tests\Mock\Cells')
+        );
+    }
+
+    public function testRemoveNamespaceInvalid(): void
+    {
+        $this->assertFalse(
+            CellRegistry::removeNamespace('\Tests\Mock\Invalid')
+        );
+    }
+
     protected function setUp(): void
     {
         CellRegistry::clear();
@@ -118,5 +117,4 @@ final class CellRegistryTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }

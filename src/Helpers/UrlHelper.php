@@ -13,9 +13,9 @@ use Fyre\View\Helper;
  */
 class UrlHelper extends Helper
 {
-
     /**
      * Generate an anchor link for a destination.
+     *
      * @param string $content The link content.
      * @param array $options The link options.
      * @return string The anchor link.
@@ -35,6 +35,7 @@ class UrlHelper extends Helper
 
     /**
      * Generate a URL for a relative path.
+     *
      * @param string $path The relative path.
      * @param array $options The path options.
      * @return string The URL.
@@ -57,6 +58,7 @@ class UrlHelper extends Helper
 
     /**
      * Generate a URL for a named route.
+     *
      * @param string $name The name.
      * @param array $arguments The route arguments
      * @param array $options The route options.
@@ -66,5 +68,4 @@ class UrlHelper extends Helper
     {
         return Router::url($name, $arguments, $options);
     }
-
 }

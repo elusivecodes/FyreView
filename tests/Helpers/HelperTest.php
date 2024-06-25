@@ -12,8 +12,29 @@ use PHPUnit\Framework\TestCase;
 
 final class HelperTest extends TestCase
 {
-
     protected View $view;
+
+    public function testGetConfig(): void
+    {
+        $this->view->loadHelper('Test', [
+            'value' => 1,
+        ]);
+
+        $this->assertSame(
+            [
+                'value' => 1,
+            ],
+            $this->view->Test->getConfig()
+        );
+    }
+
+    public function testGetView(): void
+    {
+        $this->assertInstanceOf(
+            View::class,
+            $this->view->Test->getView()
+        );
+    }
 
     public function testHelper(): void
     {
@@ -32,28 +53,6 @@ final class HelperTest extends TestCase
         $this->view->loadHelper('Invalid');
     }
 
-    public function testGetConfig(): void
-    {
-        $this->view->loadHelper('Test', [
-            'value' => 1
-        ]);
-
-        $this->assertSame(
-            [
-                'value' => 1
-            ],
-            $this->view->Test->getConfig()
-        );
-    }
-
-    public function testGetView(): void
-    {
-        $this->assertInstanceOf(
-            View::class,
-            $this->view->Test->getView()
-        );
-    }
-
     protected function setUp(): void
     {
         HelperRegistry::clear();
@@ -66,5 +65,4 @@ final class HelperTest extends TestCase
 
         $this->view = new View($request);
     }
-
 }
