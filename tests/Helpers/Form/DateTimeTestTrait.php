@@ -10,7 +10,7 @@ trait DateTimeTestTrait
     public function testDateTime(): void
     {
         $this->assertSame(
-            '<input id="datetime-value" name="datetime_value" type="datetime-local" placeholder="Datetime Value" />',
+            '<input id="datetime-value" name="datetime_value" type="datetime-local" />',
             $this->view->Form->datetime('datetime_value')
         );
     }
@@ -18,7 +18,7 @@ trait DateTimeTestTrait
     public function testDateTimeAttributeArray(): void
     {
         $this->assertSame(
-            '<input id="datetime" name="datetime" data-test="[1,2]" type="datetime-local" placeholder="Datetime" />',
+            '<input id="datetime" name="datetime" data-test="[1,2]" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'data-test' => [1, 2],
             ])
@@ -28,7 +28,7 @@ trait DateTimeTestTrait
     public function testDateTimeAttributeEscape(): void
     {
         $this->assertSame(
-            '<input id="datetime" name="datetime" data-test="&lt;test&gt;" type="datetime-local" placeholder="Datetime" />',
+            '<input id="datetime" name="datetime" data-test="&lt;test&gt;" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'data-test' => '<test>',
             ])
@@ -38,7 +38,7 @@ trait DateTimeTestTrait
     public function testDateTimeAttributeInvalid(): void
     {
         $this->assertSame(
-            '<input class="test" id="datetime" name="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input class="test" id="datetime" name="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 '*class*' => 'test',
             ])
@@ -48,7 +48,7 @@ trait DateTimeTestTrait
     public function testDateTimeAttributes(): void
     {
         $this->assertSame(
-            '<input class="test" id="other" name="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input class="test" id="other" name="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'class' => 'test',
                 'id' => 'other',
@@ -59,7 +59,7 @@ trait DateTimeTestTrait
     public function testDateTimeAttributesOrder(): void
     {
         $this->assertSame(
-            '<input class="test" id="other" name="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input class="test" id="other" name="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'id' => 'other',
                 'class' => 'test',
@@ -70,7 +70,7 @@ trait DateTimeTestTrait
     public function testDateTimeDot(): void
     {
         $this->assertSame(
-            '<input id="key-datetime-value" name="key[datetime_value]" type="datetime-local" placeholder="Datetime Value" />',
+            '<input id="key-datetime-value" name="key[datetime_value]" type="datetime-local" />',
             $this->view->Form->datetime('key.datetime_value')
         );
     }
@@ -78,7 +78,7 @@ trait DateTimeTestTrait
     public function testDateTimeDotDeep(): void
     {
         $this->assertSame(
-            '<input id="deep-key-datetime-value" name="deep[key][datetime_value]" type="datetime-local" placeholder="Datetime Value" />',
+            '<input id="deep-key-datetime-value" name="deep[key][datetime_value]" type="datetime-local" />',
             $this->view->Form->datetime('deep.key.datetime_value')
         );
     }
@@ -86,7 +86,7 @@ trait DateTimeTestTrait
     public function testDateTimeId(): void
     {
         $this->assertSame(
-            '<input id="other" name="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input id="other" name="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'id' => 'other',
             ])
@@ -96,7 +96,7 @@ trait DateTimeTestTrait
     public function testDateTimeIdFalse(): void
     {
         $this->assertSame(
-            '<input name="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input name="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'id' => false,
             ])
@@ -110,7 +110,7 @@ trait DateTimeTestTrait
         ]);
 
         $this->assertSame(
-            '<input id="test-datetime" name="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input id="test-datetime" name="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime')
         );
     }
@@ -118,7 +118,7 @@ trait DateTimeTestTrait
     public function testDateTimeName(): void
     {
         $this->assertSame(
-            '<input id="datetime" name="other" type="datetime-local" placeholder="Datetime" />',
+            '<input id="datetime" name="other" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'name' => 'other',
             ])
@@ -128,29 +128,9 @@ trait DateTimeTestTrait
     public function testDateTimeNameFalse(): void
     {
         $this->assertSame(
-            '<input id="datetime" type="datetime-local" placeholder="Datetime" />',
+            '<input id="datetime" type="datetime-local" />',
             $this->view->Form->datetime('datetime', [
                 'name' => false,
-            ])
-        );
-    }
-
-    public function testDateTimePlaceholder(): void
-    {
-        $this->assertSame(
-            '<input id="datetime" name="datetime" type="datetime-local" placeholder="Other" />',
-            $this->view->Form->datetime('datetime', [
-                'placeholder' => 'Other',
-            ])
-        );
-    }
-
-    public function testDateTimePlaceholderFalse(): void
-    {
-        $this->assertSame(
-            '<input id="datetime" name="datetime" type="datetime-local" />',
-            $this->view->Form->datetime('datetime', [
-                'placeholder' => false,
             ])
         );
     }
@@ -160,7 +140,7 @@ trait DateTimeTestTrait
         $now = DateTime::fromArray([2022, 1, 1]);
 
         $this->assertSame(
-            '<input id="datetime" name="datetime" type="datetime-local" value="2022-01-01T00:00" placeholder="Datetime" />',
+            '<input id="datetime" name="datetime" type="datetime-local" value="2022-01-01T00:00" />',
             $this->view->Form->datetime('datetime', [
                 'default' => $now,
             ])
@@ -172,7 +152,7 @@ trait DateTimeTestTrait
         $_POST['datetime'] = '2022-01-01T00:00';
 
         $this->assertSame(
-            '<input id="datetime" name="datetime" type="datetime-local" value="2022-01-01T00:00" placeholder="Datetime" />',
+            '<input id="datetime" name="datetime" type="datetime-local" value="2022-01-01T00:00" />',
             $this->view->Form->datetime('datetime')
         );
     }
@@ -182,7 +162,7 @@ trait DateTimeTestTrait
         $_POST['key']['datetime'] = '2022-01-01T00:00';
 
         $this->assertSame(
-            '<input id="key-datetime" name="key[datetime]" type="datetime-local" value="2022-01-01T00:00" placeholder="Datetime" />',
+            '<input id="key-datetime" name="key[datetime]" type="datetime-local" value="2022-01-01T00:00" />',
             $this->view->Form->datetime('key.datetime')
         );
     }

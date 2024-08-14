@@ -555,6 +555,7 @@ All `options` will be created as attributes on the input element.
     - If the form was opened in an [*Entity*](https://github.com/elusivecodes/FyreEntity) context, the [*Entity*](https://github.com/elusivecodes/FyreEntity) and the [*TableSchema*](https://github.com/elusivecodes/FyreSchema#table-schemas) will also be used.
 - Select options can be specified using the `options` key.
 - Checkboxes and radio inputs can be marked as checked by setting the `checked` option to *true*.
+- Multiple select menus will (by default) render a hidden field with an empty value. This can be disabled by setting the `hiddenField` option to *false*.
 - Checkboxes will (by default) render a hidden field with the value "*0*". This can be disabled by setting the `hiddenField` option to *false*.
 
 You can also use the following helper methods to generate specific input type fields.

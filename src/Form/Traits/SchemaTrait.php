@@ -3,21 +3,39 @@ declare(strict_types=1);
 
 namespace Fyre\View\Form\Traits;
 
+use Fyre\DB\Types\BinaryType;
+use Fyre\DB\Types\BooleanType;
+use Fyre\DB\Types\DateTimeType;
+use Fyre\DB\Types\DateType;
+use Fyre\DB\Types\DecimalType;
+use Fyre\DB\Types\EnumType;
+use Fyre\DB\Types\FloatType;
+use Fyre\DB\Types\IntegerType;
+use Fyre\DB\Types\SetType;
+use Fyre\DB\Types\StringType;
+use Fyre\DB\Types\TextType;
+use Fyre\DB\Types\TimeType;
 use Fyre\Schema\TableSchema;
 
-use function is_numeric;
+use function array_combine;
+use function array_key_exists;
+use function max;
 use function min;
 use function pow;
-use function preg_match;
-
-use const PHP_INT_MAX;
-use const PHP_INT_MIN;
 
 /**
  * SchemaTrait
  */
 trait SchemaTrait
 {
+    protected const MAX_VALUES = [
+        'tinyint' => 127,
+        'smallint' => 32767,
+        'mediumint' => 8388607,
+        'int' => 2147483647,
+        'integer' => 2147483647,
+    ];
+
     /**
      * Get the default value.
      *
@@ -27,21 +45,15 @@ trait SchemaTrait
      */
     public static function getSchemaDefaultValue(TableSchema $schema, string $field): mixed
     {
-        $column = $schema->column($field);
+        $type = $schema->getType($field);
 
-        if (!$column || $column['default'] === null || $column['default'] === 'NULL') {
+        if (!$type) {
             return null;
         }
 
-        if (is_numeric($column['default'])) {
-            return (float) $column['default'];
-        }
+        $value = $schema->defaultValue($field);
 
-        if (preg_match('/^([\'"])(.*)\1$/', $column['default'], $match)) {
-            return $match[2];
-        }
-
-        return null;
+        return $type->parse($value);
     }
 
     /**
@@ -59,40 +71,28 @@ trait SchemaTrait
             return null;
         }
 
-        switch ($column['type']) {
-            case 'tinyint':
-                $max = 127;
-                break;
-            case 'smallint':
-                $max = 32767;
-                break;
-            case 'mediumint':
-                $max = 8388607;
-                break;
-            case 'int':
-                $max = 2147483647;
-                break;
-                // case 'bigint':
-                //     $max = 9223372036854775807;
-                //     break;
-            case 'float':
-            case 'double':
-            case 'real':
-                return null;
-            default:
-                $max = null;
-                break;
+        $type = $schema->getType($field);
+
+        if ($type instanceof FloatType) {
+            return null;
         }
 
-        if ($column['unsigned'] && $max) {
-            $max *= 2;
-            $max += 1;
+        $type = $column['type'];
+        $length = $column['length'] ?? null;
+        $unsigned = $column['unsigned'] ?? false;
+
+        $max = static::MAX_VALUES[$type] ?? null;
+
+        if ($unsigned && $max) {
+            $max = ($max * 2) + 1;
         }
 
-        $lengthMax = pow(10, $column['length']) - 1;
-        $max ??= $lengthMax;
+        if (!$length) {
+            return $max;
+        }
 
-        $max = min($max, $lengthMax);
+        $lengthMax = pow(10, $length) - 1;
+        $max = $max ? min($max, $lengthMax) : $lengthMax;
 
         if ($max > PHP_INT_MAX) {
             return null;
@@ -116,28 +116,13 @@ trait SchemaTrait
             return null;
         }
 
-        switch ($column['type']) {
-            case 'binary':
-            case 'char':
-                return 1;
-            case 'varbinary':
-            case 'varchar':
-                return $column['length'];
-            case 'tinyblob':
-            case 'tinytext':
-                return 255;
-            case 'blob':
-            case 'text':
-                return 65535;
-                // case 'mediumblob':
-                // case 'mediumtext':
-                //     return 16777215;
-                // case 'longblob':
-                // case 'longtext':
-                //     return 4294967295;
-            default:
-                return null;
+        $type = $schema->getType($field);
+
+        if ($type instanceof StringType && $column['length'] < 524288) {
+            return $column['length'];
         }
+
+        return null;
     }
 
     /**
@@ -147,7 +132,7 @@ trait SchemaTrait
      * @param string $field The field name.
      * @return float|null The minimum value.
      */
-    public static function getSchemaMin(TableSchema $schema, string $field): float|null
+    public static function getSchemaMin(TableSchema $schema, string $field): int|null
     {
         $column = $schema->column($field);
 
@@ -155,45 +140,63 @@ trait SchemaTrait
             return null;
         }
 
-        if ($column['unsigned']) {
+        if (array_key_exists('unsigned', $column) && $column['unsigned']) {
             return 0;
         }
 
-        switch ($column['type']) {
-            case 'tinyint':
-                $min = -128;
-                break;
-            case 'smallint':
-                $min = -32768;
-                break;
-            case 'mediumint':
-                $min = -8388608;
-                break;
-            case 'int':
-                $min = -2147483648;
-                break;
-                // case 'bigint':
-                //     $min = -9223372036854775808;
-                //     break;
-            case 'float':
-            case 'double':
-            case 'real':
-                return null;
-            default:
-                $min = null;
-                break;
+        $type = $schema->getType($field);
+
+        if ($type instanceof FloatType) {
+            return null;
         }
 
-        $lengthMax = pow(10, $column['length']) - 1;
-        $min ??= -$lengthMax;
+        $type = $column['type'];
+        $length = $column['length'] ?? null;
 
-        $min = max($min, -$lengthMax);
+        if (array_key_exists($type, static::MAX_VALUES)) {
+            $min = (static::MAX_VALUES[$type] + 1) * -1;
+        } else {
+            $min = null;
+        }
+
+        if (!$length) {
+            return $min;
+        }
+
+        $lengthMax = pow(10, $length) - 1;
+        $min = $min ? max($min, -$lengthMax) : -$lengthMax;
 
         if ($min < PHP_INT_MIN) {
             return null;
         }
 
         return $min;
+    }
+
+    /**
+     * Get the option values.
+     *
+     * @param TableSchema $schema The TableSchema.
+     * @param string $field The field name.
+     * @return array|null The options value.
+     */
+    public static function getSchemaOptionValues(TableSchema $schema, string $field): array|null
+    {
+        $type = $schema->getType($field);
+
+        if (!$type) {
+            return null;
+        }
+
+        if ($type instanceof EnumType || $type instanceof SetType) {
+            $column = $schema->column($field);
+
+            $values = $column['values'] ?? [];
+
+            return array_combine($values, $values);
+        }
+
+        return null;
     }
 
     /**
@@ -211,22 +214,27 @@ trait SchemaTrait
             return null;
         }
 
-        switch ($column['type']) {
-            case 'bigint':
-            case 'int':
-            case 'mediumint':
-            case 'smallint':
-            case 'tinyint':
-                return 1;
-            case 'decimal':
-                return 1 / pow(10, $column['precision']);
-            case 'double':
-            case 'float':
-            case 'real':
-                return 'any';
-            default:
-                return null;
+        $type = $schema->getType($field);
+
+        if ($type instanceof IntegerType) {
+            return 1;
         }
+
+        if ($type instanceof FloatType) {
+            return 'any';
+        }
+
+        if ($type instanceof DecimalType) {
+            if ($column['precision'] > 0) {
+                return 1 / pow(10, $column['precision']);
+            }
+
+            if ($column['precision'] === 0) {
+                return 1;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -244,43 +252,44 @@ trait SchemaTrait
             return 'text';
         }
 
-        if ($column['type'] === 'tinyint' && $column['length'] == 1) {
+        $type = $schema->getType($field);
+
+        if ($type instanceof BooleanType) {
             return 'checkbox';
         }
 
-        switch ($column['type']) {
-            case 'boolean':
-                return 'checkbox';
-            case 'date':
-                return 'date';
-            case 'datetime':
-                return 'datetime';
-            case 'time':
-                return 'time';
-            case 'enum':
-            case 'set':
-                return 'select';
-            case 'blob':
-            case 'longblob':
-            case 'longtext':
-            case 'mediumblob':
-            case 'mediumtext':
-            case 'text':
-            case 'tinyblob':
-            case 'tinytext':
-                return 'textarea';
-            case 'bigint':
-            case 'decimal':
-            case 'double':
-            case 'float':
-            case 'int':
-            case 'mediumint':
-            case 'real':
-            case 'smallint':
-            case 'tinyint':
-                return 'number';
-            default:
-                return 'text';
+        if ($type instanceof DateType) {
+            return 'date';
         }
+
+        if ($type instanceof TimeType) {
+            return 'time';
+        }
+
+        if ($type instanceof DateTimeType) {
+            return 'datetime';
+        }
+
+        if ($type instanceof DecimalType || $type instanceof FloatType || $type instanceof IntegerType) {
+            return 'number';
+        }
+
+        if ($type instanceof TextType) {
+            return 'textarea';
+        }
+
+        if ($type instanceof EnumType) {
+            return 'select';
+        }
+
+        if ($type instanceof SetType) {
+            return 'selectMulti';
+        }
+
+        if ($type instanceof BinaryType) {
+            return 'file';
+        }
+
+        return 'text';
     }
 }

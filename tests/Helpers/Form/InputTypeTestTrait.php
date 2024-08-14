@@ -79,7 +79,7 @@ trait InputTypeTestTrait
     public function testInputTypeMonth(): void
     {
         $this->assertSame(
-            '<input id="month" name="month" type="month" placeholder="Month" />',
+            '<input id="month" name="month" type="month" />',
             $this->view->Form->month('month')
         );
     }
@@ -169,7 +169,7 @@ trait InputTypeTestTrait
     public function testInputTypeWeek(): void
     {
         $this->assertSame(
-            '<input id="week" name="week" type="week" placeholder="Week" />',
+            '<input id="week" name="week" type="week" />',
             $this->view->Form->week('week')
         );
     }

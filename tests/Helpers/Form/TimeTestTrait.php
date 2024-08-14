@@ -10,7 +10,7 @@ trait TimeTestTrait
     public function testTime(): void
     {
         $this->assertSame(
-            '<input id="time-value" name="time_value" type="time" placeholder="Time Value" />',
+            '<input id="time-value" name="time_value" type="time" />',
             $this->view->Form->time('time_value')
         );
     }
@@ -18,7 +18,7 @@ trait TimeTestTrait
     public function testTimeAttributeArray(): void
     {
         $this->assertSame(
-            '<input id="time" name="time" data-test="[1,2]" type="time" placeholder="Time" />',
+            '<input id="time" name="time" data-test="[1,2]" type="time" />',
             $this->view->Form->time('time', [
                 'data-test' => [1, 2],
             ])
@@ -28,7 +28,7 @@ trait TimeTestTrait
     public function testTimeAttributeEscape(): void
     {
         $this->assertSame(
-            '<input id="time" name="time" data-test="&lt;test&gt;" type="time" placeholder="Time" />',
+            '<input id="time" name="time" data-test="&lt;test&gt;" type="time" />',
             $this->view->Form->time('time', [
                 'data-test' => '<test>',
             ])
@@ -38,7 +38,7 @@ trait TimeTestTrait
     public function testTimeAttributeInvalid(): void
     {
         $this->assertSame(
-            '<input class="test" id="time" name="time" type="time" placeholder="Time" />',
+            '<input class="test" id="time" name="time" type="time" />',
             $this->view->Form->time('time', [
                 '*class*' => 'test',
             ])
@@ -48,7 +48,7 @@ trait TimeTestTrait
     public function testTimeAttributes(): void
     {
         $this->assertSame(
-            '<input class="test" id="other" name="time" type="time" placeholder="Time" />',
+            '<input class="test" id="other" name="time" type="time" />',
             $this->view->Form->time('time', [
                 'class' => 'test',
                 'id' => 'other',
@@ -59,7 +59,7 @@ trait TimeTestTrait
     public function testTimeAttributesOrder(): void
     {
         $this->assertSame(
-            '<input class="test" id="other" name="time" type="time" placeholder="Time" />',
+            '<input class="test" id="other" name="time" type="time" />',
             $this->view->Form->time('time', [
                 'id' => 'other',
                 'class' => 'test',
@@ -70,7 +70,7 @@ trait TimeTestTrait
     public function testTimeDot(): void
     {
         $this->assertSame(
-            '<input id="key-time-value" name="key[time_value]" type="time" placeholder="Time Value" />',
+            '<input id="key-time-value" name="key[time_value]" type="time" />',
             $this->view->Form->time('key.time_value')
         );
     }
@@ -78,7 +78,7 @@ trait TimeTestTrait
     public function testTimeDotDeep(): void
     {
         $this->assertSame(
-            '<input id="deep-key-time-value" name="deep[key][time_value]" type="time" placeholder="Time Value" />',
+            '<input id="deep-key-time-value" name="deep[key][time_value]" type="time" />',
             $this->view->Form->time('deep.key.time_value')
         );
     }
@@ -86,7 +86,7 @@ trait TimeTestTrait
     public function testTimeId(): void
     {
         $this->assertSame(
-            '<input id="other" name="time" type="time" placeholder="Time" />',
+            '<input id="other" name="time" type="time" />',
             $this->view->Form->time('time', [
                 'id' => 'other',
             ])
@@ -96,7 +96,7 @@ trait TimeTestTrait
     public function testTimeIdFalse(): void
     {
         $this->assertSame(
-            '<input name="time" type="time" placeholder="Time" />',
+            '<input name="time" type="time" />',
             $this->view->Form->time('time', [
                 'id' => false,
             ])
@@ -110,7 +110,7 @@ trait TimeTestTrait
         ]);
 
         $this->assertSame(
-            '<input id="test-time" name="time" type="time" placeholder="Time" />',
+            '<input id="test-time" name="time" type="time" />',
             $this->view->Form->time('time')
         );
     }
@@ -118,7 +118,7 @@ trait TimeTestTrait
     public function testTimeName(): void
     {
         $this->assertSame(
-            '<input id="time" name="other" type="time" placeholder="Time" />',
+            '<input id="time" name="other" type="time" />',
             $this->view->Form->time('time', [
                 'name' => 'other',
             ])
@@ -128,29 +128,9 @@ trait TimeTestTrait
     public function testTimeNameFalse(): void
     {
         $this->assertSame(
-            '<input id="time" type="time" placeholder="Time" />',
+            '<input id="time" type="time" />',
             $this->view->Form->time('time', [
                 'name' => false,
-            ])
-        );
-    }
-
-    public function testTimePlaceholder(): void
-    {
-        $this->assertSame(
-            '<input id="time" name="time" type="time" placeholder="Other" />',
-            $this->view->Form->time('time', [
-                'placeholder' => 'Other',
-            ])
-        );
-    }
-
-    public function testTimePlaceholderFalse(): void
-    {
-        $this->assertSame(
-            '<input id="time" name="time" type="time" />',
-            $this->view->Form->time('time', [
-                'placeholder' => false,
             ])
         );
     }
@@ -160,7 +140,7 @@ trait TimeTestTrait
         $now = DateTime::fromArray([2022, 1, 1]);
 
         $this->assertSame(
-            '<input id="time" name="time" type="time" value="00:00" placeholder="Time" />',
+            '<input id="time" name="time" type="time" value="00:00" />',
             $this->view->Form->time('time', [
                 'default' => $now,
             ])
@@ -172,7 +152,7 @@ trait TimeTestTrait
         $_POST['time'] = '00:00';
 
         $this->assertSame(
-            '<input id="time" name="time" type="time" value="00:00" placeholder="Time" />',
+            '<input id="time" name="time" type="time" value="00:00" />',
             $this->view->Form->time('time')
         );
     }
@@ -182,7 +162,7 @@ trait TimeTestTrait
         $_POST['key']['time'] = '00:00';
 
         $this->assertSame(
-            '<input id="key-time" name="key[time]" type="time" value="00:00" placeholder="Time" />',
+            '<input id="key-time" name="key[time]" type="time" value="00:00" />',
             $this->view->Form->time('key.time')
         );
     }

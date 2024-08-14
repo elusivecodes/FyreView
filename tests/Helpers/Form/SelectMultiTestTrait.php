@@ -8,7 +8,7 @@ trait SelectMultiTestTrait
     public function testSelectMulti(): void
     {
         $this->assertSame(
-            '<select id="select-value" name="select_value" multiple></select>',
+            '<input name="select_value" type="hidden" value="" /><select id="select-value" name="select_value[]" multiple></select>',
             $this->view->Form->selectMulti('select_value')
         );
     }
@@ -16,7 +16,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiAttributeArray(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" data-test="[1,2]" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" data-test="[1,2]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'data-test' => [1, 2],
             ])
@@ -26,7 +26,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiAttributeEscape(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" data-test="&lt;test&gt;" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" data-test="&lt;test&gt;" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'data-test' => '<test>',
             ])
@@ -36,7 +36,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiAttributeInvalid(): void
     {
         $this->assertSame(
-            '<select class="test" id="select" name="select" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select class="test" id="select" name="select[]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 '*class*' => 'test',
             ])
@@ -46,7 +46,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiAttributes(): void
     {
         $this->assertSame(
-            '<select class="test" id="other" name="select" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select class="test" id="other" name="select[]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'class' => 'test',
                 'id' => 'other',
@@ -57,7 +57,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiAttributesOrder(): void
     {
         $this->assertSame(
-            '<select class="test" id="other" name="select" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select class="test" id="other" name="select[]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'id' => 'other',
                 'class' => 'test',
@@ -68,7 +68,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiDot(): void
     {
         $this->assertSame(
-            '<select id="key-select-value" name="key[select_value]" multiple></select>',
+            '<input name="key[select_value]" type="hidden" value="" /><select id="key-select-value" name="key[select_value][]" multiple></select>',
             $this->view->Form->selectMulti('key.select_value')
         );
     }
@@ -76,15 +76,25 @@ trait SelectMultiTestTrait
     public function testSelectMultiDotDeep(): void
     {
         $this->assertSame(
-            '<select id="deep-key-select-value" name="deep[key][select_value]" multiple></select>',
+            '<input name="deep[key][select_value]" type="hidden" value="" /><select id="deep-key-select-value" name="deep[key][select_value][]" multiple></select>',
             $this->view->Form->selectMulti('deep.key.select_value')
+        );
+    }
+
+    public function testSelectMultiHiddenFieldFalse(): void
+    {
+        $this->assertSame(
+            '<select id="select" name="select[]" multiple></select>',
+            $this->view->Form->selectMulti('select', [
+                'hiddenField' => false,
+            ])
         );
     }
 
     public function testSelectMultiId(): void
     {
         $this->assertSame(
-            '<select id="other" name="select" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select id="other" name="select[]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'id' => 'other',
             ])
@@ -94,7 +104,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiIdFalse(): void
     {
         $this->assertSame(
-            '<select name="select" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select name="select[]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'id' => false,
             ])
@@ -108,7 +118,7 @@ trait SelectMultiTestTrait
         ]);
 
         $this->assertSame(
-            '<select id="test-select" name="select" multiple></select>',
+            '<input name="select" type="hidden" value="" /><select id="test-select" name="select[]" multiple></select>',
             $this->view->Form->selectMulti('select')
         );
     }
@@ -116,7 +126,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiName(): void
     {
         $this->assertSame(
-            '<select id="select" name="other" multiple></select>',
+            '<input name="other" type="hidden" value="" /><select id="select" name="other[]" multiple></select>',
             $this->view->Form->selectMulti('select', [
                 'name' => 'other',
             ])
@@ -133,10 +143,20 @@ trait SelectMultiTestTrait
         );
     }
 
+    public function testSelectMultiNamePrefix(): void
+    {
+        $this->assertSame(
+            '<input name="select[]" type="hidden" value="" /><select id="select" name="select[]" multiple></select>',
+            $this->view->Form->selectMulti('select', [
+                'name' => 'select[]',
+            ])
+        );
+    }
+
     public function testSelectMultiOptionGroup(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><optgroup label="test"><option value="0">A</option><option value="1">B</option></optgroup></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><optgroup label="test"><option value="0">A</option><option value="1">B</option></optgroup></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     [
@@ -154,7 +174,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiOptions(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="0">A</option><option value="1">B</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="0">A</option><option value="1">B</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     'A',
@@ -167,7 +187,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiOptionsAssoc(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="a">A</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="a">A</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     'a' => 'A',
@@ -179,7 +199,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiOptionsAttributes(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="a">A</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="a">A</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     [
@@ -194,7 +214,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiOptionsAttributesEscape(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option data-test="&lt;test&gt;" value="a">A</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option data-test="&lt;test&gt;" value="a">A</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     [
@@ -210,7 +230,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiOptionsAttributesInvalid(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option class="test" value="a">A</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option class="test" value="a">A</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     [
@@ -226,7 +246,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiOptionsEscape(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="0">&lt;test&gt;</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="0">&lt;test&gt;</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     '<test>',
@@ -238,7 +258,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiSelected(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="0">A</option><option value="1" selected>B</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="0">A</option><option value="1" selected>B</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     'A',
@@ -252,7 +272,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiSelectedArray(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     'A',
@@ -267,7 +287,7 @@ trait SelectMultiTestTrait
     public function testSelectMultiSelectedDefault(): void
     {
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     'A',
@@ -284,7 +304,7 @@ trait SelectMultiTestTrait
         $_POST['select'] = ['1', '2'];
 
         $this->assertSame(
-            '<select id="select" name="select" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
+            '<input name="select" type="hidden" value="" /><select id="select" name="select[]" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
             $this->view->Form->selectMulti('select', [
                 'options' => [
                     'A',
@@ -300,7 +320,7 @@ trait SelectMultiTestTrait
         $_POST['key']['select'] = ['1', '2'];
 
         $this->assertSame(
-            '<select id="key-select" name="key[select]" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
+            '<input name="key[select]" type="hidden" value="" /><select id="key-select" name="key[select][]" multiple><option value="0">A</option><option value="1" selected>B</option><option value="2" selected>C</option></select>',
             $this->view->Form->selectMulti('key.select', [
                 'options' => [
                     'A',

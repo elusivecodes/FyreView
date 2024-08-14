@@ -21,8 +21,10 @@ use function array_pop;
 use function class_parents;
 use function explode;
 use function get_class;
+use function in_array;
 use function method_exists;
 use function preg_replace;
+use function str_ends_with;
 use function str_replace;
 use function str_starts_with;
 use function trim;
@@ -132,7 +134,7 @@ class FormHelper extends Helper
     public function color(string $key, array $options = []): string
     {
         $options['type'] ??= 'color';
-        $options['placeholder'] ??= false;
+        $options['required'] = false;
 
         return $this->text($key, $options);
     }
@@ -151,7 +153,6 @@ class FormHelper extends Helper
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
-        $options['placeholder'] ??= static::getLabelText($key);
         $options['type'] ??= 'date';
         $options['value'] ??= $this->getValue($key, $options);
         $options['required'] ??= $context->isRequired($key);
@@ -185,7 +186,6 @@ class FormHelper extends Helper
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
-        $options['placeholder'] ??= static::getLabelText($key);
         $options['type'] ??= 'datetime-local';
         $options['value'] ??= $this->getValue($key, $options);
         $options['required'] ??= $context->isRequired($key);
@@ -257,7 +257,6 @@ class FormHelper extends Helper
     {
         $options['type'] ??= 'file';
         $options['value'] = false;
-        $options['placeholder'] ??= false;
 
         return $this->text($key, $options);
     }
@@ -272,7 +271,7 @@ class FormHelper extends Helper
     public function hidden(string $key, array $options = []): string
     {
         $options['type'] ??= 'hidden';
-        $options['placeholder'] ??= false;
+        $options['required'] = false;
 
         return $this->text($key, $options);
     }
@@ -288,7 +287,6 @@ class FormHelper extends Helper
     {
         $options['type'] ??= 'image';
         $options['value'] = false;
-        $options['placeholder'] ??= false;
 
         return $this->text($key, $options);
     }
@@ -537,7 +535,7 @@ class FormHelper extends Helper
     public function range(string $key, array $options = []): string
     {
         $options['type'] ??= 'range';
-        $options['placeholder'] ??= false;
+        $options['required'] = false;
 
         return $this->text($key, $options);
     }
@@ -552,7 +550,7 @@ class FormHelper extends Helper
     public function reset(string $key, array $options = []): string
     {
         $options['type'] ??= 'reset';
-        $options['placeholder'] ??= false;
+        $options['required'] = false;
 
         return $this->text($key, $options);
     }
@@ -586,10 +584,13 @@ class FormHelper extends Helper
         $options['name'] ??= static::getName($key);
         $options['value'] ??= $this->getValue($key, $options);
         $options['required'] ??= $context->isRequired($key);
-        $options['options'] ??= null;
+        $options['multiple'] ??= false;
+        $options['hiddenField'] ??= true;
 
         $options['value'] ??= [];
         $options['value'] = (array) $options['value'];
+
+        $options['options'] ??= $context->getOptionValues($key);
 
         if ($options['options'] === null && $options['value'] !== []) {
             $options['options'] = array_map(
@@ -603,9 +604,26 @@ class FormHelper extends Helper
             $options['options'] ??= [];
         }
 
+        $result = '';
+
+        if ($options['multiple'] && $options['hiddenField'] && $options['name'] !== false) {
+            $result .= FormBuilder::hidden(null, [
+                'name' => $options['name'],
+                'value' => '',
+            ]);
+        }
+
+        unset($options['hiddenField']);
+
+        if ($options['multiple'] && $options['name'] !== false && !str_ends_with($options['name'], '[]')) {
+            $options['name'] .= '[]';
+        }
+
         $options = static::cleanOptions($options);
 
-        return FormBuilder::select(null, $options);
+        $result .= FormBuilder::select(null, $options);
+
+        return $result;
     }
 
     /**
@@ -632,7 +650,7 @@ class FormHelper extends Helper
     public function submit(string $key, array $options = []): string
     {
         $options['type'] ??= 'submit';
-        $options['placeholder'] ??= false;
+        $options['required'] = false;
 
         return $this->text($key, $options);
     }
@@ -665,11 +683,18 @@ class FormHelper extends Helper
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
-        $options['placeholder'] ??= static::getLabelText($key);
         $options['type'] ??= 'text';
+
+        if (in_array($options['type'], ['text', 'email', 'search', 'password', 'tel', 'url', 'number'])) {
+            $options['placeholder'] ??= static::getLabelText($key);
+        }
+
         $options['value'] ??= $this->getValue($key, $options);
         $options['required'] ??= $context->isRequired($key);
-        $options['maxlength'] ??= $context->getMaxLength($key);
+
+        if (in_array($options['type'], ['text', 'email', 'search', 'password', 'tel', 'url'])) {
+            $options['maxlength'] ??= $context->getMaxLength($key);
+        }
 
         if ($options['value'] !== false) {
             $options['value'] = $parser->parse($options['value']);
@@ -722,7 +747,6 @@ class FormHelper extends Helper
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
-        $options['placeholder'] ??= static::getLabelText($key);
         $options['type'] ??= 'time';
         $options['value'] ??= $this->getValue($key, $options);
         $options['required'] ??= $context->isRequired($key);

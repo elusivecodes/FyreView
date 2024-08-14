@@ -11,11 +11,11 @@ use Fyre\ORM\Relationships\Relationship;
 use Fyre\View\Form\Traits\SchemaTrait;
 use Fyre\View\Form\Traits\ValidationTrait;
 
-use function array_filter;
 use function array_key_exists;
 use function array_pop;
 use function array_shift;
 use function explode;
+use function in_array;
 use function is_array;
 use function max;
 use function min;
@@ -90,16 +90,11 @@ class EntityContext extends Context
         $validatorMax = static::getValidationMax($validator, $field);
         $schemaMax = static::getSchemaMax($schema, $field);
 
-        $values = array_filter(
-            [$validatorMax, $schemaMax],
-            fn(float|null $value): bool => $value !== null
-        );
-
-        if ($values === []) {
-            return null;
+        if ($validatorMax !== null && $schemaMax !== null) {
+            return min($validatorMax, $schemaMax);
         }
 
-        return min($values);
+        return $validatorMax ?? $schemaMax;
     }
 
     /**
@@ -122,16 +117,11 @@ class EntityContext extends Context
         $validatorMaxLength = static::getValidationMaxLength($validator, $field);
         $schemaMaxLength = static::getSchemaMaxLength($schema, $field);
 
-        $values = array_filter(
-            [$validatorMaxLength, $schemaMaxLength],
-            fn(int|null $value): bool => $value !== null
-        );
-
-        if ($values === []) {
-            return null;
+        if ($validatorMaxLength !== null && $schemaMaxLength !== null) {
+            return min($validatorMaxLength, $schemaMaxLength);
         }
 
-        return min($values);
+        return $validatorMaxLength ?? $schemaMaxLength;
     }
 
     /**
@@ -154,23 +144,37 @@ class EntityContext extends Context
         $validatorMin = static::getValidationMin($validator, $field);
         $schemaMin = static::getSchemaMin($schema, $field);
 
-        $values = array_filter(
-            [$validatorMin, $schemaMin],
-            fn(float|null $value): bool => $value !== null
-        );
+        if ($validatorMin !== null && $schemaMin !== null) {
+            return max($validatorMin, $schemaMin);
+        }
 
-        if ($values === []) {
+        return $validatorMin ?? $schemaMin;
+    }
+
+    /**
+     * Get the option values for a field.
+     *
+     * @param string $key The field key.
+     * @return array|null The option values.
+     */
+    public function getOptionValues(string $key): array|null
+    {
+        [$model, $field] = $this->getModelField($key);
+
+        if (!$model) {
             return null;
         }
 
-        return max($values);
+        $schema = $model->getSchema();
+
+        return static::getSchemaOptionValues($schema, $field);
     }
 
     /**
      * Get the step interval.
      *
      * @param string $key The field key.
-     * @return string|float|null The step interval.
+     * @return float|string|null The step interval.
      */
     public function getStep(string $key): float|string|null
     {
@@ -209,6 +213,10 @@ class EntityContext extends Context
         }
 
         $schema = $model->getSchema();
+
+        if (in_array($field, $schema->primaryKey())) {
+            return 'hidden';
+        }
 
         return static::getSchemaType($schema, $field);
     }

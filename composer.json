@@ -26,7 +26,7 @@
         "fyre/formbuilder": "^2.0",
         "fyre/htmlhelper": "^2.0",
         "fyre/lang": "^3.0",
-        "fyre/orm": "^6.0",
+        "fyre/orm": "^7.0",
         "fyre/path": "^2.0",
         "fyre/router": "^5.0"
     },

@@ -50,10 +50,18 @@ abstract class Context
     }
 
     /**
+     * Get the option values for a field.
+     *
+     * @param string $key The field key.
+     * @return array|null The options.
+     */
+    abstract public function getOptionValues(string $key): array|null;
+
+    /**
      * Get the step interval.
      *
      * @param string $key The field key.
-     * @return string|float|null The step interval.
+     * @return float|string|null The step interval.
      */
     public function getStep(string $key): float|string|null
     {
