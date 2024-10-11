@@ -28,7 +28,7 @@
         "fyre/lang": "^3.0",
         "fyre/orm": "^8.0",
         "fyre/path": "^2.0",
-        "fyre/router": "^5.0"
+        "fyre/router": "^6.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.59",
