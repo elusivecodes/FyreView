@@ -6,8 +6,6 @@ namespace Fyre\View\Helpers;
 use Fyre\Utility\Formatter;
 use Fyre\View\Helper;
 
-use function call_user_func_array;
-
 /**
  * FormatHelper
  */
@@ -22,6 +20,6 @@ class FormatHelper extends Helper
      */
     public function __call(string $method, array $arguments): mixed
     {
-        return call_user_func_array([Formatter::class, $method], $arguments);
+        return Formatter::$method(...$arguments);
     }
 }
