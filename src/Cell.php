@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
+use Fyre\Container\Container;
 use Fyre\Utility\Path;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\Traits\EvaluateTrait;
 use Fyre\View\Traits\ViewVarsTrait;
 use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
 
+use function method_exists;
 use function preg_replace;
 
 /**
@@ -25,20 +25,32 @@ abstract class Cell
 
     protected array $args;
 
+    protected Container $container;
+
+    protected HelperRegistry $helperRegistry;
+
     protected array $helpers = [];
 
     protected string|null $template = null;
+
+    protected TemplateLocator $templateLocator;
 
     protected View $view;
 
     /**
      * New Cell constructor.
      *
+     * @param Container $container The Container.
+     * @param TemplateLocator $templateLocator The TemplateLocator.
+     * @param HelperRegistry $helperRegistry The HelperRegistry.
      * @param View $view The View.
      * @param array $options The cell options.
      */
-    public function __construct(View $view, array $options = [])
+    public function __construct(Container $container, TemplateLocator $templateLocator, HelperRegistry $helperRegistry, View $view, array $options = [])
     {
+        $this->container = $container;
+        $this->templateLocator = $templateLocator;
+        $this->helperRegistry = $helperRegistry;
         $this->view = $view;
 
         $this->action = $options['action'] ?? 'display';
@@ -97,7 +109,7 @@ abstract class Cell
      */
     public function loadHelper(string $name, array $options = []): static
     {
-        $this->helpers[$name] ??= HelperRegistry::load($name, $this->view, $options);
+        $this->helpers[$name] ??= $this->helperRegistry->build($name, $this->view, $options);
 
         return $this;
     }
@@ -113,21 +125,20 @@ abstract class Cell
     {
         $cell = preg_replace('/Cell$/', '', (new ReflectionClass($this))->getShortName());
 
-        try {
-            $method = new ReflectionMethod($this, $this->action);
-            $method->invokeArgs($this, $this->args);
-        } catch (ReflectionException $e) {
+        if (!method_exists($this, $this->action)) {
             throw ViewException::forInvalidCellMethod($cell, $this->action);
         }
+
+        $this->container->call([$this, $this->action], $this->args);
 
         $template = $this->template;
 
         if ($template === null) {
-            $file = Template::normalize($this->action);
+            $file = TemplateLocator::normalize($this->action);
             $template = Path::join($cell, $file);
         }
 
-        $filePath = Template::locate($template, Template::CELLS_FOLDER);
+        $filePath = $this->templateLocator->locate($template, TemplateLocator::CELLS_FOLDER);
 
         if (!$filePath) {
             throw ViewException::forInvalidTemplate($template);

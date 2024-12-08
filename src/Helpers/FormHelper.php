@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Fyre\View\Helpers;
 
+use Fyre\Container\Container;
 use Fyre\DB\TypeParser;
 use Fyre\Entity\Entity;
 use Fyre\Form\FormBuilder;
 use Fyre\Lang\Lang;
 use Fyre\Security\CsrfProtection;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Inflector;
 use Fyre\View\Exceptions\FormException;
 use Fyre\View\Form\Context;
 use Fyre\View\Form\EntityContext;
@@ -25,10 +27,8 @@ use function in_array;
 use function method_exists;
 use function preg_replace;
 use function str_ends_with;
-use function str_replace;
 use function str_starts_with;
 use function trim;
-use function ucwords;
 
 /**
  * FormHelper
@@ -41,22 +41,44 @@ class FormHelper extends Helper
 
     protected static Context $nullContext;
 
+    protected Container $container;
+
     protected Context|null $context = null;
+
+    protected CsrfProtection $csrfProtection;
+
+    protected FormBuilder $formBuilder;
 
     protected string|null $idPrefix = null;
 
+    protected Inflector $inflector;
+
+    protected Lang $lang;
+
     protected ServerRequest $request;
+
+    protected TypeParser $typeParser;
 
     /**
      * New Helper constructor.
      *
+     * @param Container $container The Container.
+     * @param FormBuilder $formBuilder The FormBuilder.
+     * @param TypeParser $typeParser The TypeParser.
+     * @param Lang $lang The Lang.
+     * @param Inflector $inflector The Inflector.
      * @param View $view The View.
      * @param array $options The helper options.
      */
-    public function __construct(View $view, array $options = [])
+    public function __construct(Container $container, FormBuilder $formBuilder, TypeParser $typeParser, Lang $lang, Inflector $inflector, View $view, array $options = [])
     {
         parent::__construct($view, $options);
 
+        $this->container = $container;
+        $this->formBuilder = $formBuilder;
+        $this->typeParser = $typeParser;
+        $this->lang = $lang;
+        $this->inflector = $inflector;
         $this->request = $this->view->getRequest();
     }
 
@@ -69,7 +91,7 @@ class FormHelper extends Helper
      */
     public function button(string $content = '', array $options = []): string
     {
-        return FormBuilder::button($content, $options);
+        return $this->formBuilder->button($content, $options);
     }
 
     /**
@@ -82,7 +104,7 @@ class FormHelper extends Helper
     public function checkbox(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('boolean');
+        $parser = $this->typeParser->use('boolean');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -97,7 +119,7 @@ class FormHelper extends Helper
         $result = '';
 
         if ($options['hiddenField'] && $options['name'] !== false) {
-            $result .= FormBuilder::hidden(null, [
+            $result .= $this->formBuilder->hidden(null, [
                 'name' => $options['name'],
                 'value' => 0,
             ]);
@@ -107,7 +129,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        $result .= FormBuilder::input(null, $options);
+        $result .= $this->formBuilder->input(null, $options);
 
         return $result;
     }
@@ -121,7 +143,7 @@ class FormHelper extends Helper
     {
         $this->context = null;
 
-        return FormBuilder::close();
+        return $this->formBuilder->close();
     }
 
     /**
@@ -149,7 +171,7 @@ class FormHelper extends Helper
     public function date(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('date');
+        $parser = $this->typeParser->use('date');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -169,7 +191,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::input(null, $options);
+        return $this->formBuilder->input(null, $options);
     }
 
     /**
@@ -182,7 +204,7 @@ class FormHelper extends Helper
     public function datetime(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('datetime');
+        $parser = $this->typeParser->use('datetime');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -208,7 +230,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::input(null, $options);
+        return $this->formBuilder->input(null, $options);
     }
 
     /**
@@ -232,7 +254,7 @@ class FormHelper extends Helper
      */
     public function fieldsetClose(): string
     {
-        return FormBuilder::fieldsetClose();
+        return $this->formBuilder->fieldsetClose();
     }
 
     /**
@@ -243,7 +265,7 @@ class FormHelper extends Helper
      */
     public function fieldsetOpen(array $options = []): string
     {
-        return FormBuilder::fieldsetOpen($options);
+        return $this->formBuilder->fieldsetOpen($options);
     }
 
     /**
@@ -325,7 +347,7 @@ class FormHelper extends Helper
     public function label(string $key, array $options = []): string
     {
         $options['for'] ??= $this->getId($key);
-        $options['text'] ??= static::getLabelText($key);
+        $options['text'] ??= $this->getLabelText($key);
 
         $text = $options['text'];
 
@@ -339,7 +361,7 @@ class FormHelper extends Helper
             unset($options['for']);
         }
 
-        return FormBuilder::label($text, $options);
+        return $this->formBuilder->label($text, $options);
     }
 
     /**
@@ -351,7 +373,7 @@ class FormHelper extends Helper
      */
     public function legend(string $content = '', array $options = []): string
     {
-        return FormBuilder::legend($content, $options);
+        return $this->formBuilder->legend($content, $options);
     }
 
     /**
@@ -378,11 +400,11 @@ class FormHelper extends Helper
     public function number(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('float');
+        $parser = $this->typeParser->use('float');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
-        $options['placeholder'] ??= static::getLabelText($key);
+        $options['placeholder'] ??= $this->getLabelText($key);
         $options['type'] ??= 'number';
         $options['value'] ??= $this->getValue($key, $options);
         $options['min'] ??= $context->getMin($key);
@@ -396,7 +418,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::input(null, $options);
+        return $this->formBuilder->input(null, $options);
     }
 
     /**
@@ -434,7 +456,7 @@ class FormHelper extends Helper
                 throw FormException::forInvalidContext();
             }
 
-            $this->context = new $className($item);
+            $this->context = $this->container->build($className, ['item' => $item]);
         } else {
             $this->context = static::getNullContext();
         }
@@ -452,12 +474,14 @@ class FormHelper extends Helper
 
         unset($options['idPrefix']);
 
-        $html = FormBuilder::open('', $options);
+        $html = $this->formBuilder->open('', $options);
 
-        if (CsrfProtection::isEnabled()) {
-            $html .= FormBuilder::hidden(null, [
-                'name' => CsrfProtection::getField(),
-                'value' => CsrfProtection::getTokenHash(),
+        $csrf = $this->request->getParam('csrf');
+
+        if ($csrf) {
+            $html .= $this->formBuilder->hidden(null, [
+                'name' => $csrf->getField(),
+                'value' => $csrf->getFormToken(),
             ]);
         }
 
@@ -503,7 +527,7 @@ class FormHelper extends Helper
     public function radio(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('boolean');
+        $parser = $this->typeParser->use('boolean');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -522,7 +546,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::input(null, $options);
+        return $this->formBuilder->input(null, $options);
     }
 
     /**
@@ -607,7 +631,7 @@ class FormHelper extends Helper
         $result = '';
 
         if ($options['multiple'] && $options['hiddenField'] && $options['name'] !== false) {
-            $result .= FormBuilder::hidden(null, [
+            $result .= $this->formBuilder->hidden(null, [
                 'name' => $options['name'],
                 'value' => '',
             ]);
@@ -621,7 +645,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        $result .= FormBuilder::select(null, $options);
+        $result .= $this->formBuilder->select(null, $options);
 
         return $result;
     }
@@ -679,14 +703,14 @@ class FormHelper extends Helper
     public function text(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('string');
+        $parser = $this->typeParser->use('string');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
         $options['type'] ??= 'text';
 
         if (in_array($options['type'], ['text', 'email', 'search', 'password', 'tel', 'url', 'number'])) {
-            $options['placeholder'] ??= static::getLabelText($key);
+            $options['placeholder'] ??= $this->getLabelText($key);
         }
 
         $options['value'] ??= $this->getValue($key, $options);
@@ -702,7 +726,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::input(null, $options);
+        return $this->formBuilder->input(null, $options);
     }
 
     /**
@@ -715,11 +739,11 @@ class FormHelper extends Helper
     public function textarea(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('string');
+        $parser = $this->typeParser->use('string');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
-        $options['placeholder'] ??= static::getLabelText($key);
+        $options['placeholder'] ??= $this->getLabelText($key);
         $options['value'] ??= $this->getValue($key, $options);
         $options['required'] ??= $context->isRequired($key);
         $options['maxlength'] ??= $context->getMaxLength($key);
@@ -730,7 +754,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::textarea(null, $options);
+        return $this->formBuilder->textarea(null, $options);
     }
 
     /**
@@ -743,7 +767,7 @@ class FormHelper extends Helper
     public function time(string $key, array $options = []): string
     {
         $context = $this->getContext();
-        $parser = TypeParser::use('time');
+        $parser = $this->typeParser->use('time');
 
         $options['id'] ??= $this->getId($key);
         $options['name'] ??= static::getName($key);
@@ -763,7 +787,7 @@ class FormHelper extends Helper
 
         $options = static::cleanOptions($options);
 
-        return FormBuilder::input(null, $options);
+        return $this->formBuilder->input(null, $options);
     }
 
     /**
@@ -817,6 +841,26 @@ class FormHelper extends Helper
         }
 
         return preg_replace('/(?<!\.)[._]([^._]+)/', '-\1', $key);
+    }
+
+    /**
+     * Get a field label text.
+     *
+     * @param string $key The field key.
+     * @return string The field label text.
+     */
+    protected function getLabelText(string $key): string
+    {
+        $parts = explode('.', $key);
+        $field = array_pop($parts);
+
+        $label = $this->lang->get('Form.'.$field);
+
+        if ($label) {
+            return $label;
+        }
+
+        return $this->inflector->humanize($field);
     }
 
     /**
@@ -889,29 +933,6 @@ class FormHelper extends Helper
         $key = trim($key, '.');
 
         return $key;
-    }
-
-    /**
-     * Get a field label text.
-     *
-     * @param string $key The field key.
-     * @return string The field label text.
-     */
-    protected static function getLabelText(string $key): string
-    {
-        $parts = explode('.', $key);
-        $field = array_pop($parts);
-
-        $label = Lang::get('Form.'.$field);
-
-        if ($label) {
-            return $label;
-        }
-
-        $label = str_replace('_', ' ', $field);
-        $label = ucwords($label);
-
-        return $label;
     }
 
     /**

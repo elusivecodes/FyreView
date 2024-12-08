@@ -39,12 +39,10 @@ class EntityContext extends Context
      *
      * @param Entity $item The entity.
      */
-    public function __construct(Entity $item)
+    public function __construct(ModelRegistry $modelRegistry, Entity $item)
     {
         $this->item = $item;
-
-        $source = $item->getSource();
-        $this->model = ModelRegistry::use($source);
+        $this->model = $modelRegistry->use($item->getSource());
     }
 
     /**
@@ -296,7 +294,7 @@ class EntityContext extends Context
             }
         }
 
-        return $this->models[$key] = [$model, $field];
+        return $models[$key] = [$model, $field];
     }
 
     /**

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
+use Fyre\Container\Container;
 use Fyre\View\Exceptions\ViewException;
 
 use function array_merge;
@@ -15,71 +16,43 @@ use function trim;
 /**
  * HelperRegistry
  */
-abstract class HelperRegistry
+class HelperRegistry
 {
-    protected static array $helpers = [];
+    protected Container $container;
 
-    protected static array $namespaces = [];
+    protected array $helpers = [];
+
+    protected array $namespaces = [];
+
+    /**
+     * New HelperRegistry constructor.
+     *
+     * @param Container $container The Container.
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Add a namespace for loading helpers.
      *
      * @param string $namespace The namespace.
+     * @return static The HelperRegistry.
      */
-    public static function addNamespace(string $namespace): void
+    public function addNamespace(string $namespace): static
     {
         $namespace = static::normalizeNamespace($namespace);
 
-        if (!in_array($namespace, static::$namespaces)) {
-            static::$namespaces[] = $namespace;
+        if (!in_array($namespace, $this->namespaces)) {
+            $this->namespaces[] = $namespace;
         }
+
+        return $this;
     }
 
     /**
-     * Clear all namespaces and helpers.
-     */
-    public static function clear(): void
-    {
-        static::$namespaces = [];
-        static::$helpers = [];
-    }
-
-    /**
-     * Find a helper class.
-     *
-     * @param string $name The helper name.
-     * @return string|null The helper class.
-     */
-    public static function find(string $name): string|null
-    {
-        return static::$helpers[$name] ??= static::locate($name);
-    }
-
-    /**
-     * Get the namespaces.
-     *
-     * @return array The namespaces.
-     */
-    public static function getNamespaces(): array
-    {
-        return static::$namespaces;
-    }
-
-    /**
-     * Determine if a namespace exists.
-     *
-     * @param string $namespace The namespace.
-     * @return bool TRUE if the namespace exists, otherwise FALSE.
-     */
-    public static function hasNamespace(string $namespace): bool
-    {
-        $namespace = static::normalizeNamespace($namespace);
-
-        return in_array($namespace, static::$namespaces);
-    }
-
-    /**
-     * Load a helper.
+     * Build a helper.
      *
      * @param string $name The helper name.
      * @param View $view The View.
@@ -88,38 +61,80 @@ abstract class HelperRegistry
      *
      * @throws ViewException if the helper is not valid.
      */
-    public static function load(string $name, View $view, array $options = []): Helper
+    public function build(string $name, View $view, array $options = []): Helper
     {
-        $className = static::find($name);
+        $className = $this->find($name);
 
         if (!$className) {
             throw ViewException::forInvalidHelper($name);
         }
 
-        return new $className($view, $options);
+        return $this->container->build($className, ['view' => $view, 'options' => $options]);
+    }
+
+    /**
+     * Clear all namespaces and helpers.
+     */
+    public function clear(): void
+    {
+        $this->namespaces = [];
+        $this->helpers = [];
+    }
+
+    /**
+     * Find a helper class.
+     *
+     * @param string $name The helper name.
+     * @return string|null The helper class.
+     */
+    public function find(string $name): string|null
+    {
+        return $this->helpers[$name] ??= $this->locate($name);
+    }
+
+    /**
+     * Get the namespaces.
+     *
+     * @return array The namespaces.
+     */
+    public function getNamespaces(): array
+    {
+        return $this->namespaces;
+    }
+
+    /**
+     * Determine if a namespace exists.
+     *
+     * @param string $namespace The namespace.
+     * @return bool TRUE if the namespace exists, otherwise FALSE.
+     */
+    public function hasNamespace(string $namespace): bool
+    {
+        $namespace = static::normalizeNamespace($namespace);
+
+        return in_array($namespace, $this->namespaces);
     }
 
     /**
      * Remove a namespace.
      *
      * @param string $namespace The namespace.
-     * @return bool TRUE If the namespace was removed, otherwise FALSE.
+     * @return static The HelperRegistry.
      */
-    public static function removeNamespace(string $namespace): bool
+    public function removeNamespace(string $namespace): static
     {
         $namespace = static::normalizeNamespace($namespace);
 
-        foreach (static::$namespaces as $i => $otherNamespace) {
+        foreach ($this->namespaces as $i => $otherNamespace) {
             if ($otherNamespace !== $namespace) {
                 continue;
             }
 
-            array_splice(static::$namespaces, $i, 1);
-
-            return true;
+            array_splice($this->namespaces, $i, 1);
+            break;
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -128,9 +143,9 @@ abstract class HelperRegistry
      * @param string $name The helper name.
      * @return string|null The helper class.
      */
-    protected static function locate(string $name): string|null
+    protected function locate(string $name): string|null
     {
-        $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Helpers\\']);
+        $namespaces = array_merge($this->namespaces, ['\Fyre\View\Helpers\\']);
 
         foreach ($namespaces as $namespace) {
             $className = $namespace.$name.'Helper';
@@ -151,10 +166,6 @@ abstract class HelperRegistry
      */
     protected static function normalizeNamespace(string $namespace): string
     {
-        $namespace = trim($namespace, '\\');
-
-        return $namespace ?
-            '\\'.$namespace.'\\' :
-            '\\';
+        return trim($namespace, '\\').'\\';
     }
 }

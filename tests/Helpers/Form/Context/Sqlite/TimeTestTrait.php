@@ -4,18 +4,13 @@ declare(strict_types=1);
 namespace Tests\Helpers\Form\Context\Sqlite;
 
 use Fyre\DateTime\DateTime;
-use Fyre\DB\ConnectionManager;
-use Fyre\ORM\ModelRegistry;
 use Fyre\Validation\Rule;
-use Fyre\Validation\Validator;
 
 trait TimeTestTrait
 {
     public function testTimeEntityValue(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value TIME NULL DEFAULT NULL,
@@ -23,9 +18,7 @@ trait TimeTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'value' => DateTime::fromArray([2022, 1, 1, 12, 30]),
         ]);
 
@@ -39,9 +32,7 @@ trait TimeTestTrait
 
     public function testTimeRequiredValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value TIME NULL DEFAULT NULL,
@@ -49,14 +40,9 @@ trait TimeTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::required());
 
-        $validator = new Validator();
-        $validator->add('value', Rule::required());
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -68,9 +54,7 @@ trait TimeTestTrait
 
     public function testTimeSchema(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value TIME NULL DEFAULT NULL,
@@ -78,9 +62,7 @@ trait TimeTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -92,9 +74,7 @@ trait TimeTestTrait
 
     public function testTimeSchemaDefaultValue(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value TIME NOT NULL DEFAULT '12:30:00',
@@ -102,9 +82,7 @@ trait TimeTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 

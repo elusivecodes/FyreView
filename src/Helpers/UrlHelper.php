@@ -5,14 +5,38 @@ namespace Fyre\View\Helpers;
 
 use Fyre\Http\Uri;
 use Fyre\Router\Router;
+use Fyre\Server\ServerRequest;
 use Fyre\Utility\HtmlHelper;
 use Fyre\View\Helper;
+use Fyre\View\View;
 
 /**
  * UrlHelper
  */
 class UrlHelper extends Helper
 {
+    protected HtmlHelper $htmlHelper;
+
+    protected ServerRequest $request;
+
+    protected Router $router;
+
+    /**
+     * New Helper constructor.
+     *
+     * @param Router $router The Router.
+     * @param View $view The View.
+     * @param array $options The helper options.
+     */
+    public function __construct(Router $router, HtmlHelper $htmlHelper, View $view, array $options = [])
+    {
+        parent::__construct($view, $options);
+
+        $this->router = $router;
+        $this->htmlHelper = $htmlHelper;
+        $this->request = $this->view->getRequest();
+    }
+
     /**
      * Generate an anchor link for a destination.
      *
@@ -27,10 +51,10 @@ class UrlHelper extends Helper
         unset($options['escape']);
 
         if ($escape) {
-            $content = HtmlHelper::escape($content);
+            $content = $this->htmlHelper->escape($content);
         }
 
-        return '<a'.HtmlHelper::attributes($options).'>'.$content.'</a>';
+        return '<a'.$this->htmlHelper->attributes($options).'>'.$content.'</a>';
     }
 
     /**
@@ -45,7 +69,7 @@ class UrlHelper extends Helper
         $options['fullBase'] ??= false;
 
         if ($options['fullBase']) {
-            $baseUri = Router::getBaseUri();
+            $baseUri = $this->router->getBaseUri();
 
             return Uri::fromString($baseUri)
                 ->resolveRelativeUri($path)
@@ -66,6 +90,6 @@ class UrlHelper extends Helper
      */
     public function to(string $name, array $arguments = [], array $options = []): string
     {
-        return Router::url($name, $arguments, $options);
+        return $this->router->url($name, $arguments, $options);
     }
 }

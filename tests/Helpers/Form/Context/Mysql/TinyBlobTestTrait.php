@@ -3,18 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Form\Context\Mysql;
 
-use Fyre\DB\ConnectionManager;
-use Fyre\ORM\ModelRegistry;
 use Fyre\Validation\Rule;
-use Fyre\Validation\Validator;
 
 trait TinyBlobTestTrait
 {
     public function testTinyBlobRequiredValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value TINYBLOB NULL DEFAULT NULL,
@@ -22,14 +17,9 @@ trait TinyBlobTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::required());
 
-        $validator = new Validator();
-        $validator->add('value', Rule::required());
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 

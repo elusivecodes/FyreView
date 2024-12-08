@@ -3,16 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Form\Context\Mysql;
 
-use Fyre\DB\ConnectionManager;
-use Fyre\ORM\ModelRegistry;
-
 trait RelationshipTestTrait
 {
     public function testBelongsTo(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 parent_id INT(10) UNSIGNED NOT NULL,
@@ -20,7 +15,7 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE parents (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value TEXT NOT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -28,10 +23,9 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-        $model->belongsTo('Parents');
+        $this->model->belongsTo('Parents');
 
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'parent' => [
                 'value' => 'Test',
             ],
@@ -47,9 +41,7 @@ trait RelationshipTestTrait
 
     public function testBelongsToForeignKey(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 parent_id INT(10) UNSIGNED NOT NULL,
@@ -57,7 +49,7 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE parents (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value TEXT NOT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -65,10 +57,9 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-        $model->belongsTo('Parents');
+        $this->model->belongsTo('Parents');
 
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -80,16 +71,14 @@ trait RelationshipTestTrait
 
     public function testHasMany(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 PRIMARY KEY (id)
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE children (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 context_id INT(10) UNSIGNED NOT NULL,
@@ -98,10 +87,9 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-        $model->hasMany('Children');
+        $this->model->hasMany('Children');
 
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'children' => [
                 [
                     'value' => 'Test',
@@ -119,16 +107,14 @@ trait RelationshipTestTrait
 
     public function testHasOne(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 PRIMARY KEY (id)
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE children (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 context_id INT(10) UNSIGNED NOT NULL,
@@ -137,10 +123,9 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-        $model->hasOne('Children');
+        $this->model->hasOne('Children');
 
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'child' => [
                 'value' => 'Test',
             ],
@@ -156,16 +141,14 @@ trait RelationshipTestTrait
 
     public function testManyToMany(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 PRIMARY KEY (id)
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts_children (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 context_id INT(10) UNSIGNED NOT NULL,
@@ -174,7 +157,7 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE children (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value TEXT NOT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -182,10 +165,9 @@ trait RelationshipTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-        $model->manyToMany('Children');
+        $this->model->manyToMany('Children');
 
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'children' => [
                 [
                     'value' => 'Test',

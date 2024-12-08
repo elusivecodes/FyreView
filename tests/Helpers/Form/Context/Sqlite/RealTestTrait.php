@@ -3,18 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Form\Context\Sqlite;
 
-use Fyre\DB\ConnectionManager;
-use Fyre\ORM\ModelRegistry;
 use Fyre\Validation\Rule;
-use Fyre\Validation\Validator;
 
 trait RealTestTrait
 {
     public function testRealBetweenValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -22,14 +17,9 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::between(100, 1000));
 
-        $validator = new Validator();
-        $validator->add('value', Rule::between(100, 1000));
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -41,9 +31,7 @@ trait RealTestTrait
 
     public function testRealEntityValue(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -51,9 +39,7 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'value' => 100.123,
         ]);
 
@@ -67,9 +53,7 @@ trait RealTestTrait
 
     public function testRealGreaterThanOrEqualsValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -77,14 +61,9 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::greaterThanOrEquals(100));
 
-        $validator = new Validator();
-        $validator->add('value', Rule::greaterThanOrEquals(100));
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -96,9 +75,7 @@ trait RealTestTrait
 
     public function testRealGreaterThanValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -106,14 +83,9 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::greaterThan(100));
 
-        $validator = new Validator();
-        $validator->add('value', Rule::greaterThan(100));
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -125,9 +97,7 @@ trait RealTestTrait
 
     public function testRealLessThanOrEqualsValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -135,14 +105,9 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::lessThanOrEquals(1000));
 
-        $validator = new Validator();
-        $validator->add('value', Rule::lessThanOrEquals(1000));
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -154,9 +119,7 @@ trait RealTestTrait
 
     public function testRealLessThanValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -164,14 +127,9 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::lessThan(1000));
 
-        $validator = new Validator();
-        $validator->add('value', Rule::lessThan(1000));
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -183,9 +141,7 @@ trait RealTestTrait
 
     public function testRealMinMaxSchema(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -193,9 +149,7 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -207,9 +161,7 @@ trait RealTestTrait
 
     public function testRealRequiredValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NULL DEFAULT NULL,
@@ -217,14 +169,9 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::required());
 
-        $validator = new Validator();
-        $validator->add('value', Rule::required());
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -236,9 +183,7 @@ trait RealTestTrait
 
     public function testRealSchemaDefaultValue(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value REAL NOT NULL DEFAULT 100.123,
@@ -246,9 +191,7 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -260,9 +203,7 @@ trait RealTestTrait
 
     public function testRealUnsignedMinMaxSchema(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INTEGER NOT NULL,
                 value UNSIGNED REAL NULL DEFAULT NULL,
@@ -270,9 +211,7 @@ trait RealTestTrait
             )
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 

@@ -79,7 +79,7 @@ trait OpenMultipartTestTrait
 
     public function testOpenMultipartCharset(): void
     {
-        HtmlHelper::setCharset('ISO-8859-1');
+        $this->container->use(HtmlHelper::class)->setCharset('ISO-8859-1');
 
         $this->assertSame(
             '<form action="/test" method="post" enctype="multipart/form-data" charset="ISO-8859-1">',

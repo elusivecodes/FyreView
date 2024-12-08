@@ -1,1 +1,1 @@
-<?= $this->cell('Example::test', [1]);
+<?= $this->cell('Example::test', ['value' => 1]);

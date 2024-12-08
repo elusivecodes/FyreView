@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Fyre\View\Helpers;
 
-use Fyre\Security\CspBuilder;
+use Fyre\Security\ContentSecurityPolicy;
 use Fyre\View\Helper;
+use Fyre\View\View;
 
 use function hash;
 use function random_bytes;
@@ -14,6 +15,22 @@ use function random_bytes;
  */
 class CspHelper extends Helper
 {
+    protected ContentSecurityPolicy $csp;
+
+    /**
+     * New CspHelper constructor.
+     *
+     * @param ContentSecurityPolicy $csp The ContentSecurityPolicy.
+     * @param View $view The View.
+     * @param array $options The helper options.
+     */
+    public function __construct(ContentSecurityPolicy $csp, View $view, array $options = [])
+    {
+        parent::__construct($view, $options);
+
+        $this->csp = $csp;
+    }
+
     /**
      * Generate a script nonce.
      *
@@ -21,7 +38,7 @@ class CspHelper extends Helper
      */
     public function scriptNonce(): string
     {
-        return static::addNonce('script-src');
+        return $this->addNonce('script-src');
     }
 
     /**
@@ -31,7 +48,7 @@ class CspHelper extends Helper
      */
     public function styleNonce(): string
     {
-        return static::addNonce('style-src');
+        return $this->addNonce('style-src');
     }
 
     /**
@@ -40,17 +57,17 @@ class CspHelper extends Helper
      * @param string $directive The directive.
      * @return string The nonce.
      */
-    protected static function addNonce(string $directive): string
+    protected function addNonce(string $directive): string
     {
         $nonce = static::generateNonce();
         $value = 'nonce-'.$nonce;
 
-        $policies = CspBuilder::getPolicies();
+        $policies = $this->csp->getPolicies();
 
         foreach ($policies as $key => $policy) {
             $policy = $policy->addDirective($directive, $value);
 
-            CspBuilder::setPolicy($key, $policy);
+            $this->csp->setPolicy($key, $policy);
         }
 
         return $nonce;

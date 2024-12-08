@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
+use Fyre\Config\Config;
+use Fyre\Container\Container;
 use Fyre\Server\ServerRequest;
+use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\HelperRegistry;
-use Fyre\View\Template;
+use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 
@@ -55,14 +58,17 @@ final class HelperTest extends TestCase
 
     protected function setUp(): void
     {
-        HelperRegistry::clear();
-        HelperRegistry::addNamespace('\Tests\Mock\Helpers');
+        $container = new Container();
+        $container->singleton(Config::class);
+        $container->singleton(TemplateLocator::class);
+        $container->singleton(HelperRegistry::class);
+        $container->singleton(CellRegistry::class);
 
-        Template::clear();
-        Template::addPath('tests/Mock/templates');
+        $container->use(HelperRegistry::class)->addNamespace('\Tests\Mock\Helpers');
+        $container->use(TemplateLocator::class)->addPath('tests/Mock/templates');
 
-        $request = new ServerRequest();
+        $request = $container->build(ServerRequest::class);
 
-        $this->view = new View($request);
+        $this->view = $container->build(View::class, ['request' => $request]);
     }
 }

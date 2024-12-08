@@ -5,12 +5,13 @@
 
 ## Table Of Contents
 - [Installation](#installation)
-- [Views](#views)
-    - [Layouts](#layouts)
-    - [Cells](#cells)
-    - [Elements](#elements)
-    - [Blocks](#blocks)
-- [Templates](#templates)
+- [Basic Usage](#basic-usage)
+- [Methods](#methods)
+- [Layouts](#layouts)
+- [Cells](#cells)
+- [Elements](#elements)
+- [Blocks](#blocks)
+- [Template Locator](#template-locator)
 - [Cell Registry](#cell-registry)
 - [Helper Registry](#helper-registry)
 - [Helpers](#helpers)
@@ -36,14 +37,25 @@ use Fyre\View\View;
 ```
 
 
-## Views
+## Basic Usage
 
+- `$templateLocator` is a [*TemplateLocator*](#template-locator).
+- `$helperRegistry` is a [*HelperRegistry*](#helper-registry).
+- `$cellRegistry` is a [*CellRegistry*](#cell-registry).
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 
 ```php
-$view = new View($request);
+$view = new View($templateLocator, $helperRegistry, $cellRegistry, $request);
 ```
 
+Any dependencies will be injected automatically when loading from the [*Container*](https://github.com/elusivecodes/FyreContainer).
+
+```php
+$view = $container->use(View::class);
+```
+
+
+## Methods
 
 **Get Data**
 
@@ -90,7 +102,7 @@ Render a template.
 echo $view->render($file);
 ```
 
-Templates files must end in the extension `.php`, and must exist in one of the defined paths.
+Templates files must end in the extension `.php`, and must exist in one of the defined [*TemplateLocator*](#template-locator) paths.
 
 **Set Data**
 
@@ -112,12 +124,12 @@ Set the layout.
 $view->setLayout($layout);
 ```
 
-Layout files must end in the extension `.php`, and must exist in a "*layouts*" folder in one of the defined paths.
+Layout files must end in the extension `.php`, and must exist in a "*layouts*" folder in one of the defined [*TemplateLocator*](#template-locator) paths.
 
 
 ### Layouts
 
-You can use layouts when rendering views by placing a `default.php` file in a *layouts* folder of one of the defined paths. You can create multiple layouts, and specify the layout to use with the `setLayout` method above.
+You can use layouts when rendering views by placing a `default.php` file in a *layouts* folder of one of the defined [*TemplateLocator*](#template-locator) paths. You can create multiple layouts, and specify the layout to use with the `setLayout` method above.
 
 The rendered content is passed to the layout file via the `content` method of `$this`. Any other defined data is also passed to the layout.
 
@@ -126,7 +138,7 @@ $this->content();
 ```
 
 
-### Cells
+## Cells
 
 Custom cells can be created by extending `\Fyre\View\Cell`, and suffixing the class name with "*Cell*".
 
@@ -141,8 +153,10 @@ Render a *Cell*.
 echo $this->cell($cell, $args);
 ```
 
+Cell classes must exist in a namespace that will be loaded by the [*CellRegistry*](#cell-registry).
 
-### Elements
+
+## Elements
 
 **Element**
 
@@ -155,10 +169,10 @@ Render an element.
 echo $this->element($file, $data);
 ```
 
-Element files must end in the extension `.php`, and must exist in an "*elements*" folder in one of the defined paths.
+Element files must end in the extension `.php`, and must exist in an "*elements*" folder in one of the defined [*TemplateLocator*](#template-locator) paths.
 
 
-### Blocks
+## Blocks
 
 **Append**
 
@@ -235,13 +249,25 @@ $this->start($name);
 ```
 
 
-## Templates
+## Template Locator
 
 ```php
-use Fyre\View\Template;
+use Fyre\View\TemplateLocator;
 ```
 
-Layouts, templates and elements are loaded by searching available paths.
+```php
+$templateLocator = new TemplateLocator();
+```
+
+**Autoloading**
+
+It is recommended to bind the *TemplateLocator* to the [*Container*](https://github.com/elusivecodes/FyreContainer) as a singleton.
+
+```php
+$container->singleton(TemplateLocator::class);
+```
+
+### Template Locator Methods
 
 **Add Path**
 
@@ -250,7 +276,7 @@ Add a path for loading templates.
 - `$path` is a string representing the path.
 
 ```php
-Template::addPath($path);
+$templateLocator->addPath($path);
 ```
 
 **Get Paths**
@@ -258,7 +284,7 @@ Template::addPath($path);
 Get the paths.
 
 ```php
-$paths = Template::getPaths();
+$paths = $templateLocator->getPaths();
 ```
 
 **Locate**
@@ -269,8 +295,18 @@ Find a file in paths.
 - `$folder` is a string representing the folder name, and will default to "".
 
 ```php
-$filePath = Template::findFile($file, $folder);
+$filePath = $templateLocator->findFile($file, $folder);
 ```
+
+**Remove Path**
+
+- `$path` is a string representing the path.
+
+```php
+$templateLocator->removePath($path);
+```
+
+### Template Locator Static Methods
 
 **Normalize**
 
@@ -279,15 +315,7 @@ Normalize a template file name.
 - `$string` is a string representing the file name.
 
 ```php
-$normalized = Template::normalize($string);
-```
-
-**Remove Path**
-
-- `$path` is a string representing the path.
-
-```php
-$removed = Template::removePath($path);
+$normalized = TemplateLocator::normalize($string);
 ```
 
 
@@ -297,6 +325,28 @@ $removed = Template::removePath($path);
 use Fyre\View\CellRegistry;
 ```
 
+- `$container` is a [*Container*](https://github.com/elusivecodes/FyreContainer).
+
+```php
+$cellRegistry = new CellRegistry($container);
+```
+
+**Autoloading**
+
+It is recommended to bind the *CellRegistry* to the [*Container*](https://github.com/elusivecodes/FyreContainer) as a singleton.
+
+```php
+$container->singleton(CellRegistry::class);
+```
+
+Any dependencies will be injected automatically when loading from the [*Container*](https://github.com/elusivecodes/FyreContainer).
+
+```php
+$cellRegistry = $container->use(CellRegistry::class);
+```
+
+### Cell Registry Methods
+
 **Add Namespace**
 
 Add a namespace for automatically loading cells.
@@ -304,7 +354,19 @@ Add a namespace for automatically loading cells.
 - `$namespace` is a string representing the namespace.
 
 ```php
-CellRegistry::addNamespace($namespace);
+$cellRegistry->addNamespace($namespace);
+```
+
+**Build**
+
+Build a cell.
+
+- `$name` is a string representing the cell name.
+- `$view` is a *View*.
+- `$options` is an array containing cell options.
+
+```php
+$cell = $cellRegistry->build($name, $view, $options);
 ```
 
 **Clear**
@@ -312,7 +374,7 @@ CellRegistry::addNamespace($namespace);
 Clear all namespaces and cells.
 
 ```php
-CellRegistry::clear();
+$cellRegistry->clear();
 ```
 
 **Find**
@@ -322,7 +384,7 @@ Find a cell class.
 - `$name` is a string representing the cell name.
 
 ```php
-$className = CellRegistry::find($name);
+$className = $cellRegistry->find($name);
 ```
 
 **Get Namespaces**
@@ -330,7 +392,7 @@ $className = CellRegistry::find($name);
 Get the namespaces.
 
 ```php
-$namespaces = CellRegistry::getNamespaces();
+$namespaces = $cellRegistry->getNamespaces();
 ```
 
 **Has Namespace**
@@ -340,19 +402,7 @@ Check if a namespace exists.
 - `$namespace` is a string representing the namespace.
 
 ```php
-$hasNamespace = CellRegistry::hasNamespace($namespace);
-```
-
-**Load**
-
-Load a cell.
-
-- `$name` is a string representing the cell name.
-- `$view` is a *View*.
-- `$options` is an array containing cell options.
-
-```php
-$cell = CellRegistry::load($name, $view, $options);
+$hasNamespace = $cellRegistry->hasNamespace($namespace);
 ```
 
 **Remove Namespace**
@@ -362,7 +412,7 @@ Remove a namespace.
 - `$namespace` is a string representing the namespace.
 
 ```php
-$removed = CellRegistry::removeNamespace($namespace);
+$cellRegistry->removeNamespace($namespace);
 ```
 
 
@@ -372,6 +422,28 @@ $removed = CellRegistry::removeNamespace($namespace);
 use Fyre\View\HelperRegistry;
 ```
 
+- `$container` is a [*Container*](https://github.com/elusivecodes/FyreContainer).
+
+```php
+$helperRegistry = new HelperRegistry($container);
+```
+
+**Autoloading**
+
+It is recommended to bind the *HelperRegistry* to the [*Container*](https://github.com/elusivecodes/FyreContainer) as a singleton.
+
+```php
+$container->singleton(HelperRegistry::class);
+```
+
+Any dependencies will be injected automatically when loading from the [*Container*](https://github.com/elusivecodes/FyreContainer).
+
+```php
+$helperRegistry = $container->use(HelperRegistry::class);
+```
+
+### Helper Registry Methods
+
 **Add Namespace**
 
 Add a namespace for automatically loading helpers.
@@ -379,7 +451,19 @@ Add a namespace for automatically loading helpers.
 - `$namespace` is a string representing the namespace.
 
 ```php
-HelperRegistry::addNamespace($namespace);
+$helperRegistry->addNamespace($namespace);
+```
+
+**Build**
+
+Build a helper.
+
+- `$name` is a string representing the helper name.
+- `$view` is a *View*.
+- `$options` is an array containing helper options.
+
+```php
+$helper = $helperRegistry->build($name, $view, $options);
 ```
 
 **Clear**
@@ -387,7 +471,7 @@ HelperRegistry::addNamespace($namespace);
 Clear all namespaces and helpers.
 
 ```php
-HelperRegistry::clear();
+$helperRegistry->clear();
 ```
 
 **Find**
@@ -397,7 +481,7 @@ Find a helper class.
 - `$name` is a string representing the helper name.
 
 ```php
-$className = HelperRegistry::find($name);
+$className = $helperRegistry->find($name);
 ```
 
 **Get Namespaces**
@@ -405,7 +489,7 @@ $className = HelperRegistry::find($name);
 Get the namespaces.
 
 ```php
-$namespaces = HelperRegistry::getNamespaces();
+$namespaces = $helperRegistry->getNamespaces();
 ```
 
 **Has Namespace**
@@ -415,19 +499,7 @@ Check if a namespace exists.
 - `$namespace` is a string representing the namespace.
 
 ```php
-$hasNamespace = HelperRegistry::hasNamespace($namespace);
-```
-
-**Load**
-
-Load a helper.
-
-- `$name` is a string representing the helper name.
-- `$view` is a *View*.
-- `$options` is an array containing helper options.
-
-```php
-$helper = HelperRegistry::load($name, $view, $options);
+$hasNamespace = $helperRegistry->hasNamespace($namespace);
 ```
 
 **Remove Namespace**
@@ -437,7 +509,7 @@ Remove a namespace.
 - `$namespace` is a string representing the namespace.
 
 ```php
-$removed = HelperRegistry::removeNamespace($namespace);
+$helperRegistry->removeNamespace($namespace);
 ```
 
 
@@ -451,7 +523,7 @@ $helper = $this->MyHelper;
 
 Alternatively, you can load a helper with configuration options using the `loadHelper` method of the *View*.
 
-Custom helpers can be created by extending `\Fyre\View\Helper`, suffixing the class name with "*Helper*", and ensuring the `__construct` method accepts *View* as the argument.
+Custom helpers can be created by extending `\Fyre\View\Helper`, suffixing the class name with "*Helper*", and ensuring the `__construct` method accepts *View* as the argument (and optionally an `$options` array as the second parameter).
 
 **Get Config**
 

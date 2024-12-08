@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Views;
 
 trait DataTestTrait
 {

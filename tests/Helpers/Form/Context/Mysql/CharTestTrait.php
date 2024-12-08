@@ -3,18 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Form\Context\Mysql;
 
-use Fyre\DB\ConnectionManager;
-use Fyre\ORM\ModelRegistry;
 use Fyre\Validation\Rule;
-use Fyre\Validation\Validator;
 
 trait CharTestTrait
 {
     public function testCharEntityValue(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value CHAR NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -22,9 +17,7 @@ trait CharTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEntity([
+        $entity = $this->model->newEntity([
             'value' => 'A',
         ]);
 
@@ -38,9 +31,7 @@ trait CharTestTrait
 
     public function testCharMaxLengthSchema(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value CHAR NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -48,9 +39,7 @@ trait CharTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -62,9 +51,7 @@ trait CharTestTrait
 
     public function testCharRequiredValidation(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value CHAR NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -72,14 +59,9 @@ trait CharTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
+        $this->validator->add('value', Rule::required());
 
-        $validator = new Validator();
-        $validator->add('value', Rule::required());
-
-        $model->setValidator($validator);
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 
@@ -91,9 +73,7 @@ trait CharTestTrait
 
     public function testCharSchemaDefaultValue(): void
     {
-        $connection = ConnectionManager::use();
-
-        $connection->query(<<<'EOT'
+        $this->db->query(<<<'EOT'
             CREATE TABLE contexts (
                 id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 value CHAR NOT NULL DEFAULT 'A' COLLATE 'utf8mb4_unicode_ci',
@@ -101,9 +81,7 @@ trait CharTestTrait
             ) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB
         EOT);
 
-        $model = ModelRegistry::use('Contexts');
-
-        $entity = $model->newEmptyEntity();
+        $entity = $this->model->newEmptyEntity();
 
         $this->view->Form->open($entity);
 

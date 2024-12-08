@@ -3,22 +3,29 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
-use Fyre\Security\CspBuilder;
+use Fyre\Config\Config;
+use Fyre\Container\Container;
+use Fyre\Security\ContentSecurityPolicy;
 use Fyre\Server\ServerRequest;
+use Fyre\View\CellRegistry;
+use Fyre\View\HelperRegistry;
+use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 
 final class CSPTest extends TestCase
 {
+    protected ContentSecurityPolicy $csp;
+
     protected View $view;
 
     public function testScriptNonce(): void
     {
-        CspBuilder::createPolicy(CspBuilder::DEFAULT, []);
+        $this->csp->createPolicy(ContentSecurityPolicy::DEFAULT, []);
 
         $nonce = $this->view->CSP->scriptNonce();
 
-        $policy = CspBuilder::getPolicy(CspBuilder::DEFAULT);
+        $policy = $this->csp->getPolicy(ContentSecurityPolicy::DEFAULT);
 
         $this->assertMatchesRegularExpression(
             '/^[a-f0-9]{40}$/',
@@ -33,11 +40,11 @@ final class CSPTest extends TestCase
 
     public function testStyleNonce(): void
     {
-        CspBuilder::createPolicy(CspBuilder::DEFAULT, []);
+        $this->csp->createPolicy(ContentSecurityPolicy::DEFAULT, []);
 
         $nonce = $this->view->CSP->styleNonce();
 
-        $policy = CspBuilder::getPolicy(CspBuilder::DEFAULT);
+        $policy = $this->csp->getPolicy(ContentSecurityPolicy::DEFAULT);
 
         $this->assertMatchesRegularExpression(
             '/^[a-f0-9]{40}$/',
@@ -52,8 +59,17 @@ final class CSPTest extends TestCase
 
     protected function setUp(): void
     {
-        $request = new ServerRequest();
+        $container = new Container();
+        $container->singleton(Config::class);
+        $container->singleton(TemplateLocator::class);
+        $container->singleton(HelperRegistry::class);
+        $container->singleton(CellRegistry::class);
+        $container->singleton(ContentSecurityPolicy::class);
 
-        $this->view = new View($request);
+        $this->csp = $container->use(ContentSecurityPolicy::class);
+
+        $request = $container->build(ServerRequest::class);
+
+        $this->view = $container->build(View::class, ['request' => $request]);
     }
 }

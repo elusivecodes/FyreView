@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
+use Fyre\Container\Container;
 use Fyre\View\Exceptions\ViewException;
 
 use function array_splice;
@@ -14,71 +15,43 @@ use function trim;
 /**
  * CellRegistry
  */
-abstract class CellRegistry
+class CellRegistry
 {
-    protected static array $cells = [];
+    protected array $cells = [];
 
-    protected static array $namespaces = [];
+    protected Container $container;
+
+    protected array $namespaces = [];
+
+    /**
+     * New CellRegistry constructor.
+     *
+     * @param Container $container The Container.
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Add a namespace for loading cells.
      *
      * @param string $namespace The namespace.
+     * @return static The CellRegistry.
      */
-    public static function addNamespace(string $namespace): void
+    public function addNamespace(string $namespace): static
     {
         $namespace = static::normalizeNamespace($namespace);
 
-        if (!in_array($namespace, static::$namespaces)) {
-            static::$namespaces[] = $namespace;
+        if (!in_array($namespace, $this->namespaces)) {
+            $this->namespaces[] = $namespace;
         }
+
+        return $this;
     }
 
     /**
-     * Clear all namespaces and cells.
-     */
-    public static function clear(): void
-    {
-        static::$namespaces = [];
-        static::$cells = [];
-    }
-
-    /**
-     * Find a cell class.
-     *
-     * @param string $name The cell name.
-     * @return string|null The cell class.
-     */
-    public static function find(string $name): string|null
-    {
-        return static::$cells[$name] ??= static::locate($name);
-    }
-
-    /**
-     * Get the namespaces.
-     *
-     * @return array The namespaces.
-     */
-    public static function getNamespaces(): array
-    {
-        return static::$namespaces;
-    }
-
-    /**
-     * Determine if a namespace exists.
-     *
-     * @param string $namespace The namespace.
-     * @return bool TRUE if the namespace exists, otherwise FALSE.
-     */
-    public static function hasNamespace(string $namespace): bool
-    {
-        $namespace = static::normalizeNamespace($namespace);
-
-        return in_array($namespace, static::$namespaces);
-    }
-
-    /**
-     * Load a cell.
+     * Build a cell.
      *
      * @param string $name The cell name.
      * @param View $view The View.
@@ -87,38 +60,80 @@ abstract class CellRegistry
      *
      * @throws ViewException if the cell is not valid.
      */
-    public static function load(string $name, View $view, array $options = []): Cell
+    public function build(string $name, View $view, array $options = []): Cell
     {
-        $className = static::find($name);
+        $className = $this->find($name);
 
         if (!$className) {
             throw ViewException::forInvalidCell($name);
         }
 
-        return new $className($view, $options);
+        return $this->container->build($className, ['view' => $view, 'options' => $options]);
+    }
+
+    /**
+     * Clear all namespaces and cells.
+     */
+    public function clear(): void
+    {
+        $this->namespaces = [];
+        $this->cells = [];
+    }
+
+    /**
+     * Find a cell class.
+     *
+     * @param string $name The cell name.
+     * @return string|null The cell class.
+     */
+    public function find(string $name): string|null
+    {
+        return $this->cells[$name] ??= $this->locate($name);
+    }
+
+    /**
+     * Get the namespaces.
+     *
+     * @return array The namespaces.
+     */
+    public function getNamespaces(): array
+    {
+        return $this->namespaces;
+    }
+
+    /**
+     * Determine if a namespace exists.
+     *
+     * @param string $namespace The namespace.
+     * @return bool TRUE if the namespace exists, otherwise FALSE.
+     */
+    public function hasNamespace(string $namespace): bool
+    {
+        $namespace = static::normalizeNamespace($namespace);
+
+        return in_array($namespace, $this->namespaces);
     }
 
     /**
      * Remove a namespace.
      *
      * @param string $namespace The namespace.
-     * @return bool TRUE If the namespace was removed, otherwise FALSE.
+     * @return static The CellRegistry.
      */
-    public static function removeNamespace(string $namespace): bool
+    public function removeNamespace(string $namespace): static
     {
         $namespace = static::normalizeNamespace($namespace);
 
-        foreach (static::$namespaces as $i => $otherNamespace) {
+        foreach ($this->namespaces as $i => $otherNamespace) {
             if ($otherNamespace !== $namespace) {
                 continue;
             }
 
-            array_splice(static::$namespaces, $i, 1);
-
-            return true;
+            array_splice($this->namespaces, $i, 1);
+            break;
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -127,9 +142,9 @@ abstract class CellRegistry
      * @param string $name The cell name.
      * @return string|null The cell class.
      */
-    protected static function locate(string $name): string|null
+    protected function locate(string $name): string|null
     {
-        $namespaces = array_merge(static::$namespaces, ['\Fyre\View\Cells\\']);
+        $namespaces = array_merge($this->namespaces, ['\Fyre\View\Cells\\']);
 
         foreach ($namespaces as $namespace) {
             $className = $namespace.$name.'Cell';
@@ -150,10 +165,6 @@ abstract class CellRegistry
      */
     protected static function normalizeNamespace(string $namespace): string
     {
-        $namespace = trim($namespace, '\\');
-
-        return $namespace ?
-            '\\'.$namespace.'\\' :
-            '\\';
+        return trim($namespace, '\\').'\\';
     }
 }

@@ -1,36 +1,47 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Helpers;
+namespace Tests\Views;
 
 use Fyre\Config\Config;
 use Fyre\Container\Container;
-use Fyre\DB\TypeParser;
 use Fyre\Server\ServerRequest;
-use Fyre\Utility\Formatter;
 use Fyre\View\CellRegistry;
 use Fyre\View\HelperRegistry;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 
-final class FormatTest extends TestCase
+final class ViewTest extends TestCase
 {
+    use BlockTestTrait;
+    use DataTestTrait;
+    use ElementTestTrait;
+    use LayoutTestTrait;
+    use RenderTestTrait;
+
+    protected TemplateLocator $templateLocator;
+
     protected View $view;
 
-    public function testCurrency(): void
+    public function testGetRequest(): void
     {
-        $this->assertSame(
-            '$1,234.00',
-            $this->view->Format->currency(1234)
+        $this->assertInstanceOf(
+            ServerRequest::class,
+            $this->view->getRequest()
         );
     }
 
-    public function testNumber(): void
+    public function testPathTrailingSlash(): void
     {
+        $this->templateLocator->clear();
+        $this->templateLocator->addPath('tests/Mock/templates/');
+
+        $this->view->setLayout(null);
+
         $this->assertSame(
-            '1,234',
-            $this->view->Format->number(1234)
+            'Test',
+            $this->view->render('test/deep/test')
         );
     }
 
@@ -41,10 +52,9 @@ final class FormatTest extends TestCase
         $container->singleton(TemplateLocator::class);
         $container->singleton(HelperRegistry::class);
         $container->singleton(CellRegistry::class);
-        $container->singleton(TypeParser::class);
-        $container->singleton(Formatter::class);
 
-        $container->use(Config::class)->set('App.defaultLocale', 'en-US');
+        $this->templateLocator = $container->use(TemplateLocator::class);
+        $this->templateLocator->addPath('tests/Mock/templates');
 
         $request = $container->build(ServerRequest::class);
 

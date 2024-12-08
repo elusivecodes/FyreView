@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
+use Fyre\Config\Config;
+use Fyre\Container\Container;
 use Fyre\Server\ServerRequest;
 use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\HelperRegistry;
-use Fyre\View\Template;
+use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 
@@ -96,7 +98,7 @@ final class CellTest extends TestCase
     {
         $this->assertSame(
             'Value: 1',
-            $this->view->cell('Example::test', [1])->render()
+            $this->view->cell('Example::test', ['value' => 1])->render()
         );
     }
 
@@ -119,17 +121,18 @@ final class CellTest extends TestCase
 
     protected function setUp(): void
     {
-        CellRegistry::clear();
-        CellRegistry::addNamespace('\Tests\Mock\Cells');
+        $container = new Container();
+        $container->singleton(Config::class);
+        $container->singleton(TemplateLocator::class);
+        $container->singleton(HelperRegistry::class);
+        $container->singleton(CellRegistry::class);
 
-        HelperRegistry::clear();
-        HelperRegistry::addNamespace('\Tests\Mock\Helpers');
+        $container->use(CellRegistry::class)->addNamespace('\Tests\Mock\Cells');
+        $container->use(HelperRegistry::class)->addNamespace('\Tests\Mock\Helpers');
+        $container->use(TemplateLocator::class)->addPath('tests/Mock/templates');
 
-        Template::clear();
-        Template::addPath('tests/Mock/templates');
+        $request = $container->build(ServerRequest::class);
 
-        $request = new ServerRequest();
-
-        $this->view = new View($request);
+        $this->view = $container->build(View::class, ['request' => $request]);
     }
 }

@@ -27,9 +27,13 @@ class View
 
     protected array $blockStack = [];
 
+    protected CellRegistry $cellRegistry;
+
     protected string $content = '';
 
     protected string|null $file = null;
+
+    protected HelperRegistry $helperRegistry;
 
     protected array $helpers = [];
 
@@ -37,13 +41,21 @@ class View
 
     protected ServerRequest $request;
 
+    protected TemplateLocator $templateLocator;
+
     /**
      * New View constructor.
      *
+     * @param TemplateLocator $templateLocator The TemplateLocator.
+     * @param HelperRegistry $helperRegistry The HelperRegistry.
+     * @param CellRegistry $cellRegistry The CellRegistry.
      * @param ServerRequest $request The ServerRequest.
      */
-    public function __construct(ServerRequest $request)
+    public function __construct(TemplateLocator $templateLocator, HelperRegistry $helperRegistry, CellRegistry $cellRegistry, ServerRequest $request)
     {
+        $this->templateLocator = $templateLocator;
+        $this->helperRegistry = $helperRegistry;
+        $this->cellRegistry = $cellRegistry;
         $this->request = $request;
     }
 
@@ -102,7 +114,7 @@ class View
             $action = null;
         }
 
-        return CellRegistry::load($cell, $this, ['action' => $action, 'args' => $args]);
+        return $this->cellRegistry->build($cell, $this, ['action' => $action, 'args' => $args]);
     }
 
     /**
@@ -125,7 +137,7 @@ class View
      */
     public function element(string $file, array $data = []): string
     {
-        $filePath = Template::locate($file, Template::ELEMENTS_FOLDER);
+        $filePath = $this->templateLocator->locate($file, TemplateLocator::ELEMENTS_FOLDER);
 
         if (!$filePath) {
             throw ViewException::forInvalidElement($file);
@@ -213,7 +225,7 @@ class View
      */
     public function loadHelper(string $name, array $options = []): static
     {
-        $this->helpers[$name] ??= HelperRegistry::load($name, $this, $options);
+        $this->helpers[$name] ??= $this->helperRegistry->build($name, $this, $options);
 
         return $this;
     }
@@ -239,14 +251,14 @@ class View
      */
     public function render(string $file): string
     {
-        $filePath = Template::locate($file);
+        $filePath = $this->templateLocator->locate($file);
 
         if (!$filePath) {
             throw ViewException::forInvalidTemplate($file);
         }
 
         $layoutPath = $this->layout ?
-            Template::locate($this->layout, Template::LAYOUTS_FOLDER) :
+            $this->templateLocator->locate($this->layout, TemplateLocator::LAYOUTS_FOLDER) :
             null;
 
         if ($this->layout && !$layoutPath) {

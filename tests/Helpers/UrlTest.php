@@ -3,19 +3,26 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
+use Fyre\Config\Config;
+use Fyre\Container\Container;
 use Fyre\Router\Router;
 use Fyre\Server\ServerRequest;
+use Fyre\View\CellRegistry;
+use Fyre\View\HelperRegistry;
+use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use HomeController;
 use PHPUnit\Framework\TestCase;
 
 final class UrlTest extends TestCase
 {
+    protected Router $router;
+
     protected View $view;
 
     public function testLink(): void
     {
-        Router::get('home', 'Home');
+        $this->router->get('home', 'Home');
 
         $this->assertSame(
             '<a href="/home">Title</a>',
@@ -27,7 +34,7 @@ final class UrlTest extends TestCase
 
     public function testLinkAttributes(): void
     {
-        Router::get('home', 'Home');
+        $this->router->get('home', 'Home');
 
         $this->assertSame(
             '<a class="test" href="/home">Title</a>',
@@ -40,7 +47,7 @@ final class UrlTest extends TestCase
 
     public function testLinkEscape(): void
     {
-        Router::get('home', 'Home');
+        $this->router->get('home', 'Home');
 
         $this->assertSame(
             '<a href="/home">&lt;i&gt;Title&lt;/i&gt;</a>',
@@ -52,7 +59,7 @@ final class UrlTest extends TestCase
 
     public function testLinkNoEscape(): void
     {
-        Router::get('home', 'Home');
+        $this->router->get('home', 'Home');
 
         $this->assertSame(
             '<a href="/home"><i>Title</i></a>',
@@ -81,7 +88,7 @@ final class UrlTest extends TestCase
 
     public function testTo(): void
     {
-        Router::get('home', HomeController::class, ['as' => 'home']);
+        $this->router->get('home', HomeController::class, ['as' => 'home']);
 
         $this->assertSame(
             '/home',
@@ -91,17 +98,17 @@ final class UrlTest extends TestCase
 
     public function testToArguments(): void
     {
-        Router::get('home/(:segment)', HomeController::class, ['as' => 'home']);
+        $this->router->get('home/{id}', HomeController::class, ['as' => 'home']);
 
         $this->assertSame(
             '/home/1',
-            $this->view->Url->to('home', [1])
+            $this->view->Url->to('home', ['id' => 1])
         );
     }
 
     public function testToFullbase(): void
     {
-        Router::get('home', HomeController::class, ['as' => 'home']);
+        $this->router->get('home', HomeController::class, ['as' => 'home']);
 
         $this->assertSame(
             'https://test.com/home',
@@ -113,11 +120,19 @@ final class UrlTest extends TestCase
 
     protected function setUp(): void
     {
-        Router::clear();
-        Router::setBaseUri('https://test.com/');
+        $container = new Container();
+        $container->singleton(Config::class);
+        $container->singleton(TemplateLocator::class);
+        $container->singleton(HelperRegistry::class);
+        $container->singleton(CellRegistry::class);
+        $container->singleton(Router::class);
 
-        $request = new ServerRequest();
+        $container->use(Config::class)->set('App.baseUri', 'https://test.com/');
 
-        $this->view = new View($request);
+        $this->router = $container->use(Router::class);
+
+        $request = $container->build(ServerRequest::class);
+
+        $this->view = $container->build(View::class, ['request' => $request]);
     }
 }

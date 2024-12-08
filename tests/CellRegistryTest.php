@@ -3,29 +3,50 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Fyre\Config\Config;
+use Fyre\Container\Container;
 use Fyre\Server\ServerRequest;
 use Fyre\View\Cell;
 use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\ViewException;
+use Fyre\View\HelperRegistry;
+use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 
 final class CellRegistryTest extends TestCase
 {
+    protected CellRegistry $cellRegistry;
+
     protected View $view;
+
+    public function testBuild(): void
+    {
+        $this->assertInstanceOf(
+            Cell::class,
+            $this->cellRegistry->build('Test', $this->view)
+        );
+    }
+
+    public function testBuildInvalid(): void
+    {
+        $this->expectException(ViewException::class);
+
+        $this->cellRegistry->build('Invalid', $this->view);
+    }
 
     public function testFind(): void
     {
         $this->assertSame(
-            '\Tests\Mock\Cells\TestCell',
-            CellRegistry::find('Test')
+            'Tests\Mock\Cells\TestCell',
+            $this->cellRegistry->find('Test')
         );
     }
 
     public function testFindInvalid(): void
     {
         $this->assertNull(
-            CellRegistry::find('Invalid')
+            $this->cellRegistry->find('Invalid')
         );
     }
 
@@ -33,88 +54,81 @@ final class CellRegistryTest extends TestCase
     {
         $this->assertSame(
             [
-                '\Tests\Mock\Cells\\',
+                'Tests\Mock\Cells\\',
             ],
-            CellRegistry::getNamespaces()
+            $this->cellRegistry->getNamespaces()
         );
     }
 
     public function testHasNamespace(): void
     {
         $this->assertTrue(
-            CellRegistry::hasNamespace('\Tests\Mock\Cells')
+            $this->cellRegistry->hasNamespace('\Tests\Mock\Cells')
         );
     }
 
     public function testHasNamespaceInvalid(): void
     {
         $this->assertFalse(
-            CellRegistry::hasNamespace('\Tests\Mock\Invalid')
+            $this->cellRegistry->hasNamespace('\Tests\Mock\Invalid')
         );
-    }
-
-    public function testLoad(): void
-    {
-        $this->assertInstanceOf(
-            Cell::class,
-            CellRegistry::load('Test', $this->view)
-        );
-    }
-
-    public function testLoadInvalid(): void
-    {
-        $this->expectException(ViewException::class);
-
-        CellRegistry::load('Invalid', $this->view);
     }
 
     public function testNamespaceNoLeadingSlash(): void
     {
-        CellRegistry::clear();
-        CellRegistry::addNamespace('Tests\Mock\Cells');
+        $this->cellRegistry->clear();
+        $this->cellRegistry->addNamespace('Tests\Mock\Cells');
 
         $this->assertInstanceOf(
             Cell::class,
-            CellRegistry::load('Test', $this->view)
+            $this->cellRegistry->build('Test', $this->view)
         );
     }
 
     public function testNamespaceTrailingSlash(): void
     {
-        CellRegistry::clear();
-        CellRegistry::addNamespace('\Tests\Mock\Cells\\');
+        $this->cellRegistry->clear();
+        $this->cellRegistry->addNamespace('\Tests\Mock\Cells\\');
 
         $this->assertInstanceOf(
             Cell::class,
-            CellRegistry::load('Test', $this->view)
+            $this->cellRegistry->build('Test', $this->view)
         );
     }
 
     public function testRemoveNamespace(): void
     {
-        $this->assertTrue(
-            CellRegistry::removeNamespace('\Tests\Mock\Cells')
+        $this->assertSame(
+            $this->cellRegistry,
+            $this->cellRegistry->removeNamespace('\Tests\Mock\Cells')
         );
 
         $this->assertFalse(
-            CellRegistry::hasNamespace('\Tests\Mock\Cells')
+            $this->cellRegistry->hasNamespace('\Tests\Mock\Cells')
         );
     }
 
     public function testRemoveNamespaceInvalid(): void
     {
-        $this->assertFalse(
-            CellRegistry::removeNamespace('\Tests\Mock\Invalid')
+        $this->assertSame(
+            $this->cellRegistry,
+            $this->cellRegistry->removeNamespace('\Tests\Mock\Invalid')
         );
     }
 
     protected function setUp(): void
     {
-        CellRegistry::clear();
-        CellRegistry::addNamespace('\Tests\Mock\Cells');
+        $container = new Container();
+        $container->singleton(Config::class);
+        $container->singleton(TemplateLocator::class);
+        $container->singleton(HelperRegistry::class);
+        $container->singleton(CellRegistry::class);
 
-        $request = new ServerRequest();
+        $this->cellRegistry = $container->use(CellRegistry::class);
+        $this->cellRegistry->addNamespace('\Tests\Mock\Cells');
 
-        $this->view = new View($request);
+        $request = $container->build(ServerRequest::class);
+
+        $this->view = $container->build(View::class, ['request' => $request]);
     }
 }
