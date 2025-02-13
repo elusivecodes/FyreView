@@ -5,6 +5,7 @@ namespace Tests\Views;
 
 use Fyre\Config\Config;
 use Fyre\Container\Container;
+use Fyre\Event\EventManager;
 use Fyre\Server\ServerRequest;
 use Fyre\View\CellRegistry;
 use Fyre\View\HelperRegistry;
@@ -52,6 +53,7 @@ final class ViewTest extends TestCase
         $container->singleton(TemplateLocator::class);
         $container->singleton(HelperRegistry::class);
         $container->singleton(CellRegistry::class);
+        $container->singleton(EventManager::class);
 
         $this->templateLocator = $container->use(TemplateLocator::class);
         $this->templateLocator->addPath('tests/Mock/templates');

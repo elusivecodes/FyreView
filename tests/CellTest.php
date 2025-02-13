@@ -5,13 +5,18 @@ namespace Tests\Helpers;
 
 use Fyre\Config\Config;
 use Fyre\Container\Container;
+use Fyre\Event\Event;
+use Fyre\Event\EventManager;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Path;
+use Fyre\View\Cell;
 use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\HelperRegistry;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
+use Tests\Mock\Cells\ExampleCell;
 
 final class CellTest extends TestCase
 {
@@ -70,6 +75,88 @@ final class CellTest extends TestCase
         );
     }
 
+    public function testEventAfterAction(): void
+    {
+        $ran = false;
+        $this->view->getEventManager()->on('Cell.afterAction', function(Event $event, Cell $cell, string $action, array $args) use (&$ran): void {
+            $ran = true;
+
+            $this->assertInstanceOf(
+                ExampleCell::class,
+                $cell
+            );
+
+            $this->assertSame('test', $action);
+
+            $this->assertSame([
+                'value' => 1,
+            ], $args);
+        });
+
+        $this->view->cell('Example::test', ['value' => 1])->render();
+
+        $this->assertTrue($ran);
+    }
+
+    public function testEventAfterRender(): void
+    {
+        $ran = false;
+        $this->view->getEventManager()->on('Cell.afterRender', function(Event $event, string $filePath, string $content) use (&$ran): void {
+            $ran = true;
+
+            $this->assertSame(
+                Path::normalize('./tests/Mock/templates/cells/Example/test.php'),
+                $filePath
+            );
+
+            $this->assertSame('Value: 1', $content);
+        });
+
+        $this->view->cell('Example::test', ['value' => 1])->render();
+
+        $this->assertTrue($ran);
+    }
+
+    public function testEventBeforeAction(): void
+    {
+        $ran = false;
+        $this->view->getEventManager()->on('Cell.beforeAction', function(Event $event, Cell $cell, string $action, array $args) use (&$ran): void {
+            $ran = true;
+
+            $this->assertInstanceOf(
+                ExampleCell::class,
+                $cell
+            );
+
+            $this->assertSame('test', $action);
+
+            $this->assertSame([
+                'value' => 1,
+            ], $args);
+        });
+
+        $this->view->cell('Example::test', ['value' => 1])->render();
+
+        $this->assertTrue($ran);
+    }
+
+    public function testEventBeforeRender(): void
+    {
+        $ran = false;
+        $this->view->getEventManager()->on('Cell.beforeRender', function(Event $event, string $filePath) use (&$ran): void {
+            $ran = true;
+
+            $this->assertSame(
+                Path::normalize('./tests/Mock/templates/cells/Example/test.php'),
+                $filePath
+            );
+        });
+
+        $this->view->cell('Example::test', ['value' => 1])->render();
+
+        $this->assertTrue($ran);
+    }
+
     public function testGetView(): void
     {
         $this->assertInstanceOf(
@@ -126,6 +213,7 @@ final class CellTest extends TestCase
         $container->singleton(TemplateLocator::class);
         $container->singleton(HelperRegistry::class);
         $container->singleton(CellRegistry::class);
+        $container->singleton(EventManager::class);
 
         $container->use(CellRegistry::class)->addNamespace('\Tests\Mock\Cells');
         $container->use(HelperRegistry::class)->addNamespace('\Tests\Mock\Helpers');

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Fyre\View;
 
+use Fyre\Event\EventDispatcherTrait;
+use Fyre\Event\EventManager;
 use Fyre\Server\ServerRequest;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\Traits\EvaluateTrait;
@@ -21,6 +23,7 @@ use function ob_start;
 class View
 {
     use EvaluateTrait;
+    use EventDispatcherTrait;
     use ViewVarsTrait;
 
     protected array $blocks = [];
@@ -49,13 +52,15 @@ class View
      * @param TemplateLocator $templateLocator The TemplateLocator.
      * @param HelperRegistry $helperRegistry The HelperRegistry.
      * @param CellRegistry $cellRegistry The CellRegistry.
+     * @param EventManager $eventManager The EventManager.
      * @param ServerRequest $request The ServerRequest.
      */
-    public function __construct(TemplateLocator $templateLocator, HelperRegistry $helperRegistry, CellRegistry $cellRegistry, ServerRequest $request)
+    public function __construct(TemplateLocator $templateLocator, HelperRegistry $helperRegistry, CellRegistry $cellRegistry, EventManager $eventManager, ServerRequest $request)
     {
         $this->templateLocator = $templateLocator;
         $this->helperRegistry = $helperRegistry;
         $this->cellRegistry = $cellRegistry;
+        $this->eventManager = $eventManager;
         $this->request = $request;
     }
 
@@ -143,7 +148,19 @@ class View
             throw ViewException::forInvalidElement($file);
         }
 
-        return $this->evaluate($filePath, $data);
+        $this->dispatchEvent('View.beforeElement', ['filePath' => $filePath]);
+
+        $content = $this->evaluate($filePath, $data);
+
+        $event = $this->dispatchEvent('View.afterElement', ['filePath' => $filePath, 'content' => $content]);
+
+        $result = $event->getResult();
+
+        if ($result !== null) {
+            return $result;
+        }
+
+        return $content;
     }
 
     /**
@@ -265,12 +282,28 @@ class View
             throw ViewException::forInvalidLayout($this->layout);
         }
 
+        $this->dispatchEvent('View.beforeRender', ['filePath' => $filePath]);
+
         $this->content = $this->evaluate($filePath, $this->data);
+
+        $event = $this->dispatchEvent('View.afterRender', ['filePath' => $filePath, 'content' => $this->content]);
+
+        $result = $event->getResult();
+
+        if ($result !== null) {
+            $this->content = $result;
+        }
 
         if (!$layoutPath) {
             $result = $this->content;
         } else {
+            $this->dispatchEvent('View.beforeLayout', ['layoutPath' => $layoutPath]);
+
             $result = $this->evaluate($layoutPath, $this->data);
+
+            $layoutEvent = $this->dispatchEvent('View.afterLayout', ['layoutPath' => $layoutPath, 'content' => $result]);
+
+            $result = $layoutEvent->getResult() ?? $result;
         }
 
         if ($this->blockStack !== []) {

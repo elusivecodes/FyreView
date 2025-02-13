@@ -129,7 +129,11 @@ abstract class Cell
             throw ViewException::forInvalidCellMethod($cell, $this->action);
         }
 
+        $this->view->dispatchEvent('Cell.beforeAction', ['cell' => $this, 'action' => $this->action, 'args' => $this->args]);
+
         $this->container->call([$this, $this->action], $this->args);
+
+        $this->view->dispatchEvent('Cell.afterAction', ['cell' => $this, 'action' => $this->action, 'args' => $this->args]);
 
         $template = $this->template;
 
@@ -144,7 +148,19 @@ abstract class Cell
             throw ViewException::forInvalidTemplate($template);
         }
 
-        return $this->evaluate($filePath, $this->data);
+        $this->view->dispatchEvent('Cell.beforeRender', ['filePath' => $filePath]);
+
+        $content = $this->evaluate($filePath, $this->data);
+
+        $event = $this->view->dispatchEvent('Cell.afterRender', ['filePath' => $filePath, 'content' => $content]);
+
+        $result = $event->getResult();
+
+        if ($result !== null) {
+            return $result;
+        }
+
+        return $content;
     }
 
     /**
