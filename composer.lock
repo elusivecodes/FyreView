@@ -50,16 +50,16 @@
         },
         {
             "name": "fyre/cache",
-            "version": "v5.2.2",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreCache.git",
-                "reference": "a35aeda34636243ffa94ab1d16d33b350b6dd6e4"
+                "reference": "8fb117ad02c046673793a4a52443950e12dd5be3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreCache/zipball/a35aeda34636243ffa94ab1d16d33b350b6dd6e4",
-                "reference": "a35aeda34636243ffa94ab1d16d33b350b6dd6e4",
+                "url": "https://api.github.com/repos/elusivecodes/FyreCache/zipball/8fb117ad02c046673793a4a52443950e12dd5be3",
+                "reference": "8fb117ad02c046673793a4a52443950e12dd5be3",
                 "shasum": ""
             },
             "require": {
@@ -92,9 +92,9 @@
             "description": "A cache library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreCache/issues",
-                "source": "https://github.com/elusivecodes/FyreCache/tree/v5.2.2"
+                "source": "https://github.com/elusivecodes/FyreCache/tree/v5.3.0"
             },
-            "time": "2025-04-02T11:42:37+00:00"
+            "time": "2025-04-07T11:23:27+00:00"
         },
         {
             "name": "fyre/collection",
@@ -450,16 +450,16 @@
         },
         {
             "name": "fyre/db",
-            "version": "v6.2.1",
+            "version": "v6.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreDB.git",
-                "reference": "989aef132b5863575419be4da462d7a651a47c05"
+                "reference": "a48e8bfc1065de5fa1c3e2590922fab74ac7b84c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreDB/zipball/989aef132b5863575419be4da462d7a651a47c05",
-                "reference": "989aef132b5863575419be4da462d7a651a47c05",
+                "url": "https://api.github.com/repos/elusivecodes/FyreDB/zipball/a48e8bfc1065de5fa1c3e2590922fab74ac7b84c",
+                "reference": "a48e8bfc1065de5fa1c3e2590922fab74ac7b84c",
                 "shasum": ""
             },
             "require": {
@@ -494,9 +494,9 @@
             "description": "A database library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreDB/issues",
-                "source": "https://github.com/elusivecodes/FyreDB/tree/v6.2.1"
+                "source": "https://github.com/elusivecodes/FyreDB/tree/v6.2.3"
             },
-            "time": "2025-04-02T11:48:06+00:00"
+            "time": "2025-04-08T09:32:06+00:00"
         },
         {
             "name": "fyre/entity",
@@ -546,16 +546,16 @@
         },
         {
             "name": "fyre/error",
-            "version": "v6.1.4",
+            "version": "v6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreError.git",
-                "reference": "88d08e84fa867d8ae74c8efd6cb6ed9e90db4e4e"
+                "reference": "2dd9ce933b0e10bb11bf154d5db0bffd638a1316"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreError/zipball/88d08e84fa867d8ae74c8efd6cb6ed9e90db4e4e",
-                "reference": "88d08e84fa867d8ae74c8efd6cb6ed9e90db4e4e",
+                "url": "https://api.github.com/repos/elusivecodes/FyreError/zipball/2dd9ce933b0e10bb11bf154d5db0bffd638a1316",
+                "reference": "2dd9ce933b0e10bb11bf154d5db0bffd638a1316",
                 "shasum": ""
             },
             "require": {
@@ -590,9 +590,9 @@
             "description": "An error handling library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreError/issues",
-                "source": "https://github.com/elusivecodes/FyreError/tree/v6.1.4"
+                "source": "https://github.com/elusivecodes/FyreError/tree/v6.1.5"
             },
-            "time": "2025-04-02T12:09:25+00:00"
+            "time": "2025-04-08T09:44:43+00:00"
         },
         {
             "name": "fyre/event",
@@ -951,16 +951,16 @@
         },
         {
             "name": "fyre/log",
-            "version": "v6.0",
+            "version": "v6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreLog.git",
-                "reference": "eb2b4d2e2941d07e376333ae625e85267ffd29f9"
+                "reference": "7bd0de7514ea78202d1b106ef9a97c11600ee50e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreLog/zipball/eb2b4d2e2941d07e376333ae625e85267ffd29f9",
-                "reference": "eb2b4d2e2941d07e376333ae625e85267ffd29f9",
+                "url": "https://api.github.com/repos/elusivecodes/FyreLog/zipball/7bd0de7514ea78202d1b106ef9a97c11600ee50e",
+                "reference": "7bd0de7514ea78202d1b106ef9a97c11600ee50e",
                 "shasum": ""
             },
             "require": {
@@ -993,9 +993,9 @@
             "description": "A logging library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreLog/issues",
-                "source": "https://github.com/elusivecodes/FyreLog/tree/v6.0"
+                "source": "https://github.com/elusivecodes/FyreLog/tree/v6.1.0"
             },
-            "time": "2025-04-02T11:45:32+00:00"
+            "time": "2025-04-07T11:25:29+00:00"
         },
         {
             "name": "fyre/message",
@@ -1132,16 +1132,16 @@
         },
         {
             "name": "fyre/orm",
-            "version": "v11.0.5",
+            "version": "v11.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreORM.git",
-                "reference": "4cef49ce8dbcecb61c4be5ac9d2dcd1cd346aafd"
+                "reference": "b4202ed3d8ceebfaa3f0725cec1f3a5b74b25fe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreORM/zipball/4cef49ce8dbcecb61c4be5ac9d2dcd1cd346aafd",
-                "reference": "4cef49ce8dbcecb61c4be5ac9d2dcd1cd346aafd",
+                "url": "https://api.github.com/repos/elusivecodes/FyreORM/zipball/b4202ed3d8ceebfaa3f0725cec1f3a5b74b25fe8",
+                "reference": "b4202ed3d8ceebfaa3f0725cec1f3a5b74b25fe8",
                 "shasum": ""
             },
             "require": {
@@ -1179,9 +1179,9 @@
             "description": "An ORM library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreORM/issues",
-                "source": "https://github.com/elusivecodes/FyreORM/tree/v11.0.5"
+                "source": "https://github.com/elusivecodes/FyreORM/tree/v11.0.6"
             },
-            "time": "2025-04-02T12:01:42+00:00"
+            "time": "2025-04-08T09:42:32+00:00"
         },
         {
             "name": "fyre/path",
@@ -1320,16 +1320,16 @@
         },
         {
             "name": "fyre/router",
-            "version": "v7.1.3",
+            "version": "v7.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreRouter.git",
-                "reference": "9cc58548bce212df6e875c71eb55bb1ae0f003bb"
+                "reference": "ff7042c5fdf29532f31b5efefca6a0a4620d0306"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/9cc58548bce212df6e875c71eb55bb1ae0f003bb",
-                "reference": "9cc58548bce212df6e875c71eb55bb1ae0f003bb",
+                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/ff7042c5fdf29532f31b5efefca6a0a4620d0306",
+                "reference": "ff7042c5fdf29532f31b5efefca6a0a4620d0306",
                 "shasum": ""
             },
             "require": {
@@ -1364,22 +1364,22 @@
             "description": "A URL routing library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreRouter/issues",
-                "source": "https://github.com/elusivecodes/FyreRouter/tree/v7.1.3"
+                "source": "https://github.com/elusivecodes/FyreRouter/tree/v7.1.4"
             },
-            "time": "2025-04-02T12:10:44+00:00"
+            "time": "2025-04-08T09:46:42+00:00"
         },
         {
             "name": "fyre/schema",
-            "version": "v6.0.5",
+            "version": "v6.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreSchema.git",
-                "reference": "f69325b7bcfb61759dc81f91965661c0d57cd05b"
+                "reference": "9e7d332a62764188c7d5de3fd5b36bcf838adf02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreSchema/zipball/f69325b7bcfb61759dc81f91965661c0d57cd05b",
-                "reference": "f69325b7bcfb61759dc81f91965661c0d57cd05b",
+                "url": "https://api.github.com/repos/elusivecodes/FyreSchema/zipball/9e7d332a62764188c7d5de3fd5b36bcf838adf02",
+                "reference": "9e7d332a62764188c7d5de3fd5b36bcf838adf02",
                 "shasum": ""
             },
             "require": {
@@ -1412,9 +1412,9 @@
             "description": "A database schema library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreSchema/issues",
-                "source": "https://github.com/elusivecodes/FyreSchema/tree/v6.0.5"
+                "source": "https://github.com/elusivecodes/FyreSchema/tree/v6.0.7"
             },
-            "time": "2025-04-02T11:50:52+00:00"
+            "time": "2025-04-08T09:34:43+00:00"
         },
         {
             "name": "fyre/server",
@@ -2428,16 +2428,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.1.0",
+            "version": "12.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d331a5ced3d9a2b917baa9841b2211e72f9e780d"
+                "reference": "05c33d01a856f9f62488d144bafddc3d7b7a4ebb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d331a5ced3d9a2b917baa9841b2211e72f9e780d",
-                "reference": "d331a5ced3d9a2b917baa9841b2211e72f9e780d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/05c33d01a856f9f62488d144bafddc3d7b7a4ebb",
+                "reference": "05c33d01a856f9f62488d144bafddc3d7b7a4ebb",
                 "shasum": ""
             },
             "require": {
@@ -2493,7 +2493,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.1.0"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.1.2"
             },
             "funding": [
                 {
@@ -2501,7 +2501,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-17T13:56:07+00:00"
+            "time": "2025-04-03T14:34:39+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2750,16 +2750,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.0.10",
+            "version": "12.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6075843014de23bcd6992842d69ca99d25d6a433"
+                "reference": "6f2775cc4b7b19ba5a411c188e855eb0cc78a711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6075843014de23bcd6992842d69ca99d25d6a433",
-                "reference": "6075843014de23bcd6992842d69ca99d25d6a433",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6f2775cc4b7b19ba5a411c188e855eb0cc78a711",
+                "reference": "6f2775cc4b7b19ba5a411c188e855eb0cc78a711",
                 "shasum": ""
             },
             "require": {
@@ -2773,7 +2773,7 @@
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.3",
-                "phpunit/php-code-coverage": "^12.1.0",
+                "phpunit/php-code-coverage": "^12.1.2",
                 "phpunit/php-file-iterator": "^6.0.0",
                 "phpunit/php-invoker": "^6.0.0",
                 "phpunit/php-text-template": "^5.0.0",
@@ -2795,7 +2795,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "12.0-dev"
+                    "dev-main": "12.1-dev"
                 }
             },
             "autoload": {
@@ -2827,7 +2827,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.0.10"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.1.2"
             },
             "funding": [
                 {
@@ -2843,7 +2843,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-23T16:03:59+00:00"
+            "time": "2025-04-08T08:05:27+00:00"
         },
         {
             "name": "psr/container",
