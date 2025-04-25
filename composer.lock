@@ -1132,16 +1132,16 @@
         },
         {
             "name": "fyre/orm",
-            "version": "v11.1.0",
+            "version": "v11.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreORM.git",
-                "reference": "d7b2f1455b17b7a89971a6e4790dc1bb59559a42"
+                "reference": "bd59fe65385c322d59169961a9d6a3a2da9e8e20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreORM/zipball/d7b2f1455b17b7a89971a6e4790dc1bb59559a42",
-                "reference": "d7b2f1455b17b7a89971a6e4790dc1bb59559a42",
+                "url": "https://api.github.com/repos/elusivecodes/FyreORM/zipball/bd59fe65385c322d59169961a9d6a3a2da9e8e20",
+                "reference": "bd59fe65385c322d59169961a9d6a3a2da9e8e20",
                 "shasum": ""
             },
             "require": {
@@ -1179,9 +1179,9 @@
             "description": "An ORM library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreORM/issues",
-                "source": "https://github.com/elusivecodes/FyreORM/tree/v11.1.0"
+                "source": "https://github.com/elusivecodes/FyreORM/tree/v11.1.1"
             },
-            "time": "2025-04-25T04:42:46+00:00"
+            "time": "2025-04-25T06:56:33+00:00"
         },
         {
             "name": "fyre/path",
@@ -1320,16 +1320,16 @@
         },
         {
             "name": "fyre/router",
-            "version": "v7.1.8",
+            "version": "v7.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreRouter.git",
-                "reference": "64c50c60bcfe8e64027db8a74ae1003082ff7357"
+                "reference": "3f77fb7bba74deff532dfc230abc47145515ac70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/64c50c60bcfe8e64027db8a74ae1003082ff7357",
-                "reference": "64c50c60bcfe8e64027db8a74ae1003082ff7357",
+                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/3f77fb7bba74deff532dfc230abc47145515ac70",
+                "reference": "3f77fb7bba74deff532dfc230abc47145515ac70",
                 "shasum": ""
             },
             "require": {
@@ -1364,9 +1364,9 @@
             "description": "A URL routing library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreRouter/issues",
-                "source": "https://github.com/elusivecodes/FyreRouter/tree/v7.1.8"
+                "source": "https://github.com/elusivecodes/FyreRouter/tree/v7.1.9"
             },
-            "time": "2025-04-25T04:44:33+00:00"
+            "time": "2025-04-25T06:58:48+00:00"
         },
         {
             "name": "fyre/schema",
