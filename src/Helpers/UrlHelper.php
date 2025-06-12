@@ -15,11 +15,7 @@ use Fyre\View\View;
  */
 class UrlHelper extends Helper
 {
-    protected HtmlHelper $htmlHelper;
-
     protected ServerRequest $request;
-
-    protected Router $router;
 
     /**
      * New Helper constructor.
@@ -28,12 +24,14 @@ class UrlHelper extends Helper
      * @param View $view The View.
      * @param array $options The helper options.
      */
-    public function __construct(Router $router, HtmlHelper $htmlHelper, View $view, array $options = [])
-    {
+    public function __construct(
+        protected Router $router,
+        protected HtmlHelper $htmlHelper,
+        View $view,
+        array $options = []
+    ) {
         parent::__construct($view, $options);
 
-        $this->router = $router;
-        $this->htmlHelper = $htmlHelper;
         $this->request = $this->view->getRequest();
     }
 

@@ -25,17 +25,9 @@ abstract class Cell
 
     protected array $args;
 
-    protected Container $container;
-
-    protected HelperRegistry $helperRegistry;
-
     protected array $helpers = [];
 
     protected string|null $template = null;
-
-    protected TemplateLocator $templateLocator;
-
-    protected View $view;
 
     /**
      * New Cell constructor.
@@ -46,13 +38,13 @@ abstract class Cell
      * @param View $view The View.
      * @param array $options The cell options.
      */
-    public function __construct(Container $container, TemplateLocator $templateLocator, HelperRegistry $helperRegistry, View $view, array $options = [])
-    {
-        $this->container = $container;
-        $this->templateLocator = $templateLocator;
-        $this->helperRegistry = $helperRegistry;
-        $this->view = $view;
-
+    public function __construct(
+        protected Container $container,
+        protected TemplateLocator $templateLocator,
+        protected HelperRegistry $helperRegistry,
+        protected View $view,
+        array $options = []
+    ) {
         $this->action = $options['action'] ?? 'display';
         $this->args = $options['args'] ?? [];
     }

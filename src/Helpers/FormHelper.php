@@ -41,23 +41,13 @@ class FormHelper extends Helper
 
     protected static Context $nullContext;
 
-    protected Container $container;
-
     protected Context|null $context = null;
 
     protected CsrfProtection $csrfProtection;
 
-    protected FormBuilder $formBuilder;
-
     protected string|null $idPrefix = null;
 
-    protected Inflector $inflector;
-
-    protected Lang $lang;
-
     protected ServerRequest $request;
-
-    protected TypeParser $typeParser;
 
     /**
      * New Helper constructor.
@@ -70,15 +60,17 @@ class FormHelper extends Helper
      * @param View $view The View.
      * @param array $options The helper options.
      */
-    public function __construct(Container $container, FormBuilder $formBuilder, TypeParser $typeParser, Lang $lang, Inflector $inflector, View $view, array $options = [])
-    {
+    public function __construct(
+        protected Container $container,
+        protected FormBuilder $formBuilder,
+        protected TypeParser $typeParser,
+        protected Lang $lang,
+        protected Inflector $inflector,
+        View $view,
+        array $options = []
+    ) {
         parent::__construct($view, $options);
 
-        $this->container = $container;
-        $this->formBuilder = $formBuilder;
-        $this->typeParser = $typeParser;
-        $this->lang = $lang;
-        $this->inflector = $inflector;
         $this->request = $this->view->getRequest();
     }
 

@@ -19,8 +19,6 @@ class CellRegistry
 {
     protected array $cells = [];
 
-    protected Container $container;
-
     protected array $namespaces = [];
 
     /**
@@ -28,10 +26,9 @@ class CellRegistry
      *
      * @param Container $container The Container.
      */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        protected Container $container
+    ) {}
 
     /**
      * Add a namespace for loading cells.

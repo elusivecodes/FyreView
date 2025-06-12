@@ -28,8 +28,6 @@ class EntityContext extends Context
     use SchemaTrait;
     use ValidationTrait;
 
-    protected Entity $item;
-
     protected Model $model;
 
     protected array $models = [];
@@ -39,9 +37,10 @@ class EntityContext extends Context
      *
      * @param Entity $item The entity.
      */
-    public function __construct(ModelRegistry $modelRegistry, Entity $item)
-    {
-        $this->item = $item;
+    public function __construct(
+        ModelRegistry $modelRegistry,
+        protected Entity $item
+    ) {
         $this->model = $modelRegistry->use($item->getSource());
     }
 

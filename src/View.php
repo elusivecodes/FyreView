@@ -30,21 +30,13 @@ class View
 
     protected array $blockStack = [];
 
-    protected CellRegistry $cellRegistry;
-
     protected string $content = '';
 
     protected string|null $file = null;
 
-    protected HelperRegistry $helperRegistry;
-
     protected array $helpers = [];
 
     protected string|null $layout = 'default';
-
-    protected ServerRequest $request;
-
-    protected TemplateLocator $templateLocator;
 
     /**
      * New View constructor.
@@ -55,14 +47,13 @@ class View
      * @param EventManager $eventManager The EventManager.
      * @param ServerRequest $request The ServerRequest.
      */
-    public function __construct(TemplateLocator $templateLocator, HelperRegistry $helperRegistry, CellRegistry $cellRegistry, EventManager $eventManager, ServerRequest $request)
-    {
-        $this->templateLocator = $templateLocator;
-        $this->helperRegistry = $helperRegistry;
-        $this->cellRegistry = $cellRegistry;
-        $this->eventManager = $eventManager;
-        $this->request = $request;
-    }
+    public function __construct(
+        protected TemplateLocator $templateLocator,
+        protected HelperRegistry $helperRegistry,
+        protected CellRegistry $cellRegistry,
+        protected EventManager $eventManager,
+        protected ServerRequest $request
+    ) {}
 
     /**
      * Load a helper.

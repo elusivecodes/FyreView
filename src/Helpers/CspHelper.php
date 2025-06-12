@@ -15,8 +15,6 @@ use function random_bytes;
  */
 class CspHelper extends Helper
 {
-    protected ContentSecurityPolicy $csp;
-
     /**
      * New CspHelper constructor.
      *
@@ -24,11 +22,12 @@ class CspHelper extends Helper
      * @param View $view The View.
      * @param array $options The helper options.
      */
-    public function __construct(ContentSecurityPolicy $csp, View $view, array $options = [])
-    {
+    public function __construct(
+        protected ContentSecurityPolicy $csp,
+        View $view,
+        array $options = []
+    ) {
         parent::__construct($view, $options);
-
-        $this->csp = $csp;
     }
 
     /**

@@ -12,8 +12,6 @@ use Fyre\View\View;
  */
 class FormatHelper extends Helper
 {
-    protected Formatter $formatter;
-
     /**
      * New FormatHelper constructor.
      *
@@ -21,11 +19,12 @@ class FormatHelper extends Helper
      * @param View $view The View.
      * @param array $options The helper options.
      */
-    public function __construct(Formatter $formatter, View $view, array $options = [])
-    {
+    public function __construct(
+        protected Formatter $formatter,
+        View $view,
+        array $options = []
+    ) {
         parent::__construct($view, $options);
-
-        $this->formatter = $formatter;
     }
 
     /**

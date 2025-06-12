@@ -14,18 +14,16 @@ abstract class Helper
 
     protected array $config;
 
-    protected View $view;
-
     /**
      * New Helper constructor.
      *
      * @param View $view The View.
      * @param array $options The helper options.
      */
-    public function __construct(View $view, array $options = [])
-    {
-        $this->view = $view;
-
+    public function __construct(
+        protected View $view,
+        array $options = []
+    ) {
         $this->config = array_replace(static::$defaults, $options);
     }
 
