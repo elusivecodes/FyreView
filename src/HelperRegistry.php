@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\View;
 
 use Fyre\Container\Container;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Exceptions\ViewException;
 
 use function array_merge;
@@ -18,6 +19,8 @@ use function trim;
  */
 class HelperRegistry
 {
+    use MacroTrait;
+
     protected array $helpers = [];
 
     protected array $namespaces = [];

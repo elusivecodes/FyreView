@@ -6,6 +6,7 @@ namespace Tests;
 use Fyre\Config\Config;
 use Fyre\Container\Container;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Cell;
 use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\ViewException;
@@ -13,6 +14,8 @@ use Fyre\View\HelperRegistry;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
+
+use function class_uses;
 
 final class CellRegistryTest extends TestCase
 {
@@ -71,6 +74,14 @@ final class CellRegistryTest extends TestCase
     {
         $this->assertFalse(
             $this->cellRegistry->hasNamespace('\Tests\Mock\Invalid')
+        );
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(CellRegistry::class)
         );
     }
 

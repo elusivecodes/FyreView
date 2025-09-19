@@ -6,6 +6,7 @@ namespace Fyre\View;
 use Fyre\Event\EventDispatcherTrait;
 use Fyre\Event\EventManager;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\Traits\EvaluateTrait;
 use Fyre\View\Traits\ViewVarsTrait;
@@ -24,6 +25,7 @@ class View
 {
     use EvaluateTrait;
     use EventDispatcherTrait;
+    use MacroTrait;
     use ViewVarsTrait;
 
     protected array $blocks = [];

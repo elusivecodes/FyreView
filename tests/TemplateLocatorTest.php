@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace Tests;
 
 use Fyre\Utility\Path;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\TemplateLocator;
 use PHPUnit\Framework\TestCase;
+
+use function class_uses;
 
 final class TemplateLocatorTest extends TestCase
 {
@@ -42,6 +45,14 @@ final class TemplateLocatorTest extends TestCase
         $this->assertSame(
             Path::resolve('tests/Mock/templates/test/deep/test.php'),
             $this->templateLocator->locate('deep/test', 'test')
+        );
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(TemplateLocator::class)
         );
     }
 

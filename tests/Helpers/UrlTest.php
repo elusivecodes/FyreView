@@ -7,12 +7,16 @@ use Fyre\Config\Config;
 use Fyre\Container\Container;
 use Fyre\Router\Router;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\CellRegistry;
 use Fyre\View\HelperRegistry;
+use Fyre\View\Helpers\UrlHelper;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use HomeController;
 use PHPUnit\Framework\TestCase;
+
+use function class_uses;
 
 final class UrlTest extends TestCase
 {
@@ -67,6 +71,14 @@ final class UrlTest extends TestCase
                 'href' => '/home',
                 'escape' => false,
             ])
+        );
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(UrlHelper::class)
         );
     }
 

@@ -9,6 +9,7 @@ use Fyre\Event\Event;
 use Fyre\Event\EventManager;
 use Fyre\Server\ServerRequest;
 use Fyre\Utility\Path;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Cell;
 use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\ViewException;
@@ -17,6 +18,8 @@ use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 use Tests\Mock\Cells\ExampleCell;
+
+use function class_uses;
 
 final class CellTest extends TestCase
 {
@@ -170,6 +173,14 @@ final class CellTest extends TestCase
         $this->assertSame(
             'test',
             $this->view->cell('Test')->Test->test()
+        );
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(Cell::class)
         );
     }
 

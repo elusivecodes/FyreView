@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\View;
 
 use Fyre\Utility\Path;
+use Fyre\Utility\Traits\MacroTrait;
 
 use function array_splice;
 use function in_array;
@@ -17,6 +18,8 @@ use function strtolower;
  */
 class TemplateLocator
 {
+    use MacroTrait;
+
     public const CELLS_FOLDER = 'cells';
 
     public const ELEMENTS_FOLDER = 'elements';

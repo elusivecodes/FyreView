@@ -5,6 +5,7 @@ namespace Fyre\View;
 
 use Fyre\Container\Container;
 use Fyre\Utility\Path;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Exceptions\ViewException;
 use Fyre\View\Traits\EvaluateTrait;
 use Fyre\View\Traits\ViewVarsTrait;
@@ -19,6 +20,7 @@ use function preg_replace;
 abstract class Cell
 {
     use EvaluateTrait;
+    use MacroTrait;
     use ViewVarsTrait;
 
     protected string $action;

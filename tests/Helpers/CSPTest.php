@@ -7,17 +7,29 @@ use Fyre\Config\Config;
 use Fyre\Container\Container;
 use Fyre\Security\ContentSecurityPolicy;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\CellRegistry;
 use Fyre\View\HelperRegistry;
+use Fyre\View\Helpers\CspHelper;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
+
+use function class_uses;
 
 final class CSPTest extends TestCase
 {
     protected ContentSecurityPolicy $csp;
 
     protected View $view;
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(CspHelper::class)
+        );
+    }
 
     public function testScriptNonce(): void
     {

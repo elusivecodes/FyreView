@@ -15,7 +15,7 @@ use Fyre\DB\Types\SetType;
 use Fyre\DB\Types\StringType;
 use Fyre\DB\Types\TextType;
 use Fyre\DB\Types\TimeType;
-use Fyre\Schema\TableSchema;
+use Fyre\Schema\Table;
 
 use function array_combine;
 use function array_key_exists;
@@ -39,31 +39,31 @@ trait SchemaTrait
     /**
      * Get the default value.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return mixed The default value.
      */
-    public static function getSchemaDefaultValue(TableSchema $schema, string $field): mixed
+    public static function getSchemaDefaultValue(Table $schema, string $field): mixed
     {
-        $type = $schema->getType($field);
-
-        if (!$type) {
+        if (!$schema->hasColumn($field)) {
             return null;
         }
 
-        $value = $schema->defaultValue($field);
+        $column = $schema->column($field);
 
-        return $type->parse($value);
+        $value = $column->defaultValue();
+
+        return $column->type()->parse($value);
     }
 
     /**
      * Get the maximum value.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return float|null The maximum value.
      */
-    public static function getSchemaMax(TableSchema $schema, string $field): float|null
+    public static function getSchemaMax(Table $schema, string $field): float|null
     {
         $column = $schema->column($field);
 
@@ -71,15 +71,13 @@ trait SchemaTrait
             return null;
         }
 
-        $type = $schema->getType($field);
-
-        if ($type instanceof FloatType) {
+        if ($column->type() instanceof FloatType) {
             return null;
         }
 
-        $type = $column['type'];
-        $length = $column['length'] ?? null;
-        $unsigned = $column['unsigned'] ?? false;
+        $type = $column->getType();
+        $length = $column->getLength();
+        $unsigned = $column->isUnsigned();
 
         $max = static::MAX_VALUES[$type] ?? null;
 
@@ -104,11 +102,11 @@ trait SchemaTrait
     /**
      * Get the maximum length.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return int|null The maximum length.
      */
-    public static function getSchemaMaxLength(TableSchema $schema, string $field): int|null
+    public static function getSchemaMaxLength(Table $schema, string $field): int|null
     {
         $column = $schema->column($field);
 
@@ -116,10 +114,10 @@ trait SchemaTrait
             return null;
         }
 
-        $type = $schema->getType($field);
+        $length = $column->getLength();
 
-        if ($type instanceof StringType && $column['length'] < 524288) {
-            return $column['length'];
+        if ($column->type() instanceof StringType && $length < 524288) {
+            return $length;
         }
 
         return null;
@@ -128,11 +126,11 @@ trait SchemaTrait
     /**
      * Get the minimum value.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return float|null The minimum value.
      */
-    public static function getSchemaMin(TableSchema $schema, string $field): int|null
+    public static function getSchemaMin(Table $schema, string $field): int|null
     {
         $column = $schema->column($field);
 
@@ -140,18 +138,16 @@ trait SchemaTrait
             return null;
         }
 
-        if (array_key_exists('unsigned', $column) && $column['unsigned']) {
+        if ($column->isUnsigned()) {
             return 0;
         }
 
-        $type = $schema->getType($field);
-
-        if ($type instanceof FloatType) {
+        if ($column->type() instanceof FloatType) {
             return null;
         }
 
-        $type = $column['type'];
-        $length = $column['length'] ?? null;
+        $type = $column->getType();
+        $length = $column->getLength();
 
         if (array_key_exists($type, static::MAX_VALUES)) {
             $min = (static::MAX_VALUES[$type] + 1) * -1;
@@ -176,22 +172,22 @@ trait SchemaTrait
     /**
      * Get the option values.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return array|null The options value.
      */
-    public static function getSchemaOptionValues(TableSchema $schema, string $field): array|null
+    public static function getSchemaOptionValues(Table $schema, string $field): array|null
     {
-        $type = $schema->getType($field);
+        $column = $schema->column($field);
+
+        $type = $column->type();
 
         if (!$type) {
             return null;
         }
 
         if ($type instanceof EnumType || $type instanceof SetType) {
-            $column = $schema->column($field);
-
-            $values = $column['values'] ?? [];
+            $values = $column->getValues();
 
             return array_combine($values, $values);
         }
@@ -202,11 +198,11 @@ trait SchemaTrait
     /**
      * Get the step interval.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return float|null The step interval.
      */
-    public static function getSchemaStep(TableSchema $schema, string $field): float|string|null
+    public static function getSchemaStep(Table $schema, string $field): float|string|null
     {
         $column = $schema->column($field);
 
@@ -214,7 +210,7 @@ trait SchemaTrait
             return null;
         }
 
-        $type = $schema->getType($field);
+        $type = $column->type();
 
         if ($type instanceof IntegerType) {
             return 1;
@@ -225,11 +221,13 @@ trait SchemaTrait
         }
 
         if ($type instanceof DecimalType) {
-            if ($column['precision'] > 0) {
-                return 1 / pow(10, $column['precision']);
+            $precision = $column->getPrecision();
+
+            if ($precision > 0) {
+                return 1 / pow(10, $precision);
             }
 
-            if ($column['precision'] === 0) {
+            if ($precision === 0) {
                 return 1;
             }
         }
@@ -240,11 +238,11 @@ trait SchemaTrait
     /**
      * Get the field type.
      *
-     * @param TableSchema $schema The TableSchema.
+     * @param Table $schema The Table.
      * @param string $field The field name.
      * @return string The field type.
      */
-    public static function getSchemaType(TableSchema $schema, string $field): string
+    public static function getSchemaType(Table $schema, string $field): string
     {
         $column = $schema->column($field);
 
@@ -252,7 +250,7 @@ trait SchemaTrait
             return 'text';
         }
 
-        $type = $schema->getType($field);
+        $type = $column->type();
 
         if ($type instanceof BooleanType) {
             return 'checkbox';

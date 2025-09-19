@@ -11,6 +11,7 @@ use Fyre\Lang\Lang;
 use Fyre\Security\CsrfProtection;
 use Fyre\Server\ServerRequest;
 use Fyre\Utility\Inflector;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Exceptions\FormException;
 use Fyre\View\Form\Context;
 use Fyre\View\Form\EntityContext;
@@ -35,6 +36,8 @@ use function trim;
  */
 class FormHelper extends Helper
 {
+    use MacroTrait;
+
     protected static array $contextMap = [
         Entity::class => EntityContext::class,
     ];

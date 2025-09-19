@@ -7,7 +7,7 @@ use Closure;
 use Fyre\Entity\Entity;
 use Fyre\ORM\Model;
 use Fyre\ORM\ModelRegistry;
-use Fyre\ORM\Relationships\Relationship;
+use Fyre\ORM\Relationship;
 use Fyre\View\Form\Traits\SchemaTrait;
 use Fyre\View\Form\Traits\ValidationTrait;
 

@@ -7,11 +7,14 @@ use Fyre\Config\Config;
 use Fyre\Container\Container;
 use Fyre\Event\EventManager;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\CellRegistry;
 use Fyre\View\HelperRegistry;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
+
+use function class_uses;
 
 final class ViewTest extends TestCase
 {
@@ -30,6 +33,14 @@ final class ViewTest extends TestCase
         $this->assertInstanceOf(
             ServerRequest::class,
             $this->view->getRequest()
+        );
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(View::class)
         );
     }
 

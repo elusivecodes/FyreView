@@ -9,13 +9,17 @@ use Fyre\Form\FormBuilder;
 use Fyre\Security\CsrfProtection;
 use Fyre\Server\ServerRequest;
 use Fyre\Utility\HtmlHelper;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\CellRegistry;
 use Fyre\View\Exceptions\FormException;
 use Fyre\View\HelperRegistry;
+use Fyre\View\Helpers\FormHelper;
 use Fyre\View\TemplateLocator;
 use Fyre\View\View;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+
+use function class_uses;
 
 final class FormTest extends TestCase
 {
@@ -57,6 +61,14 @@ final class FormTest extends TestCase
         $this->view->Form->input('input', [
             'type' => 'invalid',
         ]);
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(FormHelper::class)
+        );
     }
 
     public function testUnclosedForm(): void

@@ -7,6 +7,7 @@ use Fyre\Http\Uri;
 use Fyre\Router\Router;
 use Fyre\Server\ServerRequest;
 use Fyre\Utility\HtmlHelper;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Helper;
 use Fyre\View\View;
 
@@ -15,6 +16,8 @@ use Fyre\View\View;
  */
 class UrlHelper extends Helper
 {
+    use MacroTrait;
+
     protected ServerRequest $request;
 
     /**

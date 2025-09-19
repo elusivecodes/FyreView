@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\View\Helpers;
 
 use Fyre\Security\ContentSecurityPolicy;
+use Fyre\Utility\Traits\MacroTrait;
 use Fyre\View\Helper;
 use Fyre\View\View;
 
@@ -15,6 +16,8 @@ use function random_bytes;
  */
 class CspHelper extends Helper
 {
+    use MacroTrait;
+
     /**
      * New CspHelper constructor.
      *
