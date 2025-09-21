@@ -1217,16 +1217,16 @@
         },
         {
             "name": "fyre/orm",
-            "version": "v12.0.1",
+            "version": "v12.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreORM.git",
-                "reference": "5bcaee7ec712ee07f1bbf19a87fd5f73082d54bb"
+                "reference": "4989dd45bff2ab1cc318b9305bc304cac2bd657c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreORM/zipball/5bcaee7ec712ee07f1bbf19a87fd5f73082d54bb",
-                "reference": "5bcaee7ec712ee07f1bbf19a87fd5f73082d54bb",
+                "url": "https://api.github.com/repos/elusivecodes/FyreORM/zipball/4989dd45bff2ab1cc318b9305bc304cac2bd657c",
+                "reference": "4989dd45bff2ab1cc318b9305bc304cac2bd657c",
                 "shasum": ""
             },
             "require": {
@@ -1265,9 +1265,9 @@
             "description": "An ORM library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreORM/issues",
-                "source": "https://github.com/elusivecodes/FyreORM/tree/v12.0.1"
+                "source": "https://github.com/elusivecodes/FyreORM/tree/v12.0.2"
             },
-            "time": "2025-09-20T03:02:09+00:00"
+            "time": "2025-09-21T07:19:35+00:00"
         },
         {
             "name": "fyre/path",
@@ -1409,16 +1409,16 @@
         },
         {
             "name": "fyre/router",
-            "version": "v8.0.2",
+            "version": "v8.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreRouter.git",
-                "reference": "e5965ff232abbc3670846560ee5017fede22f161"
+                "reference": "9a7cbaf35ff805a231d5d2e1b85d6b3b378c413b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/e5965ff232abbc3670846560ee5017fede22f161",
-                "reference": "e5965ff232abbc3670846560ee5017fede22f161",
+                "url": "https://api.github.com/repos/elusivecodes/FyreRouter/zipball/9a7cbaf35ff805a231d5d2e1b85d6b3b378c413b",
+                "reference": "9a7cbaf35ff805a231d5d2e1b85d6b3b378c413b",
                 "shasum": ""
             },
             "require": {
@@ -1454,22 +1454,22 @@
             "description": "A URL routing library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreRouter/issues",
-                "source": "https://github.com/elusivecodes/FyreRouter/tree/v8.0.2"
+                "source": "https://github.com/elusivecodes/FyreRouter/tree/v8.0.3"
             },
-            "time": "2025-09-20T03:05:27+00:00"
+            "time": "2025-09-21T07:21:04+00:00"
         },
         {
             "name": "fyre/schema",
-            "version": "v7.0.1",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreSchema.git",
-                "reference": "ebe37c6e664f9ea7eef3ebfcca1d1b3a46514938"
+                "reference": "afeba9b9d7e615d8af96380c61a328b8c3ebc7b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreSchema/zipball/ebe37c6e664f9ea7eef3ebfcca1d1b3a46514938",
-                "reference": "ebe37c6e664f9ea7eef3ebfcca1d1b3a46514938",
+                "url": "https://api.github.com/repos/elusivecodes/FyreSchema/zipball/afeba9b9d7e615d8af96380c61a328b8c3ebc7b1",
+                "reference": "afeba9b9d7e615d8af96380c61a328b8c3ebc7b1",
                 "shasum": ""
             },
             "require": {
@@ -1504,9 +1504,9 @@
             "description": "A database schema library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreSchema/issues",
-                "source": "https://github.com/elusivecodes/FyreSchema/tree/v7.0.1"
+                "source": "https://github.com/elusivecodes/FyreSchema/tree/v7.0.2"
             },
-            "time": "2025-09-20T02:45:09+00:00"
+            "time": "2025-09-21T06:59:22+00:00"
         },
         {
             "name": "fyre/server",
